@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "ocp", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4321"], "port": 4321 },
+    { "name": "ocp-design-src", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4322", "--directory", "_design-src"], "port": 4322 }
+  ]
+}

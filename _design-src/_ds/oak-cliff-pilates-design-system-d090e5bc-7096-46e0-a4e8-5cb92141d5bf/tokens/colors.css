@@ -1,0 +1,68 @@
+:root{
+/* ── Base palette ─────────────────────────────────────────── */
+--ocp-black:#0B0B0B;          /* signature surface — never pure #000 */
+--ocp-ink:#161514;            /* large dark surfaces, one step up from black */
+--ocp-gold:#C9A24A;           /* signature accent */
+--ocp-gold-warm:#E9C977;      /* highlights */
+--ocp-gold-deep:#8E6B2A;      /* eyebrows, shadowed edge of the foil */
+--ocp-copper:#B26A3C;         /* alt finish · rare */
+--ocp-cream:#F4EFE6;          /* default light */
+--ocp-paper:#FBF8F2;          /* warm paper */
+--ocp-white:#FFFFFF;
+
+/* Neutral ramp — warm greys derived between black and cream */
+--ocp-grey-900:#1C1B19;
+--ocp-grey-800:#26241F;
+--ocp-grey-700:#3A372F;
+--ocp-grey-600:#57534A;
+--ocp-grey-500:#7C766B;
+--ocp-grey-400:#A8A19A;
+--ocp-grey-300:#CFC9C0;
+--ocp-grey-200:#E4DED4;
+
+/* Event-creative accents ONLY — Happy Hour, Galentine's, badge moments.
+   Never part of an everyday layout. One neon moment per layout, max. */
+--ocp-neon-pink:#E63995;
+--ocp-hot-red:#E91E2D;
+--ocp-electric:#2E7BFF;
+
+/* ── Signature treatment ──────────────────────────────────── */
+/* 5-stop foil. Type and thin strokes only — never a large fill. */
+--ocp-gold-foil:linear-gradient(100deg,#8E6B2A 0%,#C9A24A 20%,#FAE19D 45%,#C9A24A 72%,#8E6B2A 100%); /* @kind color */
+--ocp-gold-foil-vertical:linear-gradient(180deg,#8E6B2A 0%,#C9A24A 20%,#FAE19D 45%,#C9A24A 72%,#8E6B2A 100%); /* @kind color */
+/* Bottom-up protection gradient for type over photography — not a flat overlay. */
+--ocp-photo-scrim:linear-gradient(to top,rgba(11,11,11,.92) 0%,rgba(11,11,11,.72) 26%,rgba(11,11,11,.28) 58%,rgba(11,11,11,0) 100%); /* @kind color */
+
+/* ── Semantic aliases (dark is the default context) ───────── */
+--surface-page:var(--ocp-black);
+--surface-raised:var(--ocp-ink);
+--surface-card:#111110;
+--surface-inset:#0D0D0C;
+--surface-light:var(--ocp-cream);
+--surface-light-raised:var(--ocp-paper);
+
+--text-primary:var(--ocp-cream);
+--text-secondary:var(--ocp-grey-400);
+--text-muted:var(--ocp-grey-500);
+--text-accent:var(--ocp-gold);
+--text-eyebrow:var(--ocp-gold-deep);
+--text-on-light:var(--ocp-black);
+--text-on-light-secondary:var(--ocp-grey-600);
+--text-on-gold:var(--ocp-black);
+
+--border-hairline:rgba(201,162,74,.28);   /* the gold rule that frames every page */
+--border-subtle:rgba(244,239,230,.12);
+--border-strong:var(--ocp-gold);
+--border-on-light:rgba(11,11,11,.14);
+
+--action-primary-bg:var(--ocp-gold);
+--action-primary-fg:var(--ocp-black);
+--action-primary-bg-hover:var(--ocp-gold-warm);
+--action-secondary-fg:var(--ocp-cream);
+--action-disabled-bg:var(--ocp-grey-800);
+--action-disabled-fg:var(--ocp-grey-600);
+
+--focus-ring:var(--ocp-gold-warm);
+--status-danger:var(--ocp-hot-red);
+--status-live:var(--ocp-neon-pink);
+}

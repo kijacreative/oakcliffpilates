@@ -1,0 +1,27 @@
+:root{
+/* 4px base, editorial jumps at the top end */
+--space-0:0; --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+--space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px;
+--space-16:64px; --space-20:80px; --space-24:96px; --space-32:128px; --space-40:160px;
+
+/* Layout */
+--layout-gutter:24px;
+--layout-gutter-lg:48px;
+--layout-max:1280px;
+--layout-max-prose:68ch;
+--layout-section-y:var(--space-24);
+--layout-section-y-sm:var(--space-16);
+
+/* The framed-page motif: every brand-kit page sits inside a gold hairline
+   inset from the trim by this amount. */
+--frame-inset:24px;
+
+/* Component density */
+--control-height-sm:36px;
+--control-height:44px;   /* minimum touch target */
+--control-height-lg:56px;
+--control-pad-x:20px;
+--control-pad-x-lg:28px;
+--card-pad:24px;
+--card-pad-lg:32px;
+}

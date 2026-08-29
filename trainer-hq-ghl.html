@@ -1,0 +1,809 @@
+<!--
+==================================================================
+  OAK CLIFF PILATES — TRAINER HQ
+  GoHighLevel paste-in block. (Page Builder → add a Custom Code /
+  Code element → paste this ENTIRE file → Save → Publish.)
+
+  BEFORE YOU PASTE — one-time setup on the GHL section:
+    • Section background color .......... #0B0B0B
+    • Section top/bottom padding ........ 0
+    • Row / column padding .............. 0
+    • Column width ...................... Full width
+  Everything else is handled here. All CSS is scoped to #ocp-hq so
+  it cannot touch the rest of your funnel.
+
+  WHAT YOU EDIT — six things, all marked with SEARCH TAGS:
+    1. Photos ......................... search: IMAGE SLOTS
+    2. Brand colors / fonts ........... search: BRAND TOKENS
+    3. "Updated" date ................. search: UPDATED-DATE
+    4. Events ......................... search: EVENTS START
+    5. Offers ......................... search: OFFERS START
+    6. Member count (the 1,000) ....... search: MEMBER COUNT START
+    7. Announcements .................. search: NEWS START
+
+  Anything in [BRACKETS] is a placeholder — replace before publishing.
+==================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Khand:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap">
+
+<style>
+/* =================================================================
+   IMAGE SLOTS — the only place photo URLs live.
+   Upload each photo in GHL (Settings → Media Library), copy its URL,
+   and swap `none` for  url("https://...")  below. Leave any slot as
+   `none` and that tile renders as a clean dark panel — nothing breaks.
+
+     --img-logo    →  logo-puck-gold-on-black.png   (header mark)
+     --img-hero    →  photo-member-golden-window.jpg
+     --img-class   →  photo-neon-sign.jpg
+     --img-strip-1 →  photo-golden-hour-class.jpg
+     --img-strip-2 →  photo-overhead-class.jpg
+     --img-strip-3 →  photo-studio-reformers.jpg
+   ================================================================= */
+#ocp-hq{
+  --img-logo:none;
+  --img-hero:none;
+  --img-class:none;
+  --img-strip-1:none;
+  --img-strip-2:none;
+  --img-strip-3:none;
+}
+
+/* =================================================================
+   BRAND TOKENS — Oak Cliff Pilates design system. Change colors here.
+   ================================================================= */
+#ocp-hq{
+  --black:#0B0B0B;                  /* page surface — never pure #000 */
+  --ink:#161514;                    /* raised / empty photo panel     */
+  --card:#111110;                   /* card background                */
+  --gold:#C9A24A;                   /* signature accent               */
+  --gold-warm:#E9C977;              /* hover / highlight              */
+  --gold-deep:#8E6B2A;              /* eyebrows                       */
+  --cream:#F4EFE6;                  /* primary text / light surface   */
+  --white:#FFFFFF;
+  --grey-900:#1C1B19;
+  --grey-400:#A8A19A;               /* secondary text                 */
+  --grey-500:#7C766B;               /* muted text                     */
+  --grey-600:#57534A;               /* secondary text on light        */
+  --hairline:rgba(201,162,74,.28);  /* the gold rule that frames the page */
+  --subtle:rgba(244,239,230,.12);   /* neutral rule                   */
+  --red:#E91E2D;                    /* urgent flag only               */
+
+  --display:'Khand','Oswald','Arial Narrow',sans-serif;
+  --body:'Montserrat',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --scrim:linear-gradient(to top,rgba(11,11,11,.92) 0%,rgba(11,11,11,.72) 26%,rgba(11,11,11,.28) 58%,rgba(11,11,11,0) 100%);
+}
+
+/* ============ scoped reset ============ */
+#ocp-hq,#ocp-hq *,#ocp-hq *::before,#ocp-hq *::after{box-sizing:border-box;margin:0;padding:0}
+#ocp-hq{background:var(--black);color:var(--cream);font:400 16px/1.62 var(--body);-webkit-font-smoothing:antialiased;text-align:left;width:100%;overflow-x:hidden}
+#ocp-hq ul,#ocp-hq ol{list-style:none}
+#ocp-hq p,#ocp-hq li{color:var(--cream)}
+#ocp-hq strong{font-weight:700;color:inherit}
+#ocp-hq h1,#ocp-hq h2,#ocp-hq h3{font-weight:inherit}
+#ocp-hq a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--hairline);transition:color .18s var(--ease),border-color .18s var(--ease)}
+#ocp-hq a:hover{color:var(--gold-warm);border-bottom-color:var(--gold)}
+#ocp-hq a:focus-visible{outline:2px solid rgba(233,201,119,.5);outline-offset:3px;border-color:var(--gold)}
+#ocp-hq .ocp-wrap{max-width:1280px;margin:0 auto;padding:0 clamp(18px,5vw,48px)}
+
+/* anchor links land below the sticky bar */
+#ocp-hq [id]{scroll-margin-top:96px}
+
+/* ============ photo panels ============ */
+#ocp-hq .ocp-photo{position:relative;background-color:var(--ink);background-position:center;background-size:cover;background-repeat:no-repeat;border:1px solid var(--hairline);border-radius:8px;overflow:hidden}
+#ocp-hq .ocp-photo::after{content:"";position:absolute;inset:0;background:var(--scrim);opacity:.5;pointer-events:none}
+
+/* ============ header ============ */
+#ocp-hq .ocp-hdr{position:sticky;top:0;z-index:20;background:rgba(11,11,11,.86);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid var(--hairline)}
+#ocp-hq .ocp-hdr-in{display:flex;align-items:center;gap:24px;max-width:1280px;margin:0 auto;padding:14px clamp(18px,5vw,48px)}
+#ocp-hq .ocp-mark{display:flex;align-items:center;gap:14px;border:0}
+#ocp-hq .ocp-mark:hover{border:0}
+#ocp-hq .ocp-logo{width:44px;height:44px;flex:none;background-image:var(--img-logo);background-size:contain;background-position:center;background-repeat:no-repeat;border-radius:50%}
+#ocp-hq .ocp-mark b{font:600 20px/1 var(--display);letter-spacing:.02em;text-transform:uppercase;color:var(--cream)}
+#ocp-hq .ocp-hdr-tag{font:700 12px/1.3 var(--body);letter-spacing:.3em;text-transform:uppercase;color:var(--grey-500)}
+#ocp-hq .ocp-nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:6px}
+#ocp-hq .ocp-pill{font:600 15px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--cream);border:1px solid var(--subtle);border-radius:999px;padding:8px 16px;transition:border-color .18s var(--ease),background .18s var(--ease),color .18s var(--ease)}
+#ocp-hq .ocp-pill:hover{border-color:var(--gold);background:rgba(201,162,74,.1);color:var(--gold)}
+
+/* ============ hero ============ */
+#ocp-hq .ocp-hero{border-bottom:1px solid var(--hairline);padding:clamp(40px,7vw,80px) clamp(18px,5vw,48px) clamp(40px,6vw,72px)}
+#ocp-hq .ocp-hero-grid{display:grid;grid-template-columns:1fr minmax(300px,480px);gap:clamp(28px,5vw,64px);align-items:end}
+#ocp-hq .ocp-hero-photo{background-image:var(--img-hero);aspect-ratio:1/1;max-width:480px;width:100%;justify-self:end}
+#ocp-hq .ocp-eyebrow{font:700 12px/1.3 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep)}
+#ocp-hq .ocp-eyebrow.gold{color:var(--gold)}
+#ocp-hq .ocp-h1{font:700 clamp(56px,9vw,120px)/.88 var(--display);letter-spacing:-.015em;text-transform:uppercase;margin-top:18px}
+#ocp-hq .ocp-h1 span{color:var(--gold)}
+#ocp-hq .ocp-lede{font-size:18px;line-height:1.62;color:var(--grey-400);max-width:58ch;margin-top:20px}
+#ocp-hq .ocp-stamp{display:inline-block;margin-top:24px;font:600 15px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:9px 15px;border-radius:2px}
+
+/* ============ sections ============ */
+#ocp-hq .ocp-sec{padding-top:clamp(56px,9vw,112px)}
+#ocp-hq .ocp-sec-head{border-top:1px solid var(--hairline);padding-top:20px;margin-bottom:34px}
+#ocp-hq .ocp-h2{font:700 clamp(34px,6vw,56px)/.88 var(--display);letter-spacing:-.015em;text-transform:uppercase;margin-top:10px}
+#ocp-hq .ocp-h3{font:600 22px/1.08 var(--display);letter-spacing:-.005em;text-transform:uppercase}
+#ocp-hq .ocp-sec-head p{margin-top:14px;max-width:62ch;color:var(--grey-400)}
+#ocp-hq .ocp-sec-head.split{display:grid;grid-template-columns:1fr minmax(240px,38%);gap:clamp(24px,4vw,48px);align-items:start}
+#ocp-hq .ocp-sec-head.split .ocp-tile{aspect-ratio:4/3}
+#ocp-hq .ocp-note{font-size:14px;color:var(--grey-500)}
+
+/* ============ photo strip ============ */
+#ocp-hq .ocp-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(56px,9vw,112px)}
+#ocp-hq .ocp-strip .ocp-photo{aspect-ratio:4/3}
+#ocp-hq .ocp-strip .ocp-photo::after{opacity:.45}
+
+/* ============ run of show ============ */
+#ocp-hq .ocp-flow{border-left:1px solid var(--subtle);margin-left:6px}
+#ocp-hq .ocp-step{display:grid;grid-template-columns:132px 1fr;gap:0 28px;padding:28px 0 28px 28px;position:relative}
+#ocp-hq .ocp-step + .ocp-step{border-top:1px solid var(--subtle)}
+#ocp-hq .ocp-step::before{content:"";position:absolute;left:-4px;top:36px;width:7px;height:7px;background:var(--gold);border-radius:50%}
+#ocp-hq .ocp-time{font:600 26px/1 var(--display);letter-spacing:-.01em;color:var(--gold);padding-top:2px}
+#ocp-hq .ocp-time small{display:block;font:700 12px/1.3 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500);margin-top:9px}
+#ocp-hq .ocp-step-body p{margin-top:10px;color:var(--grey-400)}
+#ocp-hq .ocp-step-body ul{margin-top:14px;display:grid;gap:9px}
+#ocp-hq .ocp-step-body li,#ocp-hq .ocp-box ul li{padding-left:22px;position:relative}
+#ocp-hq .ocp-step-body li::before,#ocp-hq .ocp-box ul li::before{content:"\2014";position:absolute;left:0;top:0;color:var(--gold-deep)}
+
+/* ============ non-negotiables ============ */
+#ocp-hq .ocp-rules{margin-top:40px;background:var(--card);border:1px solid var(--hairline);border-radius:8px;padding:clamp(22px,3vw,32px);box-shadow:inset 0 1px 0 rgba(244,239,230,.06)}
+#ocp-hq .ocp-rules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--subtle);margin-top:22px}
+#ocp-hq .ocp-rule{background:var(--card);padding:20px 18px}
+#ocp-hq .ocp-rule b{display:block;font:600 20px/1.08 var(--display);text-transform:uppercase}
+#ocp-hq .ocp-rule span{display:block;margin-top:8px;font-size:14px;color:var(--grey-400)}
+
+/* ============ events ============ */
+#ocp-hq .ocp-events{display:grid;gap:14px}
+#ocp-hq .ocp-event{display:grid;grid-template-columns:116px 1fr;gap:0 28px;background:var(--card);border:1px solid var(--subtle);border-radius:8px;padding:24px;transition:border-color .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease)}
+#ocp-hq .ocp-event:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:0 12px 32px -12px rgba(0,0,0,.85)}
+#ocp-hq .ocp-date{border-right:1px solid var(--subtle);padding-right:22px}
+#ocp-hq .ocp-date b{display:block;font:700 52px/.88 var(--display);letter-spacing:-.015em}
+#ocp-hq .ocp-date span{display:block;font:600 20px/1.1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-top:2px}
+#ocp-hq .ocp-date em{display:block;font-style:normal;font-size:13px;color:var(--grey-500);margin-top:10px}
+#ocp-hq .ocp-event-body .ocp-h3{margin-bottom:8px}
+#ocp-hq .ocp-event-body > p{font-size:14px;color:var(--grey-400)}
+#ocp-hq .ocp-meta{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:18px}
+#ocp-hq .ocp-meta div{min-width:118px}
+#ocp-hq .ocp-meta b{display:block;font:700 11px/1.3 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500)}
+#ocp-hq .ocp-meta span{display:block;font-size:14px;margin-top:5px}
+#ocp-hq .ocp-tag{display:inline-block;font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;padding:6px 10px;margin-bottom:12px;border-radius:2px}
+#ocp-hq .ocp-tag.open{background:var(--gold);color:var(--black)}
+#ocp-hq .ocp-tag.set{background:transparent;color:var(--grey-400);border:1px solid var(--subtle)}
+#ocp-hq .ocp-tag.hot{background:var(--red);color:#fff}
+#ocp-hq .ocp-tag.partner{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+#ocp-hq .ocp-share{margin-top:18px;padding-top:16px;border-top:1px solid var(--subtle);display:flex;flex-wrap:wrap;gap:10px 20px;align-items:baseline}
+#ocp-hq .ocp-share b{font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500)}
+#ocp-hq .ocp-share a{font-size:14px;color:var(--gold);border-bottom:1px solid rgba(201,162,74,.4);word-break:break-all}
+#ocp-hq .ocp-share em{font-style:normal;font-size:14px;color:var(--grey-500)}
+
+/* ============ two-up / boxes / tips ============ */
+#ocp-hq .ocp-two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
+#ocp-hq .ocp-tips{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+#ocp-hq .ocp-tips .ocp-box{display:flex;flex-direction:column}
+#ocp-hq .ocp-tips .ocp-eyebrow{color:var(--gold)}
+#ocp-hq .ocp-tips ol{margin-top:14px;display:grid;gap:11px;counter-reset:t}
+#ocp-hq .ocp-tips ol li{counter-increment:t;padding-left:30px;position:relative;font-size:14px;line-height:1.62}
+#ocp-hq .ocp-tips ol li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:1px;font:600 11px/1.5 var(--body);color:var(--gold)}
+#ocp-hq .ocp-box{background:var(--card);border:1px solid var(--hairline);border-radius:8px;padding:clamp(22px,3vw,32px)}
+#ocp-hq .ocp-box .ocp-h3{margin:12px 0 14px}
+#ocp-hq .ocp-box ul{display:grid;gap:11px}
+#ocp-hq .ocp-box li,#ocp-hq .ocp-box p{font-size:14px;line-height:1.62}
+#ocp-hq .ocp-box > p{color:var(--grey-400)}
+#ocp-hq .ocp-box.light{background:var(--cream);border-color:var(--cream)}
+#ocp-hq .ocp-box.light .ocp-h3,#ocp-hq .ocp-box.light li,#ocp-hq .ocp-box.light strong{color:var(--black)}
+#ocp-hq .ocp-box.light p{color:var(--grey-600)}
+#ocp-hq .ocp-box.light li::before{color:var(--gold-deep)}
+
+/* ============ offers ============ */
+#ocp-hq .ocp-offers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+#ocp-hq .ocp-offer{background:var(--card);border:1px solid var(--hairline);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
+#ocp-hq .ocp-code{font:600 18px/1 var(--display);letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--black);padding:11px 20px}
+#ocp-hq .ocp-offer-body{padding:22px 20px 24px;display:flex;flex-direction:column;flex:1}
+#ocp-hq .ocp-who{font:600 11px/1.3 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:10px}
+#ocp-hq .ocp-price{font:700 40px/.88 var(--display);letter-spacing:-.015em;margin:4px 0 12px;color:var(--gold)}
+#ocp-hq .ocp-price small{font:400 15px/1 var(--body);color:var(--grey-400);letter-spacing:0}
+#ocp-hq .ocp-offer-body > p{font-size:14px;color:var(--grey-400)}
+#ocp-hq .ocp-script{margin-top:auto;padding-top:18px;border-top:1px solid var(--subtle)}
+#ocp-hq .ocp-script b{display:block;font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500);margin-bottom:9px}
+#ocp-hq .ocp-script q{font-size:14px;font-style:italic;line-height:1.62;color:var(--cream)}
+
+/* ============ the 1,000 ============ */
+#ocp-hq .ocp-goal{background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:clamp(24px,3.4vw,40px);box-shadow:inset 0 1px 0 rgba(244,239,230,.06)}
+#ocp-hq .ocp-goal-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--subtle);margin-top:26px}
+#ocp-hq .ocp-goal-num{background:var(--card);padding:18px 20px}
+#ocp-hq .ocp-goal-num b{display:block;font:700 clamp(40px,6vw,64px)/.88 var(--display);letter-spacing:-.015em;color:var(--gold)}
+#ocp-hq .ocp-goal-num.now b{color:var(--cream)}
+#ocp-hq .ocp-goal-num span{display:block;margin-top:8px;font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500)}
+#ocp-hq .ocp-rail{margin-top:26px}
+#ocp-hq .ocp-rail-track{height:10px;background:#1a1a18;border:1px solid var(--subtle);border-radius:2px;overflow:hidden}
+#ocp-hq .ocp-rail-fill{height:100%;background:var(--gold)}
+#ocp-hq .ocp-rail-legend{display:flex;justify-content:space-between;margin-top:10px;font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500)}
+
+/* ============ announcements ============ */
+#ocp-hq .ocp-item{display:grid;grid-template-columns:160px 1fr;gap:0 28px;padding:24px 0;border-top:1px solid var(--subtle)}
+#ocp-hq .ocp-news .ocp-item:last-child{border-bottom:1px solid var(--subtle)}
+#ocp-hq .ocp-when{font:600 20px/1.08 var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--grey-400)}
+#ocp-hq .ocp-when span{display:block;margin-top:8px;font:600 11px/1 var(--body);letter-spacing:.18em;color:var(--gold)}
+#ocp-hq .ocp-item-body p{margin-top:9px;color:var(--grey-400)}
+#ocp-hq .ocp-item-body p strong{color:var(--cream)}
+
+/* ============ footer ============ */
+#ocp-hq .ocp-foot{margin-top:clamp(48px,7vw,88px);border-top:1px solid var(--hairline);padding:32px 0 48px;display:flex;flex-wrap:wrap;gap:28px 48px;align-items:flex-start}
+#ocp-hq .ocp-foot > div{min-width:180px}
+#ocp-hq .ocp-foot b{display:block;font:600 11px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--grey-500)}
+#ocp-hq .ocp-foot span{display:block;margin-top:8px;font-size:14px}
+#ocp-hq .ocp-foot-assets{min-width:260px}
+#ocp-hq .ocp-foot-assets ul{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:8px}
+#ocp-hq .ocp-foot-assets a{font-size:14px;color:var(--gold);border-bottom:1px solid rgba(201,162,74,.4)}
+#ocp-hq .ocp-sign{width:100%;margin-top:8px;display:flex;align-items:center;gap:clamp(16px,3vw,32px)}
+#ocp-hq .ocp-sign b{font:700 clamp(32px,7.5vw,72px)/.88 var(--display);letter-spacing:-.015em;text-transform:uppercase;color:var(--white)}
+
+/* ============ responsive ============ */
+@media (max-width:960px){
+  #ocp-hq .ocp-offers,#ocp-hq .ocp-rules-grid{grid-template-columns:1fr 1fr}
+  #ocp-hq .ocp-hero-grid{grid-template-columns:1fr}
+  #ocp-hq .ocp-hero-photo{max-width:none;justify-self:stretch;aspect-ratio:16/10}
+  #ocp-hq .ocp-sec-head.split{grid-template-columns:1fr}
+  #ocp-hq .ocp-sec-head.split .ocp-tile{aspect-ratio:16/9}
+  #ocp-hq .ocp-hdr-tag{display:none}
+}
+@media (max-width:680px){
+  #ocp-hq .ocp-goal-nums{grid-template-columns:1fr}
+  #ocp-hq .ocp-step{grid-template-columns:1fr;gap:12px;padding-left:22px}
+  #ocp-hq .ocp-time{display:flex;align-items:baseline;gap:14px}
+  #ocp-hq .ocp-time small{margin-top:0}
+  #ocp-hq .ocp-event{grid-template-columns:1fr;gap:16px}
+  #ocp-hq .ocp-date{border-right:0;border-bottom:1px solid var(--subtle);padding:0 0 14px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  #ocp-hq .ocp-date b{font-size:36px}
+  #ocp-hq .ocp-date span,#ocp-hq .ocp-date em{margin-top:0}
+  #ocp-hq .ocp-two,#ocp-hq .ocp-offers,#ocp-hq .ocp-tips,#ocp-hq .ocp-strip{grid-template-columns:1fr}
+  #ocp-hq .ocp-item{grid-template-columns:1fr;gap:10px}
+  #ocp-hq .ocp-when{display:flex;align-items:baseline;gap:14px}
+  #ocp-hq .ocp-when span{margin-top:0}
+  #ocp-hq .ocp-nav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  #ocp-hq *{transition:none !important}
+}
+</style>
+
+<div id="ocp-hq">
+
+  <!-- ================= HEADER ================= -->
+  <header class="ocp-hdr">
+    <div class="ocp-hdr-in">
+      <a class="ocp-mark" href="#ocp-top"><span class="ocp-logo" role="img" aria-label="Oak Cliff Pilates"></span><b>Trainer HQ</b></a>
+      <span class="ocp-hdr-tag">Internal — Trainers Only</span>
+      <nav class="ocp-nav">
+        <a class="ocp-pill" href="#ocp-class">The Class</a>
+        <a class="ocp-pill" href="#ocp-events">Events</a>
+        <a class="ocp-pill" href="#ocp-offers">Offers</a>
+        <a class="ocp-pill" href="#ocp-goal">The 1,000</a>
+        <a class="ocp-pill" href="#ocp-tips">Tips</a>
+        <a class="ocp-pill" href="#ocp-news">Announcements</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="ocp-hero ocp-wrap" id="ocp-top">
+    <div class="ocp-hero-grid">
+      <div>
+        <div class="ocp-eyebrow gold">Oak Cliff Pilates — Internal</div>
+        <h1 class="ocp-h1">Trainer<br><span>HQ</span></h1>
+        <p class="ocp-lede">Everything you need before you step on the floor. The class standard, what's on the calendar, and what we're pushing right now.</p>
+        <!-- UPDATED-DATE — change this every time you edit the page -->
+        <div class="ocp-stamp">Updated [Aug 14, 2026]</div>
+      </div>
+      <div class="ocp-photo ocp-hero-photo" role="img" aria-label="Trainer on the floor before class"></div>
+    </div>
+  </section>
+
+  <main>
+
+  <!-- ================= 1. THE CLASS ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-class">
+    <div class="ocp-sec-head split">
+      <div>
+        <div class="ocp-eyebrow">01 — Run of show</div>
+        <h2 class="ocp-h2">The 45-minute standard</h2>
+        <p>Every class is 45 minutes, start to finish. Here's what that looks like from the moment the door opens to the moment they walk out.</p>
+      </div>
+      <div class="ocp-photo ocp-tile" style="background-image:var(--img-class)" role="img" aria-label="Member in a side plank under the OCP neon sign"></div>
+    </div>
+
+    <div class="ocp-flow">
+
+      <div class="ocp-step">
+        <div class="ocp-time">−[15] min<small>Doors</small></div>
+        <div class="ocp-step-body">
+          <h3 class="ocp-h3">Be on the floor before they are</h3>
+          <p>Room set, springs reset, music on, lights right. You're greeting people as they walk in — not still setting up.</p>
+          <ul>
+            <li>Learn who's new before class starts. Check the roster.</li>
+            <li>Greet every client by name. New or 200 classes in.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ocp-step">
+        <div class="ocp-time">−[8] min<small>New clients</small></div>
+        <div class="ocp-step-body">
+          <h3 class="ocp-h3">Walk new clients through the reformer</h3>
+          <p>Never let someone's first class start cold. Pull them to a reformer and cover it hands-on.</p>
+          <ul>
+            <li>Carriage, footbar, headrest, shoulder blocks — what moves and what doesn't.</li>
+            <li>Springs and resistance: how you'll call them, how they change them.</li>
+            <li>Straps and handles, safe entry and exit off the carriage.</li>
+            <li>Then ask: <strong>"Any questions before we start?"</strong> Answer them before you cue the first movement.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ocp-step">
+        <div class="ocp-time">0:00 — 45:00<small>Class</small></div>
+        <div class="ocp-step-body">
+          <h3 class="ocp-h3">Teach the class that's on the schedule</h3>
+          <p>If it says [Sculpt], teach [Sculpt]. Clients book by class type and they should get exactly what they signed up for — every time, at every location, from every trainer.</p>
+          <ul>
+            <li>Start on time and end on time. 45 minutes means 45 minutes.</li>
+            <li>Cue for the room you actually have — offer the modification and the progression.</li>
+            <li>Move through the room. Hands-on corrections where welcome, eyes on new clients throughout.</li>
+            <li>Use names. That's the whole difference between a workout and our workout.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ocp-step">
+        <div class="ocp-time">45:00<small>The close</small></div>
+        <div class="ocp-step-body">
+          <h3 class="ocp-h3">Don't skip the last two minutes</h3>
+          <p>How you end class is how they remember it. Every class closes the same four ways:</p>
+          <ul>
+            <li><strong>Thank the class.</strong> Out loud, to the whole room, before anyone gets up.</li>
+            <li><strong>Ask for the review.</strong> "If you liked today, leave us a Google review — it's how people find us." [Link/QR at the front desk.]</li>
+            <li><strong>Answer questions.</strong> Stay on the floor a few minutes. Don't disappear into the back.</li>
+            <li><strong>Talk memberships.</strong> First-timers and anyone on an intro pack get asked what's next. Know the current offers below cold.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ocp-rules">
+      <div class="ocp-eyebrow">Non-negotiables</div>
+      <div class="ocp-rules-grid">
+        <div class="ocp-rule"><b>45 minutes</b><span>Start on time. End on time. No 40, no 50.</span></div>
+        <div class="ocp-rule"><b>Teach the type</b><span>The schedule is a promise. Deliver what it says.</span></div>
+        <div class="ocp-rule"><b>Nobody starts cold</b><span>Every new client gets the reformer intro.</span></div>
+        <div class="ocp-rule"><b>Close it out</b><span>Thank them, ask for the review, talk memberships.</span></div>
+      </div>
+      <p class="ocp-note" style="margin-top:20px">Need a sub or running late? Text [Amanda] as early as you can — not the group chat.</p>
+    </div>
+  </section>
+
+  <!-- ================= PHOTO STRIP ================= -->
+  <div class="ocp-strip ocp-wrap">
+    <div class="ocp-photo" style="background-image:var(--img-strip-1)" role="img" aria-label="Golden-hour reformer class"></div>
+    <div class="ocp-photo" style="background-image:var(--img-strip-2)" role="img" aria-label="Overhead view of a reformer class in progress"></div>
+    <div class="ocp-photo" style="background-image:var(--img-strip-3)" role="img" aria-label="Reformers lined up in raking afternoon light"></div>
+  </div>
+
+  <!-- ================= 2. EVENTS ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-events">
+    <div class="ocp-sec-head">
+      <div class="ocp-eyebrow">02 — On the calendar</div>
+      <h2 class="ocp-h2">Events</h2>
+      <p>Events are how this brand grows. If you're teaching one, you're running it. If you're not, come anyway — bring a friend and be in the room.</p>
+    </div>
+
+    <div class="ocp-events">
+
+      <!-- ================= EVENTS START =================
+      COPY-ME — duplicate one whole <article class="ocp-event"> block for a new event.
+      Tag options:  <span class="ocp-tag open">OCP Event</span>
+                    <span class="ocp-tag set">Private Party</span>
+                    <span class="ocp-tag partner">Partnership Event</span>
+                    <span class="ocp-tag hot">All hands</span>
+      ================================================== -->
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>27</b><span>Aug</span><em>Thu · 8:30 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag open">OCP Event</span>
+          <h3 class="ocp-h3">Gentlemen's Night</h3>
+          <p>45 minute class plus cocktails prepared by Pepe. $20 for non-members. Free for members.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>Uptown</span></div>
+            <div><b>Teaching</b><span>Pepe Mendoza</span></div>
+            <div><b>Pay</b><span>$100</span></div>
+            <div><b>Call time</b><span>15 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><a href="https://app.arketa.co/oakcliffpilates/checkout/5qDhN6ZKxe7yNhTx9yEc" target="_blank" rel="noopener">app.arketa.co/oakcliffpilates/checkout/5qDhN6ZKxe7yNhTx9yEc</a></div>
+        </div>
+      </article>
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>30</b><span>Aug</span><em>Sun · 12:30 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag set">Private Party</span>
+          <h3 class="ocp-h3">Brunch in Colour</h3>
+          <p>Private party for women's group. 45 minute class.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>Lower Greenville</span></div>
+            <div><b>Teaching</b><span>Verandah Mims</span></div>
+            <div><b>Pay</b><span>$50</span></div>
+            <div><b>Call time</b><span>15 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><em>Private — don't post this one.</em></div>
+        </div>
+      </article>
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>04</b><span>Sep</span><em>Fri · 6:30 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag open">OCP Event</span>
+          <h3 class="ocp-h3">Book Club</h3>
+          <p>Monthly book club event. This month's book is Mad Mabel. 2 hour event with cocktails and a charcuterie board. Free to attend.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>Uptown</span></div>
+            <div><b>Teaching</b><span>Amanda Lauro</span></div>
+            <div><b>Pay</b><span>$50</span></div>
+            <div><b>Call time</b><span>15 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><a href="https://app.arketa.co/oakcliffpilates/checkout/ZW6HDnNXibI3KtdFSzM8" target="_blank" rel="noopener">app.arketa.co/oakcliffpilates/checkout/ZW6HDnNXibI3KtdFSzM8</a></div>
+        </div>
+      </article>
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>20</b><span>Sep</span><em>Sun · 10:00 AM – 1:00 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag partner">Partnership Event</span>
+          <h3 class="ocp-h3">Cold Club: Pilates and Cold Plunge with HG Sply Co.</h3>
+          <p>Includes a mat Pilates class on the rooftop with a breath work session before getting in a cold plunge. 30 minute class. $50 tickets. Includes goodie bags and a robe and food and drinks.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>HG Sply Co. Rooftop</span></div>
+            <div><b>Teaching</b><span>Tina Darling</span></div>
+            <div><b>Pay</b><span>$200</span></div>
+            <div><b>Call time</b><span>30 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><em>TK — link from Isabel</em></div>
+        </div>
+      </article>
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>26</b><span>Sep</span><em>Sat · 2:30 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag open">OCP Event</span>
+          <h3 class="ocp-h3">Athena Event</h3>
+          <p>$25 for 30 minute class. Special speaker. Women's wellness vendors.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>Lower Greenville</span></div>
+            <div><b>Teaching</b><span>TK</span></div>
+            <div><b>Pay</b><span>$100</span></div>
+            <div><b>Call time</b><span>15 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><em>TK — link from Isabel</em></div>
+        </div>
+      </article>
+
+      <article class="ocp-event">
+        <div class="ocp-date"><b>13</b><span>Oct</span><em>Tue · 6:30 PM</em></div>
+        <div class="ocp-event-body">
+          <span class="ocp-tag set">Private Party</span>
+          <h3 class="ocp-h3">Private party for Miranda Foster</h3>
+          <p>Private birthday party for a long time member and her friends and a few trainers.</p>
+          <div class="ocp-meta">
+            <div><b>Location</b><span>Bishop Arts</span></div>
+            <div><b>Teaching</b><span>Brianna Rollings</span></div>
+            <div><b>Pay</b><span>$100</span></div>
+            <div><b>Call time</b><span>15 min early</span></div>
+          </div>
+          <div class="ocp-share"><b>Share link</b><em>Private — don't post this one.</em></div>
+        </div>
+      </article>
+      <!-- ================= EVENTS END ================= -->
+
+    </div>
+
+    <div class="ocp-two">
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">If you're teaching</div>
+        <h3 class="ocp-h3">You're not just the instructor — you're the host</h3>
+        <ul>
+          <li><strong>Pay:</strong> $50 for free events, $100 for paid events, on your regular check. Special events pay more based on time and effort. Confirm with Amanda before the date.</li>
+          <li><strong>Promote it:</strong> minimum [2] posts — one before, one day-of. Repost the flyer to your story, tag <strong>@oakcliffpilates</strong>, and personally invite [5] of your clients.</li>
+          <li><strong>Arrive early:</strong> [30–45] minutes. Help set up, don't just show up to cue.</li>
+          <li><strong>Bring the pitch:</strong> know the current offers cold. Every event attendee is a lead.</li>
+          <li><strong>Stay after:</strong> talk to people. Get names. Answer membership questions.</li>
+        </ul>
+      </div>
+      <div class="ocp-box light">
+        <div class="ocp-eyebrow">If you're not teaching</div>
+        <h3 class="ocp-h3">Come anyway</h3>
+        <p style="margin-bottom:14px">Trainers in the room is the whole reason our events don't feel like fitness marketing. Take the class. Bring a friend. Be in the photos.</p>
+        <ul>
+          <li>Events are free for trainers unless noted.</li>
+          <li>Repost the flyer even when it's not your class.</li>
+          <li>Your clients follow you, not us — one story from you moves more tickets than a paid ad.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. OFFERS ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-offers">
+    <div class="ocp-sec-head">
+      <div class="ocp-eyebrow">03 — What to push</div>
+      <h2 class="ocp-h2">Offers running now</h2>
+      <p>Know these by heart. When a client asks "what should I do next?" you should have an answer in one sentence — and the code ready.</p>
+    </div>
+
+    <div class="ocp-offers">
+
+      <!-- ================= OFFERS START =================
+      COPY-ME — duplicate one whole <article class="ocp-offer"> block for a new offer.
+      ================================================== -->
+
+      <article class="ocp-offer">
+        <div class="ocp-code">Intro offer</div>
+        <div class="ocp-offer-body">
+          <div class="ocp-who">New clients</div>
+          <h3 class="ocp-h3">3 Classes</h3>
+          <div class="ocp-price">$25</div>
+          <p>Expires in 30 days. The single best thing to hand a first-timer — and the start of every membership we sell.</p>
+          <div class="ocp-script">
+            <b>Say it like this</b>
+            <q>Three classes for $25 — try all three studios, then we'll talk about what fits.</q>
+          </div>
+        </div>
+      </article>
+
+      <article class="ocp-offer">
+        <div class="ocp-code">Intro offer</div>
+        <div class="ocp-offer-body">
+          <div class="ocp-who">Ready to go all in</div>
+          <h3 class="ocp-h3">1 Week Unlimited</h3>
+          <div class="ocp-price">$59</div>
+          <p>Seven days, every class, every studio. Best for the person who wants to know if this fits their week before they commit.</p>
+          <div class="ocp-script">
+            <b>Say it like this</b>
+            <q>$59 for a full week unlimited — come every day and see what sticks.</q>
+          </div>
+        </div>
+      </article>
+
+      <article class="ocp-offer">
+        <div class="ocp-code">Intro offer</div>
+        <div class="ocp-offer-body">
+          <div class="ocp-who">2–3x a week</div>
+          <h3 class="ocp-h3">10 Classes</h3>
+          <div class="ocp-price">$145</div>
+          <p>Expires in 30 days. Lead with the per-class math — it lands at $14.50 a class.</p>
+          <div class="ocp-script">
+            <b>Say it like this</b>
+            <q>Ten classes for $145 — that's $14.50 a class if you're coming a few times a week.</q>
+          </div>
+        </div>
+      </article>
+      <!-- ================= OFFERS END ================= -->
+
+    </div>
+
+    <div class="ocp-box" style="margin-top:14px">
+      <div class="ocp-eyebrow">Where to send them</div>
+      <h3 class="ocp-h3">All three intro offers live in one place</h3>
+      <p><a href="https://oakcliffpilates.com/intro-offers" target="_blank" rel="noopener">oakcliffpilates.com/intro-offers</a> — save it in your notes app and text it straight from the floor.</p>
+    </div>
+
+    <div class="ocp-two">
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">Special prices</div>
+        <h3 class="ocp-h3">2 Week Unlimited — $89</h3>
+        <p style="margin-bottom:14px">Lower Greenville studio only. Use it to fill the new floor and to convert anyone who lives or works on that side of town.</p>
+        <ul>
+          <li>Only valid at Lower Greenville — don't promise it at Uptown or Bishop Arts.</li>
+          <li>Great follow-up for someone who just finished a 3-class intro.</li>
+        </ul>
+      </div>
+
+      <div class="ocp-box light">
+        <div class="ocp-eyebrow">Trainer special offer</div>
+        <h3 class="ocp-h3">3 months unlimited, 20% off</h3>
+        <p style="margin-bottom:14px">Yours to give. Only share it with special clients who are on the fence — it is not a public offer and it doesn't go on social.</p>
+        <ul>
+          <li>Code is <strong>YOURNAME20</strong> — i.e. <strong>CHARLEY20</strong>.</li>
+          <li>One-on-one only: text it, say it, hand it over in person.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ocp-box" style="margin-top:14px">
+      <div class="ocp-eyebrow">How to hand it off</div>
+      <h3 class="ocp-h3">Don't sell. Point.</h3>
+      <p>Your job isn't to close — it's to name the right next step and get them to the front desk or the link. If someone's on the fence, get their name to [the front desk] and they'll follow up within 12 hours. Never invent a discount that isn't on this page.</p>
+    </div>
+  </section>
+
+  <!-- ================= 4. THE 1,000 ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-goal">
+    <div class="ocp-sec-head">
+      <div class="ocp-eyebrow">04 — The number</div>
+      <h2 class="ocp-h2">1,000 active members</h2>
+      <p>That's the goal, and we want it before the end of the year. Every intro offer you hand out and every event you post moves this number.</p>
+    </div>
+
+    <!-- ================= MEMBER COUNT START =================
+    Update the three numbers below AND the width on ocp-rail-fill
+    (922 ÷ 1000 = 92.2%) AND the two legend labels.
+    ====================================================== -->
+    <div class="ocp-goal">
+      <div class="ocp-eyebrow">Where we stand</div>
+      <div class="ocp-goal-nums">
+        <div class="ocp-goal-num now"><b>922</b><span>Active members today</span></div>
+        <div class="ocp-goal-num"><b>78</b><span>Left to hit the goal</span></div>
+        <div class="ocp-goal-num"><b>1,000</b><span>By December 31</span></div>
+      </div>
+      <div class="ocp-rail">
+        <div class="ocp-rail-track"><div class="ocp-rail-fill" style="width:92.2%"></div></div>
+        <div class="ocp-rail-legend"><span>922 of 1,000</span><span>78 to go</span></div>
+      </div>
+    </div>
+    <!-- ================= MEMBER COUNT END ================= -->
+
+    <div class="ocp-two">
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">What moves it</div>
+        <h3 class="ocp-h3">78 members is a handful a week</h3>
+        <ul>
+          <li>Hand the 3-class intro to every first-timer in your class — by name, before they leave.</li>
+          <li>Follow up with your intro-pack finishers. That conversation is where memberships come from.</li>
+          <li>Post the events. Event attendees are the warmest leads we get.</li>
+          <li>Save your <strong>YOURNAME20</strong> code for the people who are genuinely on the fence.</li>
+        </ul>
+      </div>
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">Keep it honest</div>
+        <h3 class="ocp-h3">Active means active</h3>
+        <p style="margin-bottom:14px">A member who stops coming is a member we lose in 60 days. Retention counts as much as sign-ups toward the 1,000.</p>
+        <ul>
+          <li>Learn names. Use them in class.</li>
+          <li>Notice when a regular disappears — tell the front desk.</li>
+          <li>Bring a friend night works: ask people to bring someone.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. TIPS ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-tips">
+    <div class="ocp-sec-head">
+      <div class="ocp-eyebrow">05 — On the floor</div>
+      <h2 class="ocp-h2">Tips</h2>
+      <p>The three things new trainers ask about most. Learn them once and the desk stops being a bottleneck.</p>
+    </div>
+
+    <div class="ocp-tips">
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">Tip 01</div>
+        <h3 class="ocp-h3">How to use Arketa</h3>
+        <p style="margin-bottom:14px">Arketa is where the roster, the check-ins, and the client history live. Open it before you unlock the door, not after class starts.</p>
+        <ol>
+          <li>Log in at <strong>[app.arketa.co]</strong> with your trainer account. Ask [Charley] if you don't have one.</li>
+          <li>Go to <strong>Schedule</strong> and open today's class at your location.</li>
+          <li>Pull up the <strong>roster</strong> — first-timers are flagged. Note their names before anyone walks in.</li>
+          <li>Tap a client to see class count, membership, and notes. Injuries and modifications live here.</li>
+          <li>Leave a note after class when something matters for the next trainer.</li>
+        </ol>
+        <p class="ocp-note" style="margin-top:16px">If Arketa is down, take attendance on paper and send it to [Charley] the same day.</p>
+      </div>
+
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">Tip 02</div>
+        <h3 class="ocp-h3">Checking out clients</h3>
+        <p style="margin-bottom:14px">Everyone in the room gets checked in before you cue the first movement. An unchecked client is an unpaid class.</p>
+        <ol>
+          <li>Open today's class in <strong>Schedule</strong> and tap <strong>Check in</strong> next to each name as they arrive.</li>
+          <li>Walk-in with no booking? Add them to the class, then take payment or apply their pass at the desk.</li>
+          <li>No credits left on their account: sell the [3 Classes Intro] or a class pack right in Arketa before class.</li>
+          <li>No-shows and late cancels stay unchecked — don't check in someone who isn't in the room.</li>
+          <li>Close out the roster before you leave. Every name marked one way or the other.</li>
+        </ol>
+        <p class="ocp-note" style="margin-top:16px">Billing disputes go to [Kiel] — never comp or refund on the spot.</p>
+      </div>
+
+      <div class="ocp-box">
+        <div class="ocp-eyebrow">Tip 03</div>
+        <h3 class="ocp-h3">Moving clients in class</h3>
+        <p style="margin-bottom:14px">Reformer swaps happen constantly — a spring issue, a height mismatch, a client who wants the back row. Move them, then fix the record.</p>
+        <ol>
+          <li>Ask before you move anyone. "Do you mind sliding down one?" — never reassign silently.</li>
+          <li>Update the <strong>spot assignment</strong> on the roster so the reformer number matches the person on it.</li>
+          <li>Broken equipment: move the client first, log the reformer number the same day, and flag the spot so it can't be booked.</li>
+          <li>New clients belong where you can see them — front row or nearest the door.</li>
+          <li>Wrong class or wrong time? Move their booking in Arketa instead of sending them to the desk.</li>
+        </ol>
+        <p class="ocp-note" style="margin-top:16px">Anything you change mid-class, note it on the roster before you clock out.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. ANNOUNCEMENTS ================= -->
+  <section class="ocp-sec ocp-wrap" id="ocp-news">
+    <div class="ocp-sec-head">
+      <div class="ocp-eyebrow">06 — From the office</div>
+      <h2 class="ocp-h2">Announcements</h2>
+      <p>Soonest first. Check before every shift.</p>
+    </div>
+
+    <div class="ocp-news">
+
+      <!-- ================= NEWS START =================
+      COPY-ME — duplicate one whole <div class="ocp-item"> block.
+      ================================================== -->
+
+      <div class="ocp-item">
+        <div class="ocp-when">Aug 30<span>4:30 – 7:30 PM</span></div>
+        <div class="ocp-item-body">
+          <h3 class="ocp-h3">Staff Photoshoot at Lower Greenville</h3>
+          <p>Bring your glamour fits for a vanity fair style cover shoot. All trainers are required to join.</p>
+          <div class="ocp-share"><b>RSVP</b><a href="https://app.arketa.co/oakcliffpilates/checkout/nz8UxwDwMbClSjk7GH38" target="_blank" rel="noopener">app.arketa.co/oakcliffpilates/checkout/nz8UxwDwMbClSjk7GH38</a></div>
+        </div>
+      </div>
+
+      <div class="ocp-item">
+        <div class="ocp-when">Sep 6<span>4:30 – 7:30 PM</span></div>
+        <div class="ocp-item-body">
+          <h3 class="ocp-h3">Staff Photoshoot at Lower Greenville</h3>
+          <p>Bring your glamour fits for a vanity fair style cover shoot. All trainers are required to join.</p>
+          <div class="ocp-share"><b>RSVP</b><a href="https://app.arketa.co/oakcliffpilates/checkout/PcrWkEnol69GcIG7xvuL" target="_blank" rel="noopener">app.arketa.co/oakcliffpilates/checkout/PcrWkEnol69GcIG7xvuL</a></div>
+        </div>
+      </div>
+
+      <div class="ocp-item">
+        <div class="ocp-when">Sep 19<span>5:00 – 7:00 PM</span></div>
+        <div class="ocp-item-body">
+          <h3 class="ocp-h3">Roundtable Team Dinner</h3>
+          <p>We're getting the whole OCP team together for a team dinner at Lower Greenville.</p>
+          <p>We have new faces to introduce, updates to share, we'll walk through our annual events calendar, reveal our new Trainer Website, and then close with questions and conversation. We will keep this prompt and have everyone out before 7pm. Dinner and drinks included.</p>
+          <div class="ocp-share"><b>RSVP</b><a href="https://app.arketa.co/oakcliffpilates/checkout/o7MSxt3rlmzpsBYIS54k" target="_blank" rel="noopener">app.arketa.co/oakcliffpilates/checkout/o7MSxt3rlmzpsBYIS54k</a></div>
+        </div>
+      </div>
+      <!-- ================= NEWS END ================= -->
+
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="ocp-wrap">
+    <div class="ocp-foot">
+      <div><b>Schedule &amp; subs</b><span>Charley@oakcliffpilates.com</span></div>
+      <div><b>Events &amp; marketing assets</b><span>Isabel@oakcliffpilates.com</span></div>
+      <div class="ocp-foot-assets"><b>Flyers, graphics, captions</b><ul><li><a href="https://drive.google.com/drive/folders/18xeRNgO77thIr7_os57l-3i4svBLJCly?usp=sharing" target="_blank" rel="noopener">Logos</a></li><li><a href="https://drive.google.com/drive/folders/14sPj70owIHW_rCowBz7JW_9gkXLzjxwD?usp=sharing" target="_blank" rel="noopener">Flyers</a></li><li><a href="https://drive.google.com/drive/folders/1hLoFMdl-OX-zKL4ZuIOMQcMY1og9DhmL?usp=sharing" target="_blank" rel="noopener">Photos</a></li><li><a href="https://drive.google.com/drive/folders/1EPUOcVk1CNBOF8X6C-qFH_eBE7wMQ6fl?usp=sharing" target="_blank" rel="noopener">Videos</a></li></ul></div>
+      <div><b>Payroll questions</b><span>Kiel@oakcliffpilates.com</span></div>
+      <div class="ocp-sign"><b>Oak Cliff Pilates</b></div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* Smooth-scroll the in-page nav pills without touching the rest of the funnel. */
+(function(){
+  var root=document.getElementById('ocp-hq');
+  if(!root)return;
+  root.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#ocp-"]');
+    if(!a)return;
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    if(!t)return;
+    e.preventDefault();
+    var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+  });
+})();
+</script>

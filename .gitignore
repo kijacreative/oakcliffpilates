@@ -1,0 +1,9 @@
+# Unrelated video-project working directories that happen to live in this folder.
+# output/ holds two ~4.4 GB masters; work/ holds a Python venv and a compiled ffmpeg.
+work/
+output/
+
+.DS_Store
+*.log
+.vercel/
+node_modules/

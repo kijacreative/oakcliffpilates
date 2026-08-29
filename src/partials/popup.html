@@ -1,0 +1,81 @@
+<div class="pop" id="popup" role="dialog" aria-modal="true" aria-labelledby="pop-head" hidden>
+  <div class="pop-shell">
+    <button class="pop-close" data-close-popup aria-label="Close">✕</button>
+
+    <div class="pop-panel">
+      <div style="display:flex;align-items:center;gap:16px">
+        <img class="logo-puck" src="/img/logo-puck.png" alt="Oak Cliff Pilates" width="44" height="44">
+        <p class="pop-eyebrow">New here · intro offer</p>
+      </div>
+      <div class="pop-steps" aria-hidden="true">
+        <span class="pop-dot on"></span><span class="pop-dot"></span><span class="pop-dot"></span>
+      </div>
+
+      <!-- step 0 -->
+      <div class="pop-step" data-step="0">
+        <h2 class="pop-head" id="pop-head">Start at <span class="foil">$25</span></h2>
+        <p class="pop-fine" style="margin-top:24px">3 Classes for $25, 1 Week Unlimited for $59 and 10 Classes for $145.</p>
+        <div style="margin-top:24px">
+          <div class="pop-offer-row"><span>3 classes</span><span>$25</span></div>
+          <div class="pop-offer-row"><span>1 week unlimited</span><span>$59</span></div>
+          <div class="pop-offer-row"><span>10 classes</span><span>$145</span></div>
+        </div>
+        <p class="pop-ask" style="margin-top:24px">First, what brings you in?</p>
+        <div class="pop-reasons" style="margin-top:24px">
+          <button class="btn btn--secondary btn--full" data-reason><span>I'm new to reformer</span></button>
+          <button class="btn btn--secondary btn--full" data-reason><span>I want to get stronger</span></button>
+          <button class="btn btn--secondary btn--full" data-reason><span>I'm coming back from an injury</span></button>
+          <button class="btn btn--secondary btn--full" data-reason><span>I'm here for the community</span></button>
+        </div>
+        <div style="display:grid"><button class="pop-ghost" data-close-popup>No, thanks</button></div>
+      </div>
+
+      <!-- step 1 -->
+      <div class="pop-step" data-step="1" hidden>
+        <button class="pop-back" data-back="0">← Back</button>
+        <h2 class="pop-head" style="margin-top:24px">Tell us who you are.</h2>
+        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> · we've got you. Drop your info and we'll hold your intro offer.</p>
+        <form class="pop-fields" id="pop-form" style="margin-top:24px" novalidate>
+          <label class="field" for="pop-name"><span class="field__label">Name</span><span class="field__box"><input id="pop-name" name="name" type="text" placeholder="First and last" autocomplete="name" required></span></label>
+          <label class="field" for="pop-email"><span class="field__label">Email</span><span class="field__box"><input id="pop-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" required></span></label>
+          <label class="field" for="pop-phone"><span class="field__label">Phone</span><span class="field__box"><input id="pop-phone" name="phone" type="tel" placeholder="Optional" autocomplete="tel"></span></label>
+          <div class="pop-submit">
+            <button class="btn btn--lg btn--primary btn--full" type="submit" disabled><span>See my offers</span></button>
+            <p class="pop-fine">First-timers only, one per person. We'll text you class reminders, never spam.</p>
+          </div>
+        </form>
+        <div style="display:grid"><button class="pop-ghost" data-close-popup>Never mind</button></div>
+      </div>
+
+      <!-- step 2 -->
+      <div class="pop-step" data-step="2" hidden>
+        <button class="pop-back" data-back="1">← Back</button>
+        <h2 class="pop-head" style="margin-top:24px">You're in<span data-firstname></span>.</h2>
+        <p class="pop-ask" style="margin-top:24px">Pick your intro offer and we'll take you straight to checkout.</p>
+        <div class="pop-offers" style="margin-top:24px">
+          <a class="pop-offer" href="https://app.arketa.co/oakcliffpilates" target="_blank" rel="noopener">
+            <div class="pop-offer__top"><span>3 classes</span><span>$25</span></div>
+            <p>Try all three studios before you commit.</p>
+          </a>
+          <a class="pop-offer pop-offer--best" href="https://app.arketa.co/oakcliffpilates" target="_blank" rel="noopener">
+            <div class="pop-offer__top"><span>1 week unlimited</span><span>$59</span></div>
+            <p>Seven days, every class, every studio.</p>
+            <div style="margin-top:12px"><span class="badge badge--gold">Most popular</span></div>
+          </a>
+          <a class="pop-offer" href="https://app.arketa.co/oakcliffpilates" target="_blank" rel="noopener">
+            <div class="pop-offer__top"><span>10 classes</span><span>$145</span></div>
+            <p>For the ones who already know. Expires in 30 days.</p>
+          </a>
+        </div>
+        <p class="pop-fine" style="margin-top:24px">Grip socks required. Roll in ten minutes early. Cancel free up to 4 hours out.</p>
+        <div style="display:grid"><button class="pop-ghost" data-close-popup>Never mind</button></div>
+      </div>
+    </div>
+
+    <div class="pop-photo">
+      <img src="/img/lib/uptown-reformer-medusa.jpg" alt="Oak Cliff Pilates studio" loading="lazy">
+      <div class="pop-photo__scrim"></div>
+      <div class="pop-photo__tag"><span class="badge badge--outline">Are you down with OCP?</span></div>
+    </div>
+  </div>
+</div>
