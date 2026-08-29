@@ -190,19 +190,19 @@ carried internal notes not meant for publication. Every judgement call is listed
 
 ## Before launch
 
-1. **Wire up lead capture.** `LEAD_ENDPOINT` at the top of `js/site.js` is empty, so
-   the popup's step-2 form collects a name, email and phone and then **discards them**
-   — that is what the prototype did, and it is worth fixing rather than shipping. Point
-   it at your CRM, Zapier hook or form service; it receives
-   `{source, name, email, phone, reason}` as JSON from both the popup and the footer
-   signup. The footer signup currently tells visitors it is not connected rather than
-   pretending it worked.
+1. **Lead capture is wired.** Both the intro-offer popup and the footer signup hand
+   the visitor to the Arketa new-client intake form (`LEAD_FORM_URL` in `js/site.js`).
+   That URL is a hosted page rather than an API, so nothing is POSTed to it — the
+   popup links straight there, which also means it works with JavaScript off.
 2. **Point the domain at this build.** No page links out to the old Framer or
    WordPress site any more.
 3. **Decide on `_design-src/`.** It is ~49 MB of original-resolution photography and
    the prototype's hero video. Useful for re-syncing with the design project; consider
    Git LFS or excluding it if repository size matters.
-4. **Work through [REVIEW.md](REVIEW.md).**
+4. **Remove the dated parking line after 17 September.** The Lower Greenville page
+   says validated parking "is coming from 17 September; it is not active yet." Once it
+   is live that sentence needs to change.
+5. **Work through [REVIEW.md](REVIEW.md).**
 
 ## Re-syncing with the design project
 

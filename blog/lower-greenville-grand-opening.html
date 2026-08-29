@@ -210,21 +210,20 @@
         <div style="display:grid"><button class="pop-ghost" data-close-popup>No, thanks</button></div>
       </div>
 
-      <!-- step 1 -->
+      <!-- step 1 · hand-off to the Arketa new-client form.
+           The form is a hosted page on app.arketa.co, not an API, so the only
+           way a lead actually reaches Arketa is for the visitor to fill it in
+           there. Collecting the same fields here first would mean typing them
+           twice — or losing them. -->
       <div class="pop-step" data-step="1" hidden>
-        <button class="pop-back" data-back="0">← Back</button>
-        <h2 class="pop-head" style="margin-top:24px">Tell us who you are.</h2>
-        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> · we've got you. Drop your info and we'll hold your intro offer.</p>
-        <form class="pop-fields" id="pop-form" style="margin-top:24px" novalidate>
-          <label class="field" for="pop-name"><span class="field__label">Name</span><span class="field__box"><input id="pop-name" name="name" type="text" placeholder="First and last" autocomplete="name" required></span></label>
-          <label class="field" for="pop-email"><span class="field__label">Email</span><span class="field__box"><input id="pop-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" required></span></label>
-          <label class="field" for="pop-phone"><span class="field__label">Phone</span><span class="field__box"><input id="pop-phone" name="phone" type="tel" placeholder="Optional" autocomplete="tel"></span></label>
-          <div class="pop-submit">
-            <button class="btn btn--lg btn--primary btn--full" type="submit" disabled><span>See my offers</span></button>
-            <p class="pop-fine">First-timers only, one per person. We'll text you class reminders, never spam.</p>
-          </div>
-        </form>
-        <div style="display:grid"><button class="pop-ghost" data-close-popup>Never mind</button></div>
+        <button class="pop-back" data-back="0">&larr; Back</button>
+        <h2 class="pop-head" style="margin-top:24px">Let&rsquo;s get you set up.</h2>
+        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> &middot; we&rsquo;ve got you. Fill in the new-client form and we&rsquo;ll hold your intro offer.</p>
+        <div class="pop-submit" style="margin-top:24px">
+          <a class="btn btn--lg btn--primary btn--full" data-lead-form href="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE" target="_blank" rel="noopener"><span>Start my new-client form</span></a>
+          <p class="pop-fine">First-timers only, one per person. We&rsquo;ll text you class reminders, never spam.</p>
+        </div>
+        <div style="display:grid"><button class="pop-ghost" data-step-to="2">Skip &mdash; just show me the offers</button></div>
       </div>
 
       <!-- step 2 -->

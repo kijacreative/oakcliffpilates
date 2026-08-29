@@ -11,8 +11,8 @@ please confirm which is right, then it only needs changing in one place.
 
 | Fact | Value A | Value B | What the site says |
 | --- | --- | --- | --- |
-| "The Regular" membership | **$189** (homepage design, current site) | **$192** (your pricing-page schema block) | $189 |
-| Class length | **45 min** (homepage design, location pages) | **50 min** (your FAQ, "How long is a typical Pilates class") | Both — 45 on location pages, 50 in the FAQ answer as written |
+| "The Regular" membership | **$189** (homepage design, current site) | **$192** (your pricing-page schema block) | ✅ **Resolved — $189/mo confirmed.** The $192 in your old schema block was wrong |
+| Class length | **45 min** (homepage design, location pages) | **50 min** (your FAQ, "How long is a typical Pilates class") | ✅ **Resolved — always 45 minutes.** The FAQ answer is corrected; 45 now appears in all 8 places, 50 in none |
 | Classes per week | **250+** (homepage design) | **over 150** (your pricing page, unlimited card) | 250+ |
 | Class cap | **12** everywhere | FAQ adds **"beginner classes capped at 8"** | Both, as written |
 | Lower Greenville | **14 reformers** (locations copy) | **capped at 12 per class** (LG copy) | Both (14 machines / 12 cap reads fine, but confirm) |
@@ -26,11 +26,13 @@ on the page is $9 (1-year unlimited at 20 classes/month). I used $25 in the new 
 ## 2. Things I deliberately did not publish
 
 - **Lower Greenville FAQ.** Your copy read: *"Is there parking at the Lower Greenville
-  studio? — CONFIRM parking details with Kiel before publish."* That is an internal
-  note, so it is not on the site. The published answer uses the line from your own body
-  copy: "Convenient street parking is available nearby on and around Greenville Avenue."
-  **This still needs your confirmation.** (Your main FAQ says something more specific —
-  Oram St. has an open lot — which may be the better answer.)
+  studio? — CONFIRM parking details with Kiel before publish."* That internal note was
+  never published. ✅ **Resolved** — the real answer is now on the Lower Greenville page
+  and in its FAQ: the lot next to the studio on Oram St. first, then street parking and
+  the neighbouring lots, watching for "do not park" signs.
+  **⚠️ One dated claim:** it also says validated parking "is coming from 17 September;
+  it is not active yet." That sentence goes stale the moment validation switches on —
+  update it then, and note I wrote no year, so confirm 17 September 2026 is right.
 - **Academy accreditation FAQ.** The draft answer was an editorial note to yourself
   ("Accreditation/recognition details from Kajabi programme — this is the highest-value
   FAQ if the programme carries recognised accreditation"). Not published. If OCPA carries
@@ -62,10 +64,18 @@ on the page is $9 (1-year unlimited at 20 classes/month). I used $25 in the new 
 
 ## 4. Still to wire before launch
 
-1. **`LEAD_ENDPOINT` in `js/site.js` is empty.** The intro-offer popup collects a name,
-   email and phone on step 2 and then **discards them**. Point it at your CRM / Zapier /
-   form service and both the popup and the footer signup start posting
-   `{source, name, email, phone, reason}`.
+1. ✅ **Lead capture is wired** to the Arketa new-client intake form.
+   **How, and why not the way you might expect:** that URL
+   (`app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE`) is a **hosted HTML
+   page, not an API**. Posting the popup's fields to it would have been blocked by the
+   browser as a cross-origin request and the lead would have vanished silently — the
+   exact bug we were fixing. So instead of collecting name, email and phone in the popup
+   and forwarding them, the popup now hands the visitor straight to your form, which is
+   where the lead actually gets created. It also means no one types their details twice,
+   and the link works with JavaScript disabled. The footer signup does the same.
+   **If you would rather keep the fields on our side**, you need a real endpoint — a
+   Zapier catch hook, a form service, or Arketa's API if they expose one — and I will
+   wire the original POST back up to it.
 2. **Couples Unlimited has no published price** — your copy gave the per-session figure
    ($9) but not the total. The card links to checkout and says "See the price".
 3. **Two weak images.** `img/lib/uptown-awning-letters` (547×365, tight sign crop) and

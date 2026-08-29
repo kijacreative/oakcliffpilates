@@ -5,12 +5,13 @@
   "use strict";
 
   /* ── Configuration ────────────────────────────────────────────────
-     LEAD_ENDPOINT receives the intro-offer popup form and the footer
-     newsletter signup as JSON: {source, name, email, phone, reason}.
-     While it is empty, both forms stay usable but nothing is stored —
-     the popup still walks the visitor through to the Arketa offers.
-     Point this at your CRM / Zapier / form endpoint before launch.   */
-  var LEAD_ENDPOINT = "";
+     Leads go to the Arketa new-client intake form. That URL is a hosted
+     HTML page, not an API — posting JSON at it would fail CORS and drop
+     the lead silently — so the popup and the footer signup hand the
+     visitor over to it instead of collecting the same fields twice.
+     The popup's own link carries this URL in the markup so it still
+     works with JavaScript off; this constant is the fallback.        */
+  var LEAD_FORM_URL = "https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE";
 
   /* Delay before the intro-offer popup opens, and how long a dismissal
      is remembered so returning visitors are not nagged every visit. */
@@ -139,18 +140,6 @@
     });
   })();
 
-  /* ── Lead capture ─────────────────────────────────────────────────
-     Resolves true when the lead was stored, false when no endpoint is
-     configured or the request failed. Never blocks the visitor. */
-  function sendLead(payload) {
-    if (!LEAD_ENDPOINT) return Promise.resolve(false);
-    return fetch(LEAD_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    }).then(function (r) { return r.ok; }).catch(function () { return false; });
-  }
-
   /* ── Intro-offer popup ────────────────────────────────────────── */
   (function () {
     var pop = $("#popup");
@@ -158,8 +147,6 @@
 
     var steps = $$(".pop-step", pop);
     var dots = $$(".pop-dot", pop);
-    var form = $("#pop-form", pop);
-    var submit = form ? $('button[type="submit"]', form) : null;
     var lastFocus = null;
     var reason = "";
 
@@ -227,35 +214,15 @@
       b.addEventListener("click", function () { show(Number(b.dataset.back)); });
     });
 
-    /* Step 1 — details. The button unlocks on a valid name + email,
-       matching the prototype's `ready` check. */
-    if (form && submit) {
-      var name = $("#pop-name", form);
-      var email = $("#pop-email", form);
-      var phone = $("#pop-phone", form);
-
-      var validate = function () {
-        submit.disabled = !(name.value.trim() && /.+@.+\..+/.test(email.value));
-      };
-      form.addEventListener("input", validate);
-      validate();
-
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (submit.disabled) return;
-        var first = name.value.trim().split(" ")[0];
-        var slot = $("[data-firstname]", pop);
-        if (slot) slot.textContent = first ? ", " + first : "";
-        sendLead({
-          source: "intro-offer-popup",
-          reason: reason,
-          name: name.value.trim(),
-          email: email.value.trim(),
-          phone: phone.value.trim()
-        });
-        show(2);
-      });
-    }
+    /* Step 1 — hand-off. Following the link opens the Arketa form in a
+       new tab; we advance to the offers so the popup is somewhere useful
+       when they come back to this one. "Skip" jumps straight there. */
+    $$("[data-lead-form]", pop).forEach(function (a) {
+      a.addEventListener("click", function () { show(2); });
+    });
+    $$("[data-step-to]", pop).forEach(function (b) {
+      b.addEventListener("click", function () { show(Number(b.dataset.stepTo)); });
+    });
 
     /* Auto-open once the delay has elapsed. If the page was loaded into a
        background tab, wait for it to actually be looked at first. */
@@ -292,14 +259,12 @@
         input.focus();
         return;
       }
-      sendLead({ source: "footer-signup", email: email }).then(function (ok) {
-        if (ok) {
-          form.reset();
-          say("You're on the list. See you in class.");
-        } else {
-          say("Email signup isn't connected yet — book at app.arketa.co/oakcliffpilates or ask us at the front desk.");
-        }
-      });
+      /* Same hand-off as the popup: the intake form is a hosted page, so
+         send them there rather than pretending we stored the address. */
+      var link = $("[data-lead-form]");
+      say("Opening our new-client form — finish there and you're on the list.");
+      window.open((link && link.href) || LEAD_FORM_URL, "_blank", "noopener");
+      form.reset();
     });
   })();
 
