@@ -258,11 +258,9 @@ is near enough a free month, and how it now reads.
 - **Every price on the site is now verified against Arketa**, not just copied
   from the old page. Re-run that check whenever prices change; the method is in
   the README.
-- ✅ **Product names now match Arketa.** The unlimited tiers are I'm Obsessed,
-  I'm Really Obsessed, and One Year of Unlimited Pilates, so the name on the page
-  is the name in the checkout frame. **The 6-month tier you listed — "Completely
-  Obsessed: 6 Months of Unlimited Pilates" — is not on the site and I have no
-  checkout URL for it.** Send one and it takes a minute.
+- ✅ **Product names match Arketa**, and ✅ **all four unlimited tiers are live** —
+  I'm Obsessed ($209/mo), I'm Really Obsessed ($599/3mo), Completely Obsessed
+  ($1,159/6mo) and One Year ($2,299).
 - **Payment inside an iframe has a known failure mode.** 3-D Secure and wallet
   sheets need a top-level window. Every page therefore carries a visible "open
   the checkout in a new tab" link directly under the frame, so a customer who
@@ -270,11 +268,29 @@ is near enough a free month, and how it now reads.
 ### The three intro-offer URLs
 
 - ✅ **$145 ten classes** and ✅ **$89 two weeks** now have pages.
-- 🔴 **The $59 one-week still does not.** The URL you sent for it
-  (`1oNxHZVRsxdC7ZWnwTBl`) is the **10-class $145 offer** — the same URL you sent
-  for 10 Classes. I loaded it before wiring anything up, so nothing shipped
-  pointing at the wrong product. Its buttons still go to the general Arketa page.
-  Send the real one-week URL and I'll add it.
+- ✅ **$59 one week** now has a page too. (The first URL sent for it was the
+  10-class one; the replacement checked out as "New Client Special: 1-Week
+  Unlimited Pilates, $59.00".)
+
+### Billing terms — checked one by one, and one I had wrong
+
+Arketa states the terms differently per product, so I read each checkout rather
+than assuming. Two of the intro offers charge **once**; the unlimited terms
+**recur**:
+
+| Product | Arketa's wording | Recurs? |
+| --- | --- | --- |
+| 1 week $59 | "per week until 1 cycle is complete" | No — one charge |
+| 2 weeks $89 | "every 2 weeks until 1 cycle is complete" | No — one charge |
+| 3 months $599 | "every 3 months until canceled" | Yes |
+| 6 months $1,159 | "every 6 months until canceled" | Yes |
+| 1 year $2,299 | "per year until canceled" | Yes |
+
+**I had the $89 wrong first time round.** On the strength of the phrase "every 2
+weeks" I published "renews at $89 every two weeks until you cancel" — but the
+full line ends "until 1 cycle is complete", so it does not renew. Corrected: it
+now reads as a single charge. The annual page said nothing about renewal and now
+discloses it.
 
 ### 🔴 The $89 banner image in your Arketa account says $29
 
