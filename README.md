@@ -21,6 +21,7 @@ project [Oak Cliff Pilates](https://claude.ai/design/p/82ce06af-2e80-43ee-ad49-2
 | `/private-parties` | `private-parties.html` | Private reformer parties |
 | `/academy` | `academy.html` | Oak Cliff Pilates Academy — 300hr certification |
 | `/events` | `events.html` | Community events (Arketa events feed) |
+| `/community` | `community.html` | The community programme — park classes, socials, brunch, retreats |
 | `/meet-the-team` | `meet-the-team.html` | Leadership + full roster |
 | `/retail` | `retail.html` | Shop (Arketa storefront) |
 | `/welcome-to-dallas` | `welcome-to-dallas.html` | For visitors — no membership needed |

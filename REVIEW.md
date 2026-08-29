@@ -131,3 +131,38 @@ Four posts are referenced from the ones you sent but you haven&rsquo;t sent thei
 - Art &amp; Movement: Pilates at Gallery DeFi, Rio Jiu-Jitsu, Happy Hour at Leela&rsquo;s (Dec 2025 events)
 
 Send any of them and they drop straight in.
+
+## 6. The community page (`/community`)
+
+Built from the list of event types you sent. The **names, parks, restaurants and
+retreat destinations are all yours, verbatim.** The one-line descriptions under
+each are not — you gave me names only, so I wrote them.
+
+### ⚠️ Descriptions I wrote from the name alone — please check
+
+| Event | What the page now says | Risk |
+| --- | --- | --- |
+| **Gentlemen&rsquo;s Night** | &ldquo;An evening on the reformers built for the men in the community — and the ones still deciding whether Pilates is for them.&rdquo; | Assumes it&rsquo;s a class. If it&rsquo;s social, or open to all, rewrite |
+| **Community Happy Hour** | &ldquo;No class, no mat. We take over a neighbourhood bar…&rdquo; | Based on your Leela&rsquo;s happy-hour post. Confirm there&rsquo;s no class element |
+| **Book Club** | &ldquo;A book, a room, and the OCP crowd. Read along or turn up for the conversation.&rdquo; | Deliberately vague. Where does it meet? Monthly? |
+| **Athena Community** | &ldquo;Our community for the women of OCP — gatherings built around movement, connection and showing up for each other.&rdquo; | **The weakest guess on the site.** I do not know what Athena is. If it&rsquo;s a partnership, a membership tier, or a leadership group, this is wrong |
+
+Send a sentence for any of them and I&rsquo;ll swap it in.
+
+### Other calls on this page
+
+- **Pilates in the Park** is the one I could write with confidence — your own About
+  and blog copy describe the free mat classes that started at Kidd Springs Park in
+  2016. Note the page says *Kidd Springs* is where it began but lists **Halperin,
+  Griggs and Tietze** as current locations, per your list. Is Kidd Springs still in
+  rotation? It isn&rsquo;t in the four you sent.
+- **Retreat tenses.** Belize is marked *past* (2025), Greece *coming* (2027). **Costa
+  Rica 2026 has no tense** because today is August 2026 and I don&rsquo;t know whether it
+  has happened yet. Tell me and I&rsquo;ll mark it.
+- **Every section links to `/events`** for live dates — eight links in total — because
+  that page carries the Arketa feed. Nothing on `/community` hardcodes a date, so it
+  won&rsquo;t go stale.
+- **A mislabelled image.** `img/lib/park-group` is not a park: it&rsquo;s the team posed
+  outside the Bishop Arts storefront. The real park photography is `park-lawn` and
+  `park-first-class`, which is what this page uses. `events.html` still uses
+  `park-group` — harmless there, but the slug should be renamed. Noted in MEDIA.md.

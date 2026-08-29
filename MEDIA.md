@@ -128,3 +128,8 @@ The site hero uses a separate, harder-compressed cut of `OCP Uptown - Video.mp4`
     /video/hero.mp4   /video/hero.webm   /img/hero-poster.jpg
 
 Rebuild it alone with `./tools/build-media.sh hero`.
+
+> **Note on `park-group`.** Despite the slug, this is the team posed outside the
+> Bishop Arts storefront, not a park class. The genuine park photography is
+> `park-lawn` (big group, blue sky) and `park-first-class` (the early
+> neighbourhood classes). Worth renaming when the media pipeline next runs.
