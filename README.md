@@ -193,8 +193,8 @@ carried internal notes not meant for publication. Every judgement call is listed
    `{source, name, email, phone, reason}` as JSON from both the popup and the footer
    signup. The footer signup currently tells visitors it is not connected rather than
    pretending it worked.
-2. **Confirm the remaining `oakcliffpilates.framer.website/*` links.** A handful of
-   deep links still point at the current Framer site.
+2. **Point the domain at this build.** No page links out to the old Framer or
+   WordPress site any more.
 3. **Decide on `_design-src/`.** It is ~49 MB of original-resolution photography and
    the prototype's hero video. Useful for re-syncing with the design project; consider
    Git LFS or excluding it if repository size matters.
