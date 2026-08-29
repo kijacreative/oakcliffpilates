@@ -200,10 +200,12 @@ carried internal notes not meant for publication. Every judgement call is listed
 3. **Decide on `_design-src/`.** It is ~49 MB of original-resolution photography and
    the prototype's hero video. Useful for re-syncing with the design project; consider
    Git LFS or excluding it if repository size matters.
-4. **Remove the dated parking line after 17 September.** The Lower Greenville page
+4. **Take down the Athena event block after 26 September.** `/community` carries the
+   full event under `#athena`. It is the only hardcoded date on that page.
+5. **Remove the dated parking line after 17 September.** The Lower Greenville page
    says validated parking "is coming from 17 September; it is not active yet." Once it
    is live that sentence needs to change.
-5. **Work through [REVIEW.md](REVIEW.md).**
+6. **Work through [REVIEW.md](REVIEW.md).**
 
 ## Re-syncing with the design project
 

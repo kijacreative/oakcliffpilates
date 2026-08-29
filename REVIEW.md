@@ -138,16 +138,36 @@ Built from the list of event types you sent. The **names, parks, restaurants and
 retreat destinations are all yours, verbatim.** The one-line descriptions under
 each are not — you gave me names only, so I wrote them.
 
-### ⚠️ Descriptions I wrote from the name alone — please check
+### ✅ Descriptions — resolved
 
-| Event | What the page now says | Risk |
-| --- | --- | --- |
-| **Gentlemen&rsquo;s Night** | &ldquo;An evening on the reformers built for the men in the community — and the ones still deciding whether Pilates is for them.&rdquo; | Assumes it&rsquo;s a class. If it&rsquo;s social, or open to all, rewrite |
-| **Community Happy Hour** | &ldquo;No class, no mat. We take over a neighbourhood bar…&rdquo; | Based on your Leela&rsquo;s happy-hour post. Confirm there&rsquo;s no class element |
-| **Book Club** | &ldquo;A book, a room, and the OCP crowd. Read along or turn up for the conversation.&rdquo; | Deliberately vague. Where does it meet? Monthly? |
-| **Athena Community** | &ldquo;Our community for the women of OCP — gatherings built around movement, connection and showing up for each other.&rdquo; | **The weakest guess on the site.** I do not know what Athena is. If it&rsquo;s a partnership, a membership tier, or a leadership group, this is wrong |
+All four now use the copy you sent, with the real names, cadences and partners:
+Zak/Oliver/Pepe on Gentlemen&rsquo;s Night, Caitlin on the monthly Friday happy hour,
+Amanda Lauro and Forbidden Books on the Uptown book club, and Athena described
+properly as being for women in perimenopause or menopause and the people around
+them. The earlier guesses are gone.
 
-Send a sentence for any of them and I&rsquo;ll swap it in.
+### ⚠️ The featured Athena event is dated — it expires 26 September
+
+The full event sits on `/community` under `#athena`: time, price, the three
+experiences, the vendor stations, the goody bag, the attire note. **That block
+needs replacing or removing once the date passes** — it is the only hardcoded
+date on the page, and the only thing there that can go stale. Everything else
+points at `/events`.
+
+Three things to confirm on it:
+
+1. **The year.** You wrote &ldquo;Sep 26&rdquo;; I published *Saturday 26 September* with no
+   year. 26 September 2026 is a Saturday, so that checks out — but confirm.
+2. **Dr. Chowdhry&rsquo;s name and title.** Published as written, attributed to Tailored
+   Health and Aesthetics. Worth checking the spelling before a doctor&rsquo;s name goes
+   on your site.
+3. **The wellness services.** The page lists acupuncture, ear seeding, a hydration
+   facial, and discounted **B12 and Hydrate &amp; Glow injections**, plus a talk on
+   hormone balance. I published these factually, as services vendors are providing
+   — no health claims added. Given they are medical and cosmetic procedures offered
+   by third parties, **consider whether you want a short disclaimer** naming the
+   vendors as independent providers. Your call, not mine, but it is the kind of
+   thing worth deciding deliberately.
 
 ### Other calls on this page
 
