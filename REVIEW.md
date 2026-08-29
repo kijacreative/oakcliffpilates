@@ -87,9 +87,9 @@ Nine posts are live at `/blog`. These came out of porting them.
 
 | Fact | In the blog copy | Everywhere else | What the site says |
 | --- | --- | --- | --- |
-| Lower Greenville address | **1906 Greenville Ave** (grand-opening post) | **2000 Greenville Ave** | 2000 — but **one of these is wrong, please confirm** |
-| Number of studios | &ldquo;Bishop Arts to **Downtown**, Uptown, and Lower Greenville&rdquo; (2025 award post); &ldquo;Oak Cliff Pilates **Downtown**&rdquo; (2024 CBS caption) | Three studios, no Downtown | Three. I dropped the Downtown references — **is there a Downtown location?** |
-| Instructor certification | &ldquo;minimum **500 hours** training&rdquo; (beginner guide) | OCPA is a **300-hour** programme | Neither — I rewrote it to &ldquo;ask what training they completed.&rdquo; As written, the guide disqualified your own academy |
+| Lower Greenville address | **1906 Greenville Ave** (grand-opening post) | **2000 Greenville Ave** | ✅ **Resolved — 2000 Greenville Ave confirmed.** All 16 instances match; the post carries it too |
+| Number of studios | &ldquo;Bishop Arts to **Downtown**, Uptown, and Lower Greenville&rdquo; (2025 award post); &ldquo;Oak Cliff Pilates **Downtown**&rdquo; (2024 CBS caption) | Three studios, no Downtown | ✅ **Resolved — OCP Downtown is closed.** Three studios only. No reference remains (the two lowercase &ldquo;downtown&rdquo; mentions are geography, not a location) |
+| Instructor certification | &ldquo;minimum **500 hours** training&rdquo; (beginner guide) | OCPA is a **300-hour** programme | ✅ **Resolved — 300 hours.** The guide now names 300 as the benchmark and links to the academy |
 | Drop-in price | **$35–45** (beginner guide) | **$30** | Labelled as Dallas market range, with a link to your real pricing |
 | Unlimited | **$180–250/mo** (beginner guide) | **$99–209** | Same — market range, linked to /pricing |
 | Class packs | a **5-class** pack (beginner guide) | 10 / 20 / 40 | Left in the market-range paragraph only |
