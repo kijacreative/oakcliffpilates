@@ -153,12 +153,13 @@ Send a sentence for any of them and I&rsquo;ll swap it in.
 
 - **Pilates in the Park** is the one I could write with confidence — your own About
   and blog copy describe the free mat classes that started at Kidd Springs Park in
-  2016. Note the page says *Kidd Springs* is where it began but lists **Halperin,
-  Griggs and Tietze** as current locations, per your list. Is Kidd Springs still in
-  rotation? It isn&rsquo;t in the four you sent.
-- **Retreat tenses.** Belize is marked *past* (2025), Greece *coming* (2027). **Costa
-  Rica 2026 has no tense** because today is August 2026 and I don&rsquo;t know whether it
-  has happened yet. Tell me and I&rsquo;ll mark it.
+  2016. ✅ **Resolved — Kidd Springs is history, not a venue.** The page now says so
+  outright: &ldquo;We have moved on from Kidd Springs, but not from the idea,&rdquo; and the
+  location list is headed *Where we set up now*.
+- **Retreat tenses.** ✅ **Resolved — Belize and Costa Rica have both been.** The
+  section is now split: *Next up* carries Greece 2027 on its own card with a link to
+  watch for dates, and *Where we&rsquo;ve been* lists Costa Rica 2026 and Belize 2025.
+  Greece is the only one presented as bookable.
 - **Every section links to `/events`** for live dates — eight links in total — because
   that page carries the Arketa feed. Nothing on `/community` hardcodes a date, so it
   won&rsquo;t go stale.
