@@ -226,3 +226,48 @@ Every review that ever appears will be one a real person left on Google.
 - **Reviews under 4★ are filtered out** (`MIN_RATING` in the fetcher). That is a
   normal marketing choice, not a neutral feed — flagging it so it is your decision
   and not a silent default. Set it to 0 to publish everything.
+
+## 8. Checkout pages — and a pricing error they caught
+
+18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
+Every Buy-now link across the site now routes through them rather than jumping
+straight to Arketa.
+
+### 🔴 Your annual membership was advertised $300 under what it charges
+
+Before publishing I loaded all 18 Arketa checkouts and compared the price each
+one actually charges against the price the site claimed. Sixteen matched. Two
+did not:
+
+| | Site said | Arketa charges | Now |
+| --- | --- | --- | --- |
+| **1 year unlimited** | **$1,999** | **$2,299** | ✅ Corrected to $2,299 |
+| **Couples unlimited** | "See the price" | **$359 / month** | ✅ Published |
+
+The $1,999 came from the WordPress pricing page I built from. **It has been
+wrong on your live site**, so it is worth checking whether anyone bought at the
+advertised price and what you owe them.
+
+Two derived claims went with it. The page said the annual plan was "around $9 a
+class and nearly $300 saved". At $2,299 it is around **$10** a class at twenty
+a month, and **about $209** less than twelve months of monthly billing — which
+is near enough a free month, and how it now reads.
+
+### Notes
+
+- **Every price on the site is now verified against Arketa**, not just copied
+  from the old page. Re-run that check whenever prices change; the method is in
+  the README.
+- **Arketa's own product names differ from ours** in a few places — its
+  Unlimited is "I'm Obsessed: Unlimited Pilates", the quarterly is "I'm Really
+  Obsessed". Customers will see those names inside the checkout frame. Ours are
+  the friendlier ones from your pricing page; worth a glance to check the
+  mismatch does not read as an error.
+- **Payment inside an iframe has a known failure mode.** 3-D Secure and wallet
+  sheets need a top-level window. Every page therefore carries a visible "open
+  the checkout in a new tab" link directly under the frame, so a customer who
+  hits it is one click from finishing rather than stuck.
+- **Three intro offers still have no checkout page**: the $59 one-week, the
+  $145 ten-class, and the $89 two-week. Their buttons point at the general
+  Arketa site because no per-product checkout URL exists for them in the copy
+  you sent. Send those three URLs and they take about a minute each.

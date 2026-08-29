@@ -1136,3 +1136,45 @@ figure.video-figure figcaption{
   .rv-grid{grid-template-columns:1fr}
   .rv-head{grid-template-columns:1fr;gap:20px}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   8 · CHECKOUT — one page per pricing option, Arketa's checkout embedded
+   Arketa serves the checkout without X-Frame-Options or a frame-ancestors
+   policy, so it frames cleanly. Card entry stays on Arketa's origin; we only
+   provide the surround. Every page also links out, because a payment step
+   inside a frame can hit redirects (3-D Secure, wallet sheets) that need a
+   top-level window.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.co-head{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-bottom:12px}
+.co-price{text-align:right;white-space:nowrap}
+.co-price__n{
+  font-family:var(--font-display);font-size:clamp(2.6rem,5vw,4rem);line-height:.9;
+  letter-spacing:var(--ls-display);color:var(--ocp-gold);display:block;
+}
+.co-price__unit{
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);
+}
+.co-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;align-items:start}
+.co-aside{position:sticky;top:112px;display:flex;flex-direction:column;gap:24px}
+.co-panel{padding:var(--card-pad);border:1px solid var(--border-hairline);background:var(--surface-card)}
+.co-panel h2{font-size:var(--type-display-5);margin:0 0 4px}
+
+.co-frame{border:1px solid var(--border-hairline);overflow:hidden;background:#fff}
+.co-frame iframe{display:block;width:100%;border:0;height:1080px}
+.co-note{
+  margin-top:16px;font-size:var(--type-body-sm);line-height:var(--lh-body);
+  color:var(--text-muted);
+}
+.co-note a{color:var(--ocp-gold)}
+
+@media (max-width:1000px){
+  .co-layout{grid-template-columns:1fr;gap:36px}
+  .co-aside{position:static;order:-1}
+}
+@media (max-width:640px){
+  .co-head{grid-template-columns:1fr;gap:12px}
+  .co-price{text-align:left}
+  .co-frame iframe{height:1240px}
+}

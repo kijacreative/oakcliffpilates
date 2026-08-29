@@ -97,6 +97,30 @@ comparison).
 JSON-LD generated automatically** from the questions and answers on the page, so
 the structured data can never drift from the copy.
 
+## Checkout pages
+
+One page per pricing option at `/pricing/<slug>`, each with Arketa's checkout
+embedded. Generated:
+
+```bash
+python3 tools/build-checkout.py && python3 tools/build.py
+```
+
+The name, price, blurb and Arketa checkout ID for all 18 live in the `OPTIONS`
+table at the top of `tools/build-checkout.py` — one row per product, so a price
+change is a single edit and the page, the `<title>` and the Offer JSON-LD can
+never disagree with each other.
+
+Arketa serves its checkout without `X-Frame-Options` or a `frame-ancestors`
+policy, so it frames cleanly and card details stay on Arketa's origin. Every
+page also links out to the same checkout in a new tab, because payment flows
+can hit redirects — 3-D Secure, Apple Pay, Google Pay — that need a top-level
+window and will not complete inside a frame.
+
+**When prices change, change them in `OPTIONS` and re-run.** Then confirm each
+page still matches Arketa: open the checkout URL and read the price it shows.
+A row that drifts advertises one price and charges another.
+
 ## Google reviews
 
 The homepage review feed is ours, not a widget. Two steps, both build-time:
