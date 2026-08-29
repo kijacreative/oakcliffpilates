@@ -328,3 +328,28 @@
     io.observe(holder);
   })();
 })();
+
+/* ── YouTube facade ────────────────────────────────────────────────────────
+   Posts ship a poster image and a play button; the real iframe is injected
+   only when someone asks for it. Keeps the player's ~1 MB of JS and its
+   cookies off every page view. Without JS the noscript link still works. */
+(function () {
+  var frames = document.querySelectorAll(".video[data-video]");
+  for (var i = 0; i < frames.length; i++) {
+    (function (frame) {
+      var btn = frame.querySelector(".video__play");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var id = frame.getAttribute("data-video");
+        var f = document.createElement("iframe");
+        f.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+        f.title = btn.getAttribute("aria-label") || "Video";
+        f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        f.allowFullscreen = true;
+        f.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.innerHTML = "";
+        frame.appendChild(f);
+      });
+    })(frames[i]);
+  }
+})();

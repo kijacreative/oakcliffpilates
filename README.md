@@ -26,8 +26,12 @@ project [Oak Cliff Pilates](https://claude.ai/design/p/82ce06af-2e80-43ee-ad49-2
 | `/welcome-to-dallas` | `welcome-to-dallas.html` | For visitors — no membership needed |
 | `/about` | `about.html` | Meet Amanda, our journey, mission & values |
 | `/faq` | `faq.html` | 40 questions in 5 categories |
+| `/blog` | `blog.html` | The journal — press, podcasts, awards, guides |
+| `/blog/<slug>` | `blog/<slug>.html` | 9 posts (see `src/pages/blog-*.html`) |
 
-Every page's source lives at `src/pages/<name>.html`.
+Every page's source lives at `src/pages/<name>.html`. Blog posts are
+`src/pages/blog-<slug>.html` with `path: /blog/<slug>` — the build writes any
+page whose path has a directory into that directory.
 
 **⚠️ Read [REVIEW.md](REVIEW.md) before publishing** — it lists the copy conflicts,
 placeholder values, and internal notes found in the source material.

@@ -6,16 +6,95 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
       ]
     },
     {
       "source": "/(img|video|css|js)/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/2026/08/06/dont-tell-yourself-no-what-we-said-on-stage-at-her-texas",
+      "destination": "/blog/dont-tell-yourself-no",
+      "permanent": true
+    },
+    {
+      "source": "/2025/11/04/lower-greenville-grand-opening-celebration",
+      "destination": "/blog/lower-greenville-grand-opening",
+      "permanent": true
+    },
+    {
+      "source": "/2025/10/22/hidden-city-podcast-building-a-neighborhood-pilates-studio",
+      "destination": "/blog/hidden-city-podcast",
+      "permanent": true
+    },
+    {
+      "source": "/2025/09/17/we-won-best-pilates-studio-in-dallas-again",
+      "destination": "/blog/best-pilates-studio-in-dallas-again",
+      "permanent": true
+    },
+    {
+      "source": "/2024/11/16/we-won-best-of-dallas-2024-critics-choice",
+      "destination": "/blog/best-of-dallas-2024",
+      "permanent": true
+    },
+    {
+      "source": "/2024/11/16/voyage-dallas-meet-amanda-mecsey",
+      "destination": "/blog/voyage-dallas-meet-amanda-mecsey",
+      "permanent": true
+    },
+    {
+      "source": "/2024/03/28/ocp-featured-on-destination-dallas",
+      "destination": "/blog/destination-dallas",
+      "permanent": true
+    },
+    {
+      "source": "/2021/08/16/oak-cliff-pilates-on-nbc-texas-today",
+      "destination": "/blog/nbc-texas-today",
+      "permanent": true
+    },
+    {
+      "source": "/news",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/news",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/blog",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/past-events",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/category/video",
+      "destination": "/blog",
+      "permanent": true
     }
   ]
 }

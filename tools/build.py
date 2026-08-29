@@ -18,6 +18,18 @@ Front matter is a leading HTML comment:
     og_image: /img/lib/team-bishop-exterior.jpg
     -->
 
+A page whose `path` contains a directory is written into that directory, so
+`path: /blog/five-years` becomes `blog/five-years.html` and Vercel's cleanUrls
+serves it at `/blog/five-years`.
+
+Blog posts add four optional keys. When `published` is present the page gets
+BlogPosting JSON-LD built from them:
+
+    published: 2026-08-06
+    modified: 2026-08-06
+    author: Oak Cliff Pilates
+    category: Blog, News
+
 Placeholders available in partials and pages: {{title}}, {{description}},
 {{path}}, {{og_image}}, and {{nav_<name>}} which becomes ' aria-current="page"'
 on the matching nav link.
@@ -37,7 +49,7 @@ FRONT_MATTER = re.compile(r"\A\s*<!--(.*?)-->", re.S)
 INCLUDE = re.compile(r"<!--#include\s+([a-z0-9_-]+)\s*-->")
 
 # Every nav key a page may mark active. Keep in sync with partials/header.html.
-NAV_KEYS = ("home", "classes", "studios", "membership", "about", "shop")
+NAV_KEYS = ("home", "classes", "studios", "membership", "about", "shop", "blog")
 
 
 def read_front_matter(text: str) -> tuple[dict[str, str], str]:
@@ -132,6 +144,57 @@ def faq_schema(html: str, path: str) -> str:
     )
 
 
+SITE = "https://oakcliffpilates.com"
+
+
+def article_schema(meta: dict[str, str], html: str) -> str:
+    """Build BlogPosting JSON-LD for a post, from its own front matter.
+
+    Only emitted for pages that declare `published`, so ordinary pages are
+    untouched. The publisher and author reference the Organization node that
+    partials/schema-org.html already puts on every page."""
+    published = meta.get("published")
+    if not published:
+        return ""
+    import json
+
+    path = meta.get("path", "/")
+    url = f"{SITE}{path}"
+    data = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "@id": f"{url}#post",
+        "mainEntityOfPage": url,
+        "url": url,
+        "headline": meta.get("headline") or meta.get("title", "").split(" — ")[0],
+        "description": meta.get("description", ""),
+        "datePublished": published,
+        "dateModified": meta.get("modified", published),
+        "author": {"@type": "Organization", "name": meta.get("author", "Oak Cliff Pilates"),
+                   "@id": f"{SITE}/#organization"},
+        "publisher": {"@id": f"{SITE}/#organization"},
+        "isPartOf": {"@type": "Blog", "@id": f"{SITE}/blog", "name": "Oak Cliff Pilates Journal"},
+    }
+    if meta.get("og_image"):
+        data["image"] = f"{SITE}{meta['og_image']}"
+    if meta.get("category"):
+        data["articleSection"] = [c.strip() for c in meta["category"].split(",")]
+    if meta.get("video_id"):
+        data["video"] = {
+            "@type": "VideoObject",
+            "name": meta.get("video_name", data["headline"]),
+            "description": meta.get("description", ""),
+            "thumbnailUrl": f"https://i.ytimg.com/vi/{meta['video_id']}/hqdefault.jpg",
+            "uploadDate": published,
+            "embedUrl": f"https://www.youtube.com/embed/{meta['video_id']}",
+        }
+    return (
+        '<script type="application/ld+json">\n'
+        + json.dumps(data, indent=2, ensure_ascii=False)
+        + "\n</script>\n"
+    )
+
+
 def main() -> int:
     if not PAGES.is_dir():
         raise SystemExit(f"missing {PAGES}")
@@ -141,12 +204,17 @@ def main() -> int:
     for page in sorted(PAGES.glob("*.html")):
         meta, body = read_front_matter(page.read_text())
         html = fill(expand(body, partials), meta)
-        schema = faq_schema(html, meta.get("path", "/"))
-        if schema:
-            html = html.replace("</body>", schema + "</body>", 1)
-        out = ROOT / page.name
+        for schema in (faq_schema(html, meta.get("path", "/")), article_schema(meta, html)):
+            if schema:
+                html = html.replace("</body>", schema + "</body>", 1)
+
+        # A path with a directory (e.g. /blog/five-years) writes into it, so
+        # cleanUrls serves the post at that URL.
+        path = meta.get("path", "/").strip("/")
+        out = ROOT / (f"{path}.html" if "/" in path else page.name)
+        out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html)
-        built.append((page.name, len(html)))
+        built.append((str(out.relative_to(ROOT)), len(html)))
 
     for name, size in built:
         print(f"  {name:<32} {size / 1024:6.1f} KB")

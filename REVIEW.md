@@ -78,3 +78,46 @@ on the page is $9 (1-year unlimited at 20 classes/month). I used $25 in the new 
    company-wide number or Uptown's.
 6. **Uptown opening date** is not in any copy you sent, so the Uptown page has no "est."
    stat (Bishop Arts has June 2021, Lower Greenville has late 2025).
+
+## 5. From the blog posts (added later)
+
+Nine posts are live at `/blog`. These came out of porting them.
+
+### Contradictions
+
+| Fact | In the blog copy | Everywhere else | What the site says |
+| --- | --- | --- | --- |
+| Lower Greenville address | **1906 Greenville Ave** (grand-opening post) | **2000 Greenville Ave** | 2000 — but **one of these is wrong, please confirm** |
+| Number of studios | &ldquo;Bishop Arts to **Downtown**, Uptown, and Lower Greenville&rdquo; (2025 award post); &ldquo;Oak Cliff Pilates **Downtown**&rdquo; (2024 CBS caption) | Three studios, no Downtown | Three. I dropped the Downtown references — **is there a Downtown location?** |
+| Instructor certification | &ldquo;minimum **500 hours** training&rdquo; (beginner guide) | OCPA is a **300-hour** programme | Neither — I rewrote it to &ldquo;ask what training they completed.&rdquo; As written, the guide disqualified your own academy |
+| Drop-in price | **$35–45** (beginner guide) | **$30** | Labelled as Dallas market range, with a link to your real pricing |
+| Unlimited | **$180–250/mo** (beginner guide) | **$99–209** | Same — market range, linked to /pricing |
+| Class packs | a **5-class** pack (beginner guide) | 10 / 20 / 40 | Left in the market-range paragraph only |
+| Reformers at LG | **14** (grand-opening post) | 14 machines / 12 per class | Consistent — the earlier flag is resolved |
+
+### Broken links I replaced in the beginner's guide
+
+- **&ldquo;Book Your First Beginner Class&rdquo;** pointed at `wellnessliving.com/schedule/oak_cliff_pilates` — your **old booking platform**. Now points at `/intro-offers`.
+- **&ldquo;Learn About Our Intro Specials&rdquo;** pointed at `https://claude.ai/pilates-intro-offers-and-discounts/` — a mangled URL on the wrong domain entirely. Now `/pricing`.
+- Two posts had CTAs with `href="#"` (&ldquo;oakcliffpilates.com/schedule&rdquo;, &ldquo;oakcliffpilates.com/lowergreenville&rdquo;). Now real internal links.
+
+### Other calls
+
+- **The beginner&rsquo;s guide was an unpublished draft** (`?page_id=3087&preview=true`). I published it because you sent it — **say the word if it wasn&rsquo;t ready.** Its title said &ldquo;2025&rdquo;, its footer said &ldquo;Last updated January 2026&rdquo;, and it was created August 2026; I dropped the year rather than pick one.
+- Its byline was **&ldquo;Kenko&rdquo;** (an agency or plugin account). Published under Oak Cliff Pilates.
+- The 2024 CBS post said **&ldquo;over 90 classes per week at our main studio&rdquo;** — true in 2024, stale now. Cut rather than updated, since it was describing that moment.
+- **Voyage Dallas** (2024) says &ldquo;over 450 members&rdquo; and describes the October 2022 move. Left verbatim — it&rsquo;s an archived interview, and readers can see the date.
+- **Old post URLs redirect.** `vercel.json` 301s every dated WordPress permalink (`/2026/08/06/dont-tell-yourself-no-…`) to its new `/blog/…` URL, plus `/news` and the four `/category/…` archives. Nothing that&rsquo;s been shared or indexed will 404.
+- **YouTube videos don&rsquo;t load until clicked.** Each post shows a poster and a play button; the player is only injected on click, and then from `youtube-nocookie.com`. Keeps ~1 MB of Google JS and its cookies off every page view.
+
+### Still missing
+
+Four posts are referenced from the ones you sent but you haven&rsquo;t sent their copy, so they aren&rsquo;t on the site yet:
+
+- Meet Kiel Jared of Oak Cliff Pilates (July 8, 2026)
+- Five Years Later (June 25, 2026)
+- From Pilates in the park to three Dallas studios (March 5, 2026)
+- Pilates in the Park: Tietze Park Series Recap (October 4, 2025)
+- Art &amp; Movement: Pilates at Gallery DeFi, Rio Jiu-Jitsu, Happy Hour at Leela&rsquo;s (Dec 2025 events)
+
+Send any of them and they drop straight in.
