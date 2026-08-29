@@ -1063,3 +1063,76 @@ figure.video-figure figcaption{
   .prose .pull{padding-left:18px}
   .video__play::after{width:60px;height:60px}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   7 · REVIEWS — our own Google-reviews feed
+   Rendered at build time from src/data/reviews.json by tools/build-reviews.py,
+   so the reviews are real HTML: crawlable, instant, and styled like the rest
+   of the site instead of like a third-party widget.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rv-head{
+  display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;
+  padding-bottom:40px;margin-bottom:48px;border-bottom:1px solid var(--border-hairline);
+}
+.band-light .rv-head{border-bottom-color:var(--border-on-light)}
+.rv-score{display:flex;align-items:baseline;gap:12px}
+.rv-score__n{
+  font-family:var(--font-display);font-size:clamp(3.5rem,7vw,5.5rem);line-height:.85;
+  letter-spacing:var(--ls-display);color:var(--ocp-gold);
+}
+.rv-score__of{font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted)}
+.rv-meta{display:flex;flex-direction:column;gap:10px}
+.rv-src{
+  display:flex;align-items:center;gap:10px;
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);
+}
+.rv-src svg{width:16px;height:16px;flex:none}
+
+/* Stars. Drawn from tokens rather than an icon font — one less request, and
+   they inherit the gold. `aria-hidden` on the row; the label carries the value. */
+.stars{display:inline-flex;gap:3px;line-height:1}
+.stars svg{width:16px;height:16px;fill:var(--ocp-gold)}
+.stars--lg svg{width:20px;height:20px}
+.stars .is-empty{fill:var(--border-strong)}
+.band-light .stars .is-empty{fill:var(--border-on-light)}
+
+.rv-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;margin:0;padding:0;list-style:none;
+}
+.rv-card{
+  display:flex;flex-direction:column;gap:16px;height:100%;
+  padding:var(--card-pad);border:1px solid var(--border-hairline);
+  background:var(--surface-card);
+  transition:border-color var(--dur) var(--ease-out),transform var(--dur) var(--ease-out);
+}
+.band-light .rv-card{background:var(--surface-light-raised);border-color:var(--border-on-light)}
+.rv-card:hover{border-color:var(--ocp-gold);transform:translateY(var(--hover-lift))}
+.rv-card__text{
+  font-size:var(--type-body-sm);line-height:var(--lh-body);
+  color:var(--text-secondary);margin:0;flex:1;
+}
+.band-light .rv-card__text{color:var(--text-on-light-secondary)}
+.rv-card__who{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding-top:16px;border-top:1px solid var(--border-subtle);
+}
+.band-light .rv-card__who{border-top-color:var(--border-on-light)}
+.rv-card__name{font-family:var(--font-display);font-size:var(--type-display-5);
+  text-transform:uppercase;letter-spacing:var(--ls-heading);color:var(--text-primary)}
+.rv-card__when{font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.rv-card__where{
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--ocp-gold);
+}
+.band-light .rv-card__where{color:var(--ocp-gold-deep)}
+
+@media (max-width:1000px){ .rv-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:700px){
+  .rv-grid{grid-template-columns:1fr}
+  .rv-head{grid-template-columns:1fr;gap:20px}
+}

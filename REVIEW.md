@@ -187,3 +187,42 @@ Three things to confirm on it:
   outside the Bishop Arts storefront. The real park photography is `park-lawn` and
   `park-first-class`, which is what this page uses. `events.html` still uses
   `park-group` — harmless there, but the slug should be renamed. Noted in MEDIA.md.
+
+## 7. The Google reviews feed
+
+Built as a build-time pipeline rather than a widget: `tools/fetch-reviews.py`
+pulls from the Places API into `src/data/reviews.json`, `tools/build-reviews.py`
+renders `src/partials/reviews.html`, and the homepage includes it. Branded with
+the site's own tokens — gold stars, display-type score, studio label per card.
+
+### ⚠️ It is not live yet, and it needs two things from you
+
+1. **A Google Places API key.** Create one in Google Cloud with the Places API
+   enabled. The script reads it from `GOOGLE_MAPS_API_KEY` so it never reaches
+   the repo or the browser — do not paste it into a file.
+2. **The three place IDs**, filled into `PLACES` at the top of
+   `tools/fetch-reviews.py`. Open each studio on Google Maps and take the
+   `place_id` from the share URL.
+
+Until both exist, the homepage renders the **original EmbedSocial widget**, exactly
+as before. Nothing regressed, and **no placeholder review was written** — I built and
+tested the layout with obviously-synthetic strings and deleted them before committing.
+Every review that ever appears will be one a real person left on Google.
+
+### Things to know before you switch it on
+
+- **Google returns at most five reviews per place.** Three studios means a ceiling
+  of fifteen. The component shows up to twelve. It is a curated wall, not a
+  complete archive, and the copy does not claim otherwise.
+- **Places content may not be cached beyond 30 days** under Google's terms, so the
+  fetcher needs re-running monthly. A cron on the build box or a line in your
+  deploy script covers it.
+- **The section heading is hardcoded** to "600+ verified 5 star reviews" while the
+  feed prints the live count beneath it. If the real total ever drops below 600
+  those two disagree. Worth making the heading vaguer, or generating it too.
+- **I did not add `aggregateRating` structured data.** Google's own guidelines say
+  not to mark up ratings collected from a third-party site as your own. Adding it
+  risks a manual action, and the visible number does the persuasive work anyway.
+- **Reviews under 4★ are filtered out** (`MIN_RATING` in the fetcher). That is a
+  normal marketing choice, not a neutral feed — flagging it so it is your decision
+  and not a silent default. Set it to 0 to publish everything.

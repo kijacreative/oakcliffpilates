@@ -97,6 +97,35 @@ comparison).
 JSON-LD generated automatically** from the questions and answers on the page, so
 the structured data can never drift from the copy.
 
+## Google reviews
+
+The homepage review feed is ours, not a widget. Two steps, both build-time:
+
+```bash
+export GOOGLE_MAPS_API_KEY=...          # never committed, never sent to a browser
+python3 tools/fetch-reviews.py          # → src/data/reviews.json
+python3 tools/build-reviews.py && python3 tools/build.py
+```
+
+`fetch-reviews.py` calls the Google Places API for the three studios, keeps
+reviews at 4★ and above, sorts newest first, and computes the weighted mean
+across all three so the headline number is a real aggregate rather than an
+average of averages. `build-reviews.py` renders that into
+`src/partials/reviews.html`, which the homepage includes.
+
+Doing it at build time rather than in the page means the API key stays on the
+build machine, the reviews are real HTML that crawlers can read, and no
+third-party JavaScript runs on the homepage.
+
+**Before it can run you need two things:** a Places API key, and the three
+place IDs filled into `PLACES` at the top of `fetch-reviews.py`. Until then
+`build-reviews.py` writes the original EmbedSocial widget instead, so the
+homepage keeps working — **no review is ever invented to fill the gap.**
+
+Two limits, both Google's: the Places API returns **at most five reviews per
+place** (so fifteen across three studios), and its terms forbid caching that
+content beyond 30 days — re-run the fetcher monthly.
+
 ## Team roster
 
 `meet-the-team` is generated from the Arketa staff export:
