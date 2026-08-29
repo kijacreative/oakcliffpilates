@@ -39,6 +39,22 @@ OPTIONS = [
       "New clients only, one per person"],
      "CX8QBVvU6bdj31zrkZbR", "Intro offer"),
 
+    ("intro-10-classes", "New Client Special: 10 Classes", "$145", "ten classes · new clients",
+     "Ten classes for $145 — half price, and $14.50 a class. Enough time to learn the room and find your rhythm before you commit to anything.",
+     ["10 classes for $145 — 50% off",
+      "Just $14.50 a class",
+      "Use them at Bishop Arts, Uptown or Lower Greenville",
+      "New clients only"],
+     "1oNxHZVRsxdC7ZWnwTBl", "Intro offer"),
+
+    ("2-week-unlimited", "2 Weeks Unlimited at Lower Greenville", "$89", "every two weeks · recurring",
+     "Two weeks of unlimited classes at the Lower Greenville studio for $89. The fullest way to try us — come every day if you want to.",
+     ["Unlimited classes for two weeks",
+      "Lower Greenville studio only",
+      "First-time clients",
+      "Renews at $89 every two weeks until you cancel"],
+     "WSLz8MOzUJWkNEsT0f0U", "Intro offer"),
+
     ("ocp-lite", "OCP Lite", "$99", "per month · 4 classes",
      "Four classes a month, about $25 a class. The lightest way to keep a habit going without paying for time you will not use.",
      ["4 classes every month", "Any studio, any class on the schedule",
@@ -60,7 +76,7 @@ OPTIONS = [
       "Pause for up to 3 months with 10 days' notice"],
      "wlgHQnoJYB4Wctdkdol5", "Monthly membership"),
 
-    ("unlimited", "Unlimited", "$209", "per month · every class",
+    ("unlimited", "I’m Obsessed: Unlimited Pilates", "$209", "per month · every class",
      "Every class at every studio, plus the perks. Our most popular membership, and the one that pays for itself fastest.",
      ["Every class, every studio, as often as you like",
       "VIP perks and priority waitlist", "Free guest passes to share",
@@ -68,14 +84,14 @@ OPTIONS = [
       "Pause for up to 3 months with 10 days' notice"],
      "NYH9dctoUSiY9llrTpDz", "Monthly membership"),
 
-    ("3-month-unlimited", "3 months unlimited", "$599", "three months · around $10 a class",
+    ("3-month-unlimited", "I’m Really Obsessed: 3 Months of Unlimited Pilates", "$599", "three months · around $10 a class",
      "Unlimited classes for three months, paid up front. Around $10 a class at twenty classes a month.",
      ["Unlimited classes for three months", "Every studio, every class",
       "Around $10 a class at 20 classes a month",
       "Auto-renews every three months — turn it off any time"],
      "S1dYzKADWZfO5g3WCSja", "Unlimited terms"),
 
-    ("annual-unlimited", "1 year unlimited", "$2,299", "twelve months · around $10 a class",
+    ("annual-unlimited", "One Year of Unlimited Pilates", "$2,299", "twelve months · around $10 a class",
      "A year of unlimited classes paid up front — about $209 less than twelve months at the monthly rate, which is a month for nothing.",
      ["Unlimited classes for a full year", "Every studio, every class",
       "Around $10 a class at 20 classes a month",

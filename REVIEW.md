@@ -258,16 +258,36 @@ is near enough a free month, and how it now reads.
 - **Every price on the site is now verified against Arketa**, not just copied
   from the old page. Re-run that check whenever prices change; the method is in
   the README.
-- **Arketa's own product names differ from ours** in a few places — its
-  Unlimited is "I'm Obsessed: Unlimited Pilates", the quarterly is "I'm Really
-  Obsessed". Customers will see those names inside the checkout frame. Ours are
-  the friendlier ones from your pricing page; worth a glance to check the
-  mismatch does not read as an error.
+- ✅ **Product names now match Arketa.** The unlimited tiers are I'm Obsessed,
+  I'm Really Obsessed, and One Year of Unlimited Pilates, so the name on the page
+  is the name in the checkout frame. **The 6-month tier you listed — "Completely
+  Obsessed: 6 Months of Unlimited Pilates" — is not on the site and I have no
+  checkout URL for it.** Send one and it takes a minute.
 - **Payment inside an iframe has a known failure mode.** 3-D Secure and wallet
   sheets need a top-level window. Every page therefore carries a visible "open
   the checkout in a new tab" link directly under the frame, so a customer who
   hits it is one click from finishing rather than stuck.
-- **Three intro offers still have no checkout page**: the $59 one-week, the
-  $145 ten-class, and the $89 two-week. Their buttons point at the general
-  Arketa site because no per-product checkout URL exists for them in the copy
-  you sent. Send those three URLs and they take about a minute each.
+### The three intro-offer URLs
+
+- ✅ **$145 ten classes** and ✅ **$89 two weeks** now have pages.
+- 🔴 **The $59 one-week still does not.** The URL you sent for it
+  (`1oNxHZVRsxdC7ZWnwTBl`) is the **10-class $145 offer** — the same URL you sent
+  for 10 Classes. I loaded it before wiring anything up, so nothing shipped
+  pointing at the wrong product. Its buttons still go to the general Arketa page.
+  Send the real one-week URL and I'll add it.
+
+### 🔴 The $89 banner image in your Arketa account says $29
+
+Every line of text in that checkout says $89.00 — but the banner graphic at the
+top of it (`2 WEEKS UNLIMITED.jpg`, uploaded to your Arketa account) reads
+**"UNLIMITED PILATES FOR $29"**. A customer sees $29 in the artwork and is
+charged $89. That image lives in Arketa, not in this repo, so I cannot fix it
+from here — **replace it in Arketa.**
+
+### Also worth knowing
+
+- **The $89 two-week offer recurs.** Arketa bills it "$89.00 every 2 weeks" until
+  cancelled. Your existing copy called it "two weeks of unlimited classes $89"
+  with no mention of renewal, which reads as one-off. The new page says plainly
+  that it renews every two weeks until you cancel. It is also **Lower Greenville
+  only**, which the old copy did say.
