@@ -95,6 +95,16 @@
       "source": "/category/video",
       "destination": "/blog",
       "permanent": true
+    },
+    {
+      "source": "/pricing/3-classes-for-25",
+      "destination": "/pricing/intro-1-week",
+      "permanent": true
+    },
+    {
+      "source": "/pricing/intro-10-classes",
+      "destination": "/pricing/intro-1-week",
+      "permanent": true
     }
   ]
 }

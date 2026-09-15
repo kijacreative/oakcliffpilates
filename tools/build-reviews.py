@@ -39,6 +39,13 @@ LIMIT = 12
 MIN_CHARS = 80
 MAX_CHARS = 420
 
+# Reviews naming an offer we no longer sell are skipped for the homepage grid.
+# Not censorship — they stay on Google, in full, and nobody's words are edited.
+# It is that a card advertising "3 classes for $25" next to the current pricing
+# sends someone looking for a price that cannot be bought. Add a phrase here
+# when an offer is retired; drop it when the review stops mattering.
+RETIRED_OFFERS = ("3 classes for $25", "3 classes for 25", "10 classes for $145")
+
 STAR = ('<svg viewBox="0 0 20 19" aria-hidden="true"{cls}>'
         '<path d="M10 0l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L10 14.2 4.2 17.8l1.6-6.6L.6 6.8l6.8-.5z"/>'
         '</svg>')
@@ -93,8 +100,13 @@ def pick(reviews: list[dict], limit: int) -> list[dict]:
     """
     by_studio: dict[str, list[dict]] = {}
     for r in reviews:
-        if MIN_CHARS <= len(r.get("text", "")) <= MAX_CHARS:
-            by_studio.setdefault(r["studio"], []).append(r)
+        text = r.get("text", "")
+        if not MIN_CHARS <= len(text) <= MAX_CHARS:
+            continue
+        low = text.lower()
+        if any(phrase in low for phrase in RETIRED_OFFERS):
+            continue
+        by_studio.setdefault(r["studio"], []).append(r)
 
     out: list[dict] = []
     while len(out) < limit and any(by_studio.values()):

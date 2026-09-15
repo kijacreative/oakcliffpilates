@@ -329,7 +329,77 @@ The **footer newsletter signup** only collects an email, and Arketa needs a
 name to create a client, so that one still sends people to the hosted form.
 Tell me if you would rather it asked for a name too and used the same route.
 
-## 9. Checkout pages — and a pricing error they caught
+## 9. Pricing changes — two offers in, two out
+
+### 🔴 The two new memberships do not exist in Arketa yet
+
+I checked your Arketa catalog directly. **Afternoon Unlimited and Studio
+Unlimited are not configured** — not as subscriptions, packs, bundles or
+challenges. So there is no checkout to link to and nobody can actually buy
+them yet.
+
+Both are on `/pricing` with the right price and terms, badged **New**, and
+their buttons say **Join now** and go to your Arketa pricing page rather than
+a `/pricing/<slug>` page that would 404. Nothing on the site claims a checkout
+that isn't there.
+
+**What I need from you:** create them in Arketa, then send me the two offering
+ids. They are the same string as the last segment of the checkout URL — the
+$59 offer's id is `08dxQyFUSU4GA782eKIz`, for example. Paste those into
+`OPTIONS` in `tools/build-checkout.py` (they are already listed there with
+`None` in the id slot) and the two checkout pages build themselves.
+
+Until then `build-checkout.py` prints them as pending on every run, so they
+cannot be quietly forgotten:
+
+    2 waiting on an Arketa offering id, no page built:
+      - afternoon-unlimited ($119)
+      - studio-unlimited ($159)
+
+### 🟡 The two retired offers are still live in Arketa
+
+**3 Classes for $25** (`CX8QBVvU6bdj31zrkZbR`) and **New Client Special: 10
+Classes** (`1oNxHZVRsxdC7ZWnwTBl`) are both still **active** in your catalog.
+Taking them off the website does not take them off Arketa — they can still be
+sold at the desk, and they still appear on Arketa's own pricing page. Deactivate
+them there when you're ready.
+
+### What changed on the site
+
+- Both offers removed everywhere: their checkout pages deleted, every CTA
+  repointed at the $59 week, and the copy rewritten rather than just having
+  the price swapped — headings like "Save over 70% on your first 3 classes"
+  no longer made sense.
+- `/pricing/3-classes-for-25` and `/pricing/intro-10-classes` now **301 to
+  `/pricing/intro-1-week`** rather than 404, and both are out of the sitemap.
+- The intro block is now a single $59 card, matching what you said earlier
+  about running one intro offer.
+- The membership grids on `/` and `/pricing` went from four across to three,
+  two rows: the class-count tiers, then the three unlimiteds.
+
+### Two calls worth a look
+
+- **"All memberships work at every studio" is no longer true.** Studio
+  Unlimited is one location. That line is now "Every membership works at all
+  three studios except Studio Unlimited, which is for the one you choose."
+- **A real Google review on the homepage mentioned the $25 pass.** I did not
+  edit anyone's words — `build-reviews.py` now skips reviews naming a retired
+  offer (`RETIRED_OFFERS`), so it simply is not among the twelve shown. It is
+  still on Google in full.
+
+### One loose end
+
+You said earlier you wanted **one** intro offer. The **$89 two weeks at Lower
+Greenville** is still live, still has a page at `/pricing/2-week-unlimited`,
+and is still featured in its own section on `/intro-offers`. You did not ask
+me to remove it so I have not — but it is a second intro offer. Say the word.
+
+Odd thing worth knowing: that $89 offer does not appear anywhere in Arketa's
+offering list — not as a pack, subscription, bundle or challenge — yet its
+checkout URL still loads and charges. Worth confirming it is configured the
+way you think it is.
+
+## 10. Checkout pages — and a pricing error they caught
 
 18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
 Every Buy-now link across the site now routes through them rather than jumping

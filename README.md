@@ -121,6 +121,13 @@ window and will not complete inside a frame.
 page still matches Arketa: open the checkout URL and read the price it shows.
 A row that drifts advertises one price and charges another.
 
+An entry whose Arketa id is `None` is an offer that exists on the site but not
+yet in Arketa. No page is built for it — a checkout page with nothing to buy
+is worse than no page — and the build prints it as pending on every run so it
+cannot be forgotten. Fill the id in (it is the last segment of the checkout
+URL) and the page appears. Link those offers somewhere real in the meantime;
+`/pricing` currently sends them to Arketa's own pricing page.
+
 ## Google reviews
 
 The homepage review feed is ours, not a widget. Two steps, both build-time:

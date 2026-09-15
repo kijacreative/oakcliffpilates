@@ -456,6 +456,11 @@ section{position:relative}
 .pop-reasons{display:grid;gap:10px}
 .pop-reasons .btn{white-space:normal;text-align:center;height:auto;min-height:var(--control-height);padding-top:12px;padding-bottom:12px}
 .pop-fields{display:grid;gap:14px}
+/* One intro offer in a three-up grid: let the single card take two columns
+   so it reads as the offer rather than as two missing ones. */
+.intro-solo{grid-column:span 2}
+@media (max-width:900px){ .intro-solo{grid-column:auto} }
+
 .pop-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* Arketa's hosted intake form, embedded. Their page centres its card on a

@@ -30,15 +30,6 @@ CHECKOUT = "https://app.arketa.co/oakcliffpilates/pricing/checkout/"
 
 # slug, name, price, unit, blurb, [what you get], arketa id, group
 OPTIONS = [
-    ("3-classes-for-25", "3 classes for $25", "$25", "three classes · new clients",
-     "The way most people start. Three classes for $25, good at any of the three studios, valid for 30 days.",
-     ["Three classes for $25 — save over 70%",
-      "Use them at Bishop Arts, Uptown or Lower Greenville",
-      "Any class on the schedule",
-      "Valid for 30 days from purchase",
-      "New clients only, one per person"],
-     "CX8QBVvU6bdj31zrkZbR", "Intro offer"),
-
     ("intro-1-week", "New Client Special: 1 Week Unlimited", "$59", "one week · one charge",
      "A full week of unlimited classes for $59. Come every day if you like — it is the fastest way to find out whether this is your room.",
      ["Unlimited classes for one week",
@@ -46,14 +37,6 @@ OPTIONS = [
       "First-time clients only",
       "A single $59 charge — one week, not a rolling subscription"],
      "08dxQyFUSU4GA782eKIz", "Intro offer"),
-
-    ("intro-10-classes", "New Client Special: 10 Classes", "$145", "ten classes · new clients",
-     "Ten classes for $145 — half price, and $14.50 a class. Enough time to learn the room and find your rhythm before you commit to anything.",
-     ["10 classes for $145 — 50% off",
-      "Just $14.50 a class",
-      "Use them at Bishop Arts, Uptown or Lower Greenville",
-      "New clients only"],
-     "1oNxHZVRsxdC7ZWnwTBl", "Intro offer"),
 
     ("2-week-unlimited", "2 Weeks Unlimited at Lower Greenville", "$89", "two weeks · one charge",
      "Two weeks of unlimited classes at the Lower Greenville studio for $89. The fullest way to try us — come every day if you want to.",
@@ -83,6 +66,22 @@ OPTIONS = [
       "Works out at less than $16 a class", "No contract — cancel any time",
       "Pause for up to 3 months with 10 days' notice"],
      "wlgHQnoJYB4Wctdkdol5", "Monthly membership"),
+
+    ("afternoon-unlimited", "Afternoon Unlimited", "$119", "per month · every weekday class 10–4",
+     "Unlimited classes between 10am and 4pm, Monday to Friday, at all three studios. If your day has a gap in the middle of it, this is the cheapest way to fill it.",
+     ["Unlimited classes, 10am to 4pm, Monday to Friday",
+      "Bishop Arts, Uptown and Lower Greenville",
+      "Any class on the schedule inside those hours",
+      "No contract — cancel any time"],
+     None, "Monthly membership"),
+
+    ("studio-unlimited", "Studio Unlimited", "$159", "per month · one studio",
+     "Unlimited classes at whichever studio is yours — any class, any time it runs. For people who go to the same room every time and would rather not pay for the other two.",
+     ["Unlimited classes at one studio",
+      "Pick Bishop Arts, Uptown or Lower Greenville",
+      "Any class on that studio's schedule, any time of day",
+      "No contract — cancel any time"],
+     None, "Monthly membership"),
 
     ("unlimited", "I’m Obsessed: Unlimited Pilates", "$209", "per month · every class",
      "Every class at every studio, plus the perks. Our most popular membership, and the one that pays for itself fastest.",
@@ -233,7 +232,7 @@ og_image: /img/lib/uptown-reformers.jpg
         </div>
         <div class="co-panel">
           <h2 class="dsp">Not sure yet?</h2>
-          <p style="margin-top:12px;font-size:var(--type-body-sm);color:var(--text-secondary)">Compare every option side by side, or start with three classes for $25.</p>
+          <p style="margin-top:12px;font-size:var(--type-body-sm);color:var(--text-secondary)">Compare every option side by side, or start with a week of unlimited classes for $59.</p>
           <div class="btn-row" style="margin-top:20px">
             <a class="btn btn--secondary btn--full" href="/pricing"><span>All pricing</span></a>
             <a class="btn btn--ghost btn--full" href="/schedule"><span>See the schedule</span></a>
@@ -275,7 +274,16 @@ def offer_schema(slug, name, price, blurb):
 
 
 def main() -> int:
+    written, pending = 0, []
     for slug, name, price, unit, blurb, gets, aid, group in OPTIONS:
+        if not aid:
+            # The offer exists on the site but not yet in Arketa, so there is
+            # no checkout to embed. Skipping is deliberate: a checkout page
+            # with nothing to buy is worse than no page. Paste the offering id
+            # in above — it is the same string as the checkout URL's last
+            # segment — and the page appears on the next run.
+            pending.append(f"{slug} ({price})")
+            continue
         if price:
             price_block = (f'      <div class="co-price"><span class="co-price__n">{price}</span>'
                            f'<span class="co-price__unit">{html.escape(unit)}</span></div>')
@@ -293,7 +301,12 @@ def main() -> int:
             group=html.escape(group), ticks=ticks, url=CHECKOUT + aid,
             offer=offer_schema(slug, name, price, blurb),
         ))
-    print(f"  {len(OPTIONS)} checkout page(s) written to src/pages/pricing-*.html")
+        written += 1
+    print(f"  {written} checkout page(s) written to src/pages/pricing-*.html")
+    if pending:
+        print(f"  {len(pending)} waiting on an Arketa offering id, no page built:")
+        for row in pending:
+            print(f"    - {row}")
     print("  next: python3 tools/build.py")
     return 0
 
