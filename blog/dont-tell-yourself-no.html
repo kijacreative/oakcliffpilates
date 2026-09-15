@@ -222,6 +222,13 @@
         <a href="https://app.arketa.co/oakcliffpilates/account/account" target="_blank" rel="noopener">My account</a>
         <a href="https://instagram.com/oakcliffpilates" target="_blank" rel="noopener">Instagram</a>
       </div>
+      <div class="foot-list">
+        <span class="eyebrow">Legal</span>
+        <a href="/policies">Studio policies</a>
+        <a href="/terms">Terms &amp; conditions</a>
+        <a href="/privacy">Privacy policy</a>
+        <a href="#" data-cookie-prefs>Cookie preferences</a>
+      </div>
     </div>
     <h2 class="dsp foot-big">Energy Elevated™</h2>
     <div class="rowlabel" style="margin-top:32px;color:var(--text-muted)">
@@ -326,6 +333,67 @@
       <img src="/img/lib/uptown-reformer-medusa.jpg" alt="Oak Cliff Pilates studio" loading="lazy">
       <div class="pop-photo__scrim"></div>
       <div class="pop-photo__tag"><span class="badge badge--outline">Are you down with OCP?</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie notice.
+
+     Deliberately specific rather than the usual "we value your privacy"
+     boilerplate: it names every cookie the site sets, what each one is for,
+     and how long it lasts. That is possible here because the list is genuinely
+     short — there is no analytics, no advertising and no tracking pixel on
+     this site, so there is nothing to be vague about.
+
+     Only one toggle exists because only one thing is genuinely optional. A
+     switch that does nothing is worse than no switch. -->
+<div class="ck" id="cookie-notice" role="dialog" aria-modal="false" aria-labelledby="ck-title" hidden>
+  <div class="ck-bar">
+    <div class="ck-copy">
+      <p class="ck-title" id="ck-title">We use a couple of cookies.</p>
+      <p class="ck-text">Two small ones, both ours: one remembers this choice, one remembers you have already seen the intro offer. Booking and checkout run on Arketa and set their own. <strong>No analytics, no advertising, nothing that follows you to other sites.</strong></p>
+    </div>
+    <div class="ck-actions">
+      <button class="btn btn--secondary" data-ck="prefs"><span>Preferences</span></button>
+      <button class="btn btn--secondary" data-ck="reject"><span>Essential only</span></button>
+      <button class="btn btn--primary" data-ck="accept"><span>Accept</span></button>
+    </div>
+  </div>
+
+  <div class="ck-panel" data-ck-panel hidden>
+    <div class="ck-panel__head">
+      <h2 class="ck-panel__title">Cookie preferences</h2>
+      <button class="ck-close" data-ck="close" aria-label="Close preferences">✕</button>
+    </div>
+
+    <div class="ck-group">
+      <div class="ck-group__top">
+        <span class="ck-group__name">Strictly necessary</span>
+        <span class="ck-group__state">Always on</span>
+      </div>
+      <p class="ck-group__why">The site cannot work without these, so there is no switch. None of them identify you or leave this site.</p>
+      <ul class="ck-list">
+        <li><code>ocp_consent</code> &mdash; remembers what you choose here. 12 months.</li>
+        <li><code>ocp_popup_seen</code> &mdash; so the intro offer shows once, not on every page. 30 days.</li>
+        <li><strong>Arketa</strong> &mdash; our booking and payment system, embedded on the schedule, shop and checkout pages. It sets its own cookies so it can hold your basket and keep you signed in. Blocking them would mean you could not book or pay.</li>
+      </ul>
+    </div>
+
+    <div class="ck-group">
+      <div class="ck-group__top">
+        <span class="ck-group__name">Video</span>
+        <label class="ck-switch">
+          <input type="checkbox" data-ck-toggle="video">
+          <span class="ck-switch__track" aria-hidden="true"></span>
+          <span class="ck-switch__label" data-ck-label="video">Off</span>
+        </label>
+      </div>
+      <p class="ck-group__why">Videos in the Journal are served by YouTube. Nothing loads until you press play, and we use their no-cookie domain &mdash; but pressing play still contacts Google, which may store data. Leave this off and we will ask before any video loads.</p>
+    </div>
+
+    <div class="ck-panel__foot">
+      <button class="ck-clear" data-ck="clear">Clear what is stored on this device</button>
+      <button class="btn btn--primary" data-ck="save"><span>Save preferences</span></button>
     </div>
   </div>
 </div>

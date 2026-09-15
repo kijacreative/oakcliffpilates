@@ -329,7 +329,90 @@ The **footer newsletter signup** only collects an email, and Arketa needs a
 name to create a client, so that one still sends people to the hosted form.
 Tell me if you would rather it asked for a name too and used the same route.
 
-## 9. Pricing changes — two offers in, two out
+## 9. Legal pages and the cookie notice
+
+`/policies`, `/terms` and `/privacy` are live, linked from a new **Legal**
+column in the footer alongside **Cookie preferences**, and in the sitemap. Your
+copy is reproduced as you sent it, with one exception noted below.
+
+### 🔴 Your two documents contradict each other on cancellations
+
+- **Studio Policies** says cancel at least **4 hours** before class, $15 late
+  fee, $25 no-show.
+- **Terms and Conditions §2c** says cancel at least **12 hours** before class.
+
+The rest of the site says 4 hours everywhere — the FAQ, the popup, every
+checkout page. This is an operative term with money attached, so I have not
+picked one for you: both pages say exactly what you sent. **Tell me which is
+right and I will make everything agree.**
+
+### 🔴 The Privacy Policy describes tracking this site does not do
+
+I checked the code. There is **no Google Analytics, no Meta Pixel, no
+advertising tag and no tracking script of any kind** on this site. But the
+policy says:
+
+- §1c — cookies are used to "analyze usage data, and deliver targeted
+  advertisements"
+- §2 — "usage data helps us analyze how our site is used"
+- §3 — "Marketing platforms: to provide you with personalized marketing and
+  advertisements"
+
+None of that happens here. Over-disclosing is not illegal, but it now sits on
+the same site as a cookie banner that says plainly "no analytics, no
+advertising, nothing that follows you to other sites" — and **the banner is
+the accurate one**. Worth having whoever wrote the policy trim those three
+lines, or tell me and I will.
+
+Related: §1b lists IP address, browser and pages visited under "usage data".
+This site collects none of that itself. Your host (Vercel) keeps standard
+server logs, and Arketa collects what it collects — which is worth saying
+accurately rather than implying we run analytics.
+
+### 🟡 One line I changed in the Terms
+
+§2a gave "3 classes for $25" as the example promotion. You had just asked me
+to remove every reference to that offer, so it now reads "1 Week Unlimited for
+$59". It is an illustrative example, not an operative clause, so the legal
+effect is unchanged — but it is your document and I changed a word in it, so
+you should know. Revert it if you would rather.
+
+I did **not** touch anything operative. The 12-hour clause above is still 12
+hours precisely because changing it would change what you can charge.
+
+### 🟡 Smaller things to check
+
+- **Two phone numbers.** Studio Policies says `469-340-0422`; the FAQ and the
+  rest of the site say `(469) 949-5306`. Both are now published.
+- **Effective date is 1 November 2024**, nearly two years ago. It predates the
+  Lower Greenville studio and every current price. §3c still references a rate
+  lock for memberships bought before 18 November 2024.
+- **§2a says "prior to our new studio opening"** — ambiguous now that Lower
+  Greenville has opened and the wording could mean either.
+
+### The cookie notice
+
+Banner on first visit, preferences panel reopenable from the footer, choice
+kept in a first-party `ocp_consent` cookie for 12 months.
+
+**It has one switch, and that is deliberate.** The site stores two functional
+cookies and embeds Arketa; none of that is optional, so none of it pretends to
+be. A preferences panel full of dead toggles is just a longer way of ignoring
+someone. The panel names each cookie, what it does and how long it lasts,
+which is only possible because the real list is this short.
+
+- **Arketa is treated as strictly necessary.** It *is* the booking and payment
+  system — gating it would put a consent wall in front of your schedule and
+  your checkout. Defensible under Texas law, which requires notice and opt-out
+  for targeted advertising and data sales, and you do neither. If you want the
+  stricter GDPR-style treatment anyway, say so.
+- **The video toggle does real work.** With it off, pressing play on a Journal
+  video shows a prompt offering "Allow and play" or "Watch on YouTube", and
+  nothing reaches Google until one is chosen. Verified: no iframe, no request.
+- **"Clear what is stored on this device" really clears it** — both cookies and
+  the localStorage fallback — rather than only saying so.
+
+## 10. Pricing changes — two offers in, two out
 
 ### 🔴 The two new memberships do not exist in Arketa yet
 
@@ -399,7 +482,7 @@ offering list — not as a pack, subscription, bundle or challenge — yet its
 checkout URL still loads and charges. Worth confirming it is configured the
 way you think it is.
 
-## 10. Checkout pages — and a pricing error they caught
+## 11. Checkout pages — and a pricing error they caught
 
 18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
 Every Buy-now link across the site now routes through them rather than jumping

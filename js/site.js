@@ -411,6 +411,145 @@
   })();
 })();
 
+/* ── Cookie consent ────────────────────────────────────────────────────────
+   One stored choice, one real toggle. The site sets two functional cookies
+   and embeds Arketa for booking and payment; none of that is optional, so
+   none of it pretends to be. The only genuinely optional thing is YouTube,
+   so that is the only switch — a preferences panel full of dead controls is
+   just a longer way of ignoring someone.
+
+   The choice itself lives in a first-party cookie so it survives across
+   pages and sessions without any third party being involved. */
+(function () {
+  var KEY = "ocp_consent";
+  var DAYS = 365;
+  var state = null;
+
+  function write(value) {
+    var expires = new Date(Date.now() + DAYS * 864e5).toUTCString();
+    try {
+      document.cookie = KEY + "=" + encodeURIComponent(JSON.stringify(value)) +
+        "; expires=" + expires + "; path=/; SameSite=Lax" +
+        (location.protocol === "https:" ? "; Secure" : "");
+    } catch (e) { /* cookies blocked — the choice lasts this page only */ }
+    state = value;
+    document.dispatchEvent(new CustomEvent("ocp:consent", { detail: value }));
+  }
+
+  function read() {
+    if (state) return state;
+    var hit = document.cookie.split("; ").filter(function (c) {
+      return c.indexOf(KEY + "=") === 0;
+    })[0];
+    if (!hit) return null;
+    try {
+      state = JSON.parse(decodeURIComponent(hit.slice(KEY.length + 1)));
+      return state;
+    } catch (e) { return null; }
+  }
+
+  /* Read by the video facade below, and safe to call before a choice is made
+     — no choice means no consent. */
+  window.ocpConsent = {
+    allows: function (what) {
+      var c = read();
+      return !!(c && c[what]);
+    },
+    grant: function (what) {
+      var c = read() || { v: 1 };
+      c[what] = true;
+      write(c);
+    },
+    open: function () { open(true); }
+  };
+
+  var box = document.getElementById("cookie-notice");
+  if (!box) return;
+  var panel = box.querySelector("[data-ck-panel]");
+  var bar = box.querySelector(".ck-bar");
+  var toggles = box.querySelectorAll("[data-ck-toggle]");
+
+  function paint() {
+    var c = read() || {};
+    for (var i = 0; i < toggles.length; i++) {
+      var name = toggles[i].dataset.ckToggle;
+      toggles[i].checked = !!c[name];
+      var label = box.querySelector('[data-ck-label="' + name + '"]');
+      if (label) label.textContent = toggles[i].checked ? "On" : "Off";
+    }
+  }
+
+  function open(showPanel) {
+    box.hidden = false;
+    if (panel) panel.hidden = !showPanel;
+    /* One thing at a time — the bar is the short version of the panel. */
+    if (bar) bar.hidden = !!showPanel;
+    paint();
+  }
+
+  function close() {
+    box.hidden = true;
+    if (panel) panel.hidden = true;
+    if (bar) bar.hidden = false;
+  }
+
+  function fromToggles() {
+    var c = { v: 1 };
+    for (var i = 0; i < toggles.length; i++) {
+      c[toggles[i].dataset.ckToggle] = toggles[i].checked;
+    }
+    return c;
+  }
+
+  box.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-ck]");
+    if (!btn) return;
+    var action = btn.dataset.ck;
+
+    if (action === "accept") {
+      var all = { v: 1 };
+      for (var i = 0; i < toggles.length; i++) all[toggles[i].dataset.ckToggle] = true;
+      write(all); close();
+    } else if (action === "reject") {
+      write({ v: 1 }); close();
+    } else if (action === "prefs") {
+      open(true);
+    } else if (action === "save") {
+      write(fromToggles()); close();
+    } else if (action === "close") {
+      if (read()) close(); else open(false);
+    } else if (action === "clear") {
+      /* Actually clear it, rather than only saying so. Everything this site
+         stores is first-party, so it can all go from here. */
+      ["ocp_consent", "ocp_popup_seen"].forEach(function (name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      });
+      try { localStorage.removeItem("ocp_popup_seen"); } catch (e) {}
+      state = null;
+      btn.textContent = "Cleared. Arketa's own cookies are cleared in your browser settings.";
+      btn.disabled = true;
+      paint();
+    }
+  });
+
+  box.addEventListener("change", function (e) {
+    var t = e.target.closest("[data-ck-toggle]");
+    if (!t) return;
+    var label = box.querySelector('[data-ck-label="' + t.dataset.ckToggle + '"]');
+    if (label) label.textContent = t.checked ? "On" : "Off";
+  });
+
+  /* Anything, anywhere, can reopen this — the footer link uses it. */
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("[data-cookie-prefs]")) {
+      e.preventDefault();
+      open(true);
+    }
+  });
+
+  if (!read()) open(false);
+})();
+
 /* ── YouTube facade ────────────────────────────────────────────────────────
    Posts ship a poster image and a play button; the real iframe is injected
    only when someone asks for it. Keeps the player's ~1 MB of JS and its
@@ -421,7 +560,7 @@
     (function (frame) {
       var btn = frame.querySelector(".video__play");
       if (!btn) return;
-      btn.addEventListener("click", function () {
+      function play() {
         var id = frame.getAttribute("data-video");
         var f = document.createElement("iframe");
         f.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
@@ -431,6 +570,35 @@
         f.referrerPolicy = "strict-origin-when-cross-origin";
         frame.innerHTML = "";
         frame.appendChild(f);
+      }
+
+      /* Ask before the first video loads, unless it has already been allowed.
+         The prompt is here rather than in the banner because this is the
+         moment it matters, and because it can offer YouTube directly as the
+         way out — saying no should still let someone watch the thing. */
+      function ask() {
+        var id = frame.getAttribute("data-video");
+        var box = document.createElement("div");
+        box.className = "video__ask";
+        box.innerHTML =
+          '<p>Playing this loads YouTube, which may store data on your device.</p>' +
+          '<div class="video__ask-row">' +
+          '<button class="btn btn--primary" type="button"><span>Allow and play</span></button>' +
+          '<a class="btn btn--secondary" href="https://www.youtube.com/watch?v=' + id +
+          '" target="_blank" rel="noopener"><span>Watch on YouTube</span></a>' +
+          '</div>' +
+          '<button class="video__ask-prefs" type="button" data-cookie-prefs>Cookie preferences</button>';
+        box.querySelector(".btn--primary").addEventListener("click", function () {
+          if (window.ocpConsent) window.ocpConsent.grant("video");
+          play();
+        });
+        frame.appendChild(box);
+      }
+
+      btn.addEventListener("click", function () {
+        if (!window.ocpConsent || window.ocpConsent.allows("video")) return play();
+        if (frame.querySelector(".video__ask")) return;
+        ask();
       });
     })(frames[i]);
   }

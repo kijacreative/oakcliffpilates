@@ -172,6 +172,39 @@ Re-run the fetcher monthly. When you do, check that the copy still matches:
 `index.html` and `intro-offers.html` both quote a round review count ("500+")
 and `intro-offers` quotes the average rating.
 
+## Cookie notice
+
+`src/partials/cookie.html` plus the consent module in `js/site.js`. A bar on
+first visit, a preferences panel you can reopen from the footer link or any
+`data-cookie-prefs` element, and the choice stored in a first-party
+`ocp_consent` cookie for 12 months.
+
+**It has one toggle because only one thing here is genuinely optional.** The
+site runs no analytics, no advertising and no tracking pixels — there is
+nothing to switch off. What it does store:
+
+| | What | Why |
+|---|---|---|
+| Necessary | `ocp_consent` | remembers the choice, 12 months |
+| Necessary | `ocp_popup_seen` | intro popup shows once, 30 days |
+| Necessary | Arketa's cookies | booking and payment; blocking them breaks checkout |
+| Optional | YouTube | only on the Journal, only when someone presses play |
+
+Arketa is treated as strictly necessary because it *is* the booking and
+payment service. Gating it would mean a consent wall in front of the schedule
+and the checkout. If you want the stricter GDPR-style treatment — placeholder
+until consent, with an out-link — that is a change to the consent module and
+the embeds, not a rewrite.
+
+The video toggle does real work: with it off, pressing play shows an inline
+prompt offering **Allow and play** or **Watch on YouTube**, and no request
+reaches Google until one is chosen. "Clear what is stored on this device"
+actually clears both first-party cookies and the localStorage fallback.
+
+Keep the table above and `src/partials/cookie.html` in step with reality. The
+notice names specific cookies, which is only better than boilerplate while it
+is true.
+
 ## The intro popup
 
 Opens **3 seconds** after a first visit, on **every page**, and then stays
