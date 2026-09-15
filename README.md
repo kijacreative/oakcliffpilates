@@ -172,6 +172,44 @@ Re-run the fetcher monthly. When you do, check that the copy still matches:
 `index.html` and `intro-offers.html` both quote a round review count ("500+")
 and `intro-offers` quotes the average rating.
 
+## URLs and the mega menu
+
+Pages live under their menu parent: `/locations/bishop-arts`,
+`/schedule/classes`, `/pricing/intro-offers`, `/about/faq`, `/blog/events`,
+`/shop`. The `path:` in a page's front matter is the single source of truth —
+it sets both the URL and the output filename, so moving a page is one line
+plus a redirect in `vercel.json`. Every old URL 301s to its new home.
+
+`src/partials/header.html` holds the mega menu. Each top-level item is a real
+link to a real page and its panel opens on `:hover` and `:focus-within` — both
+in CSS, so **the menu works with JavaScript off**. `js/site.js` only adds
+Escape-to-close, the first-tap-opens behaviour on touch (where there is no
+hover), and keeps `aria-expanded` in step for screen readers.
+
+Every panel repeats its own parent as the first item, so the parent page is
+reachable by keyboard and by thumb rather than only by clicking the trigger.
+
+The inline nav and the panels both switch off at **1100px**, in two blocks
+that say so — they must move together, or there is a band where the nav is
+inline but the dropdowns are dead.
+
+## Journal listings
+
+`tools/build-blog-index.py` generates every post listing from the posts' own
+front matter:
+
+```bash
+python3 tools/build-blog-index.py && python3 tools/build.py
+```
+
+    src/partials/posts-all.html    every post         -> /blog
+    src/partials/posts-news.html   category: News     -> /blog/news
+
+Add a listing by adding a line to `LISTINGS`. The card fields — `excerpt`,
+`read_time`, `card`, `card_w`, `card_h` — live in each post's front matter next
+to its title and date, so a new post appears in every listing it belongs in
+without anyone editing an index.
+
 ## Cookie notice
 
 `src/partials/cookie.html` plus the consent module in `js/site.js`. A bar on

@@ -329,7 +329,67 @@ The **footer newsletter signup** only collects an email, and Arketa needs a
 name to create a client, so that one still sends people to the hosted form.
 Tell me if you would rather it asked for a name too and used the same route.
 
-## 9. The class descriptions page
+## 9. The mega menu and the URL restructure
+
+Every page now sits under its menu parent &mdash; `/locations/bishop-arts`,
+`/schedule/classes`, `/pricing/intro-offers`, `/about/faq`, `/blog/events`,
+`/shop` &mdash; and all thirteen old URLs 301 to their new home. Nothing 404s and
+nothing is orphaned: 54 pages, zero dead links, zero broken anchors, sitemap
+rebuilt from what actually got built.
+
+"Journal" is now "Blog" everywhere in the menu, as you asked.
+
+The menu opens on hover **and on keyboard focus, in CSS** &mdash; so it works with
+JavaScript off. Each top-level item is a real link to a real page, and every
+panel repeats its parent as the first item, so the parent is reachable by
+keyboard and by thumb instead of only by clicking a link that is also the
+trigger. Script only adds Escape-to-close and first-tap-opens on touch.
+
+### 🔴 Three menu items have nothing to point at
+
+You listed these and I could not build them, because there is nothing to link
+to and I will not invent product URLs:
+
+1. **Partners** &mdash; no page, no content anywhere on the site. **Left out of the
+   menu entirely** rather than shipped as a dead link. What should it be: a
+   list of local businesses you work with? Studio partners? Send me the content
+   and it takes ten minutes.
+2. **OCP Swag &mdash; direct links to products**
+3. **Retail Items &mdash; link to products**
+
+For 2 and 3: your shop is an embedded Arketa storefront, and I have no product
+URLs. Open a couple of products in Arketa and send me the links and I will
+build the submenu out properly. For now Shop has two honest items &mdash;
+**Everything in the shop** and **Gift cards** &mdash; both of which work.
+
+### ✅ News is real, not a placeholder
+
+Your posts already carry categories (`News`, `Guides`, `Past Events`, `Video`),
+so `/blog/news` is a genuine filtered listing &mdash; seven of the nine posts.
+
+Doing that properly meant fixing something first: the listing on `/blog` was
+hand-written, so a second listing would have been a second thing to keep in
+sync by hand, and both would have drifted the first time a post was added.
+`tools/build-blog-index.py` now generates both from the posts' own front
+matter. Add a post, and it appears in every listing it belongs in.
+
+### 🟡 Two calls worth your eye
+
+- **`/blog/events` shares a namespace with blog posts.** Events are not blog
+  posts, and if a post is ever slugged `events` the two collide. It is where
+  your menu put it, so that is where it is &mdash; but `/events` was arguably the
+  better URL and it is a one-line change back.
+- **`/pricing/academy`** puts teacher training under Pricing. That is your
+  menu structure, and it reads oddly for a certification programme that is not
+  really a price point. Again, easy to move.
+
+### One thing to do before launch
+
+These URLs are new. If the site has been indexed at the old ones, the 301s
+carry the ranking across &mdash; but resubmit the sitemap in Search Console once
+this is live so the new structure is picked up quickly.
+
+## 10. The class descriptions page
 
 `/classes` carries all eight, your copy as written, split into the four
 signatures (ordered by difficulty) and four specialty classes. Linked from the
@@ -366,7 +426,7 @@ Whether the eight here match what is actually on the Arketa schedule. If a
 class is listed here but never scheduled, or scheduled under a different name,
 people will go looking for it. Worth comparing against a full week.
 
-## 10. Legal pages and the cookie notice
+## 11. Legal pages and the cookie notice
 
 `/policies`, `/terms` and `/privacy` are live, linked from a new **Legal**
 column in the footer alongside **Cookie preferences**, and in the sitemap. Your
@@ -449,7 +509,7 @@ which is only possible because the real list is this short.
 - **"Clear what is stored on this device" really clears it** — both cookies and
   the localStorage fallback — rather than only saying so.
 
-## 11. Pricing changes — two offers in, two out
+## 12. Pricing changes — two offers in, two out
 
 ### 🔴 The two new memberships do not exist in Arketa yet
 
@@ -519,7 +579,7 @@ offering list — not as a pack, subscription, bundle or challenge — yet its
 checkout URL still loads and charges. Worth confirming it is configured the
 way you think it is.
 
-## 12. Checkout pages — and a pricing error they caught
+## 13. Checkout pages — and a pricing error they caught
 
 18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
 Every Buy-now link across the site now routes through them rather than jumping

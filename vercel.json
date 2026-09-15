@@ -73,7 +73,7 @@
     },
     {
       "source": "/news",
-      "destination": "/blog",
+      "destination": "/blog/news",
       "permanent": true
     },
     {
@@ -104,6 +104,71 @@
     {
       "source": "/pricing/intro-10-classes",
       "destination": "/pricing/intro-1-week",
+      "permanent": true
+    },
+    {
+      "source": "/bishop-arts",
+      "destination": "/locations/bishop-arts",
+      "permanent": true
+    },
+    {
+      "source": "/uptown",
+      "destination": "/locations/uptown",
+      "permanent": true
+    },
+    {
+      "source": "/lower-greenville",
+      "destination": "/locations/lower-greenville",
+      "permanent": true
+    },
+    {
+      "source": "/classes",
+      "destination": "/schedule/classes",
+      "permanent": true
+    },
+    {
+      "source": "/intro-offers",
+      "destination": "/pricing/intro-offers",
+      "permanent": true
+    },
+    {
+      "source": "/private-pilates",
+      "destination": "/pricing/private-pilates",
+      "permanent": true
+    },
+    {
+      "source": "/private-parties",
+      "destination": "/pricing/private-parties",
+      "permanent": true
+    },
+    {
+      "source": "/academy",
+      "destination": "/pricing/academy",
+      "permanent": true
+    },
+    {
+      "source": "/meet-the-team",
+      "destination": "/about/meet-the-team",
+      "permanent": true
+    },
+    {
+      "source": "/community",
+      "destination": "/about/community",
+      "permanent": true
+    },
+    {
+      "source": "/faq",
+      "destination": "/about/faq",
+      "permanent": true
+    },
+    {
+      "source": "/events",
+      "destination": "/blog/events",
+      "permanent": true
+    },
+    {
+      "source": "/retail",
+      "destination": "/shop",
       "permanent": true
     }
   ]

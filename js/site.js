@@ -68,6 +68,75 @@
     });
   })();
 
+  /* ── Mega menu ─────────────────────────────────────────────────────
+     Opening and closing is CSS (:hover and :focus-within), so the menu works
+     with this file absent. Two things CSS cannot do are handled here:
+
+       Escape closes an open panel and returns focus to its own top link.
+       On touch there is no hover, so the first tap on a top-level item opens
+       its panel instead of following the link — each panel repeats the parent
+       page as its first item, so nothing becomes unreachable.
+
+     aria-expanded is kept in step for screen readers, which otherwise have no
+     way to know a panel is showing. */
+  (function () {
+    var items = $$(".nav-item");
+    if (!items.length) return;
+    var touch = window.matchMedia("(hover: none)").matches;
+
+    function close(item) {
+      item.classList.remove("is-open");
+      var top = $(".nav-top", item);
+      if (top) top.setAttribute("aria-expanded", "false");
+    }
+
+    function closeAll(except) {
+      items.forEach(function (i) { if (i !== except) close(i); });
+    }
+
+    items.forEach(function (item) {
+      var top = $(".nav-top", item);
+      if (!top) return;
+
+      item.addEventListener("focusin", function () {
+        top.setAttribute("aria-expanded", "true");
+        closeAll(item);
+      });
+      item.addEventListener("focusout", function () {
+        if (!item.contains(document.activeElement)) close(item);
+      });
+      item.addEventListener("mouseenter", function () {
+        if (!touch) top.setAttribute("aria-expanded", "true");
+      });
+      item.addEventListener("mouseleave", function () { if (!touch) close(item); });
+
+      top.addEventListener("click", function (e) {
+        if (!touch) return;
+        if (!item.classList.contains("is-open")) {
+          e.preventDefault();
+          closeAll(item);
+          item.classList.add("is-open");
+          top.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    window.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      var open = items.filter(function (i) {
+        return i.classList.contains("is-open") || i.contains(document.activeElement);
+      })[0];
+      if (!open) return;
+      var top = $(".nav-top", open);
+      close(open);
+      if (top) top.focus();
+    });
+
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".nav-item")) closeAll(null);
+    });
+  })();
+
   /* ── FAQ accordion ────────────────────────────────────────────────
      One panel open at a time; the first is open on load. */
   (function () {

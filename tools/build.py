@@ -208,10 +208,12 @@ def main() -> int:
             if schema:
                 html = html.replace("</body>", schema + "</body>", 1)
 
-        # A path with a directory (e.g. /blog/five-years) writes into it, so
-        # cleanUrls serves the post at that URL.
+        # `path` drives the filename, not the source name, so a page can be
+        # renamed or moved under a parent by editing its front matter alone
+        # (/shop, /locations/bishop-arts). A path with a directory writes into
+        # it, so cleanUrls serves the page at that URL.
         path = meta.get("path", "/").strip("/")
-        out = ROOT / (f"{path}.html" if "/" in path else page.name)
+        out = ROOT / (f"{path}.html" if path else "index.html")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(html)
         built.append((str(out.relative_to(ROOT)), len(html)))

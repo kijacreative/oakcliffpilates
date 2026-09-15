@@ -575,9 +575,14 @@ body.is-locked{overflow:hidden}
   .band--flush{padding-top:0;padding-bottom:0}
   .frame-box{padding:40px}
   .signup-box{padding:48px 32px;grid-template-columns:1fr}
-  /* The inline nav needs ~1000px for brand + 5 links + CTA. Below that it
-     overlaps the CTA, so hand navigation to the drawer here rather than at
-     the prototype's 700px. The CTA stays until 700px. */
+}
+
+/* The inline nav needs room for brand + six links with chevrons + CTA. Below
+   this it overlaps the CTA, so hand navigation to the drawer here rather than
+   at the prototype's 700px. The CTA stays until 700px. Kept in its own block
+   so it stays in step with the mega-menu rule, which must switch off at
+   exactly the same width. */
+@media (max-width:1100px){
   .nav-links{display:none}
   .nav-burger{display:flex}
 }
@@ -1448,4 +1453,73 @@ figure.video-figure figcaption{
 @media (max-width:900px){
   .cls-grid{grid-template-columns:1fr;gap:28px}
   .cls__body{padding:24px 22px 26px}
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   11 · MEGA MENU
+   Panels open on :hover and :focus-within, so the whole menu works with
+   JavaScript off. The .is-open class is only used by the touch handler and
+   by Escape — CSS is the source of truth for everything else.
+   ══════════════════════════════════════════════════════════════════════════ */
+.nav-item{position:relative;display:flex;align-items:center}
+.nav-top{display:inline-flex;align-items:center;gap:6px;padding:8px 0}
+/* The chevron is decorative and rotates when the panel is up. */
+.nav-top::after{
+  content:"";width:6px;height:6px;flex:none;margin-top:-3px;
+  border-right:1px solid currentColor;border-bottom:1px solid currentColor;
+  transform:rotate(45deg);opacity:.55;
+  transition:transform var(--dur-fast) var(--ease-out),opacity var(--dur-fast) var(--ease-out);
+}
+.nav-item:hover .nav-top::after,
+.nav-item:focus-within .nav-top::after,
+.nav-item.is-open .nav-top::after{transform:rotate(225deg) translate(-2px,-2px);opacity:1}
+
+.mega{
+  position:absolute;top:100%;left:50%;transform:translate(-50%,8px);
+  min-width:320px;padding-top:14px;z-index:60;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity var(--dur-fast) var(--ease-out),transform var(--dur-fast) var(--ease-out),visibility var(--dur-fast);
+}
+.mega--wide{min-width:620px}
+.nav-item:hover .mega,
+.nav-item:focus-within .mega,
+.nav-item.is-open .mega{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0)}
+
+.mega__in{
+  display:grid;gap:4px;padding:14px;
+  background:var(--ocp-black);border:1px solid var(--border-subtle);border-radius:10px;
+  box-shadow:0 30px 60px -22px rgba(0,0,0,.9);
+}
+.mega__in--2{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px}
+.mega__link{
+  display:grid;gap:3px;padding:12px 14px;border-radius:7px;
+  text-decoration:none;
+  transition:background var(--dur-fast) var(--ease-out);
+}
+.mega__link:hover,.mega__link:focus-visible{background:rgba(201,162,74,.12)}
+.mega__name{
+  font-family:var(--font-display);font-size:var(--type-display-5);
+  letter-spacing:var(--ls-heading);text-transform:uppercase;color:var(--text-primary);
+  line-height:1.15;
+}
+.mega__link:hover .mega__name,.mega__link:focus-visible .mega__name{color:var(--ocp-gold)}
+.mega__note{
+  font:var(--fw-regular) var(--type-caption)/1.45 var(--font-body);color:var(--text-muted);
+}
+
+/* Grouped mobile drawer. */
+.drawer-head{
+  display:block;margin-top:22px;
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow-wide);
+  text-transform:uppercase;color:var(--ocp-gold);
+}
+.drawer-head:first-child{margin-top:0}
+.nav-drawer a{padding-left:2px}
+
+/* Below the desktop breakpoint the panels never open — the drawer takes over,
+   so they must not linger as invisible click targets. */
+@media (max-width:1100px){
+  .mega{display:none}
+  .nav-top::after{display:none}
 }
