@@ -329,7 +329,44 @@ The **footer newsletter signup** only collects an email, and Arketa needs a
 name to create a client, so that one still sends people to the hosted form.
 Tell me if you would rather it asked for a name too and used the same route.
 
-## 9. Legal pages and the cookie notice
+## 9. The class descriptions page
+
+`/classes` carries all eight, your copy as written, split into the four
+signatures (ordered by difficulty) and four specialty classes. Linked from the
+homepage class section, the FAQ, and the footer.
+
+Jumpboard's contraindication is not buried in the paragraph — it sits in its
+own bordered note, because the cost of someone skim-reading past "not suitable
+during pregnancy or with spinal injuries" is not a disappointing workout.
+
+### 🟡 Three classes have no level, so I did not give them one
+
+You marked Classical AF (beginner/all levels), OG Reformer (intermediate),
+OG Reformer Amped (advanced) and Arms Ass &amp; Abs (advanced). **Restorative,
+Jumpboard and Tabata** came without one. I left their badges off rather than
+guessing — a wrong level on a Jumpboard class is how someone gets hurt. Send me
+the three and they go straight on.
+
+Strength &amp; Flexibility got an "All levels" badge because your own copy says
+"ideal for athletes, beginners, or anyone" — that is your wording, not my
+inference. Say so if you disagree.
+
+### 🟡 Two small edits
+
+- **"Flexiblity" → "Flexibility"** in the class name. Straight typo.
+- **Arms, Ass &amp; Abs is now marked Advanced**, which sits slightly against the
+  homepage line "all levels welcome, capped at 12" and the existing carousel
+  copy describing the class range as being for every level. Not a contradiction
+  exactly &mdash; most classes are all-levels &mdash; but with two Advanced classes now
+  named as such, that blanket line is looser than it was. Worth a look.
+
+### One thing I could not check
+
+Whether the eight here match what is actually on the Arketa schedule. If a
+class is listed here but never scheduled, or scheduled under a different name,
+people will go looking for it. Worth comparing against a full week.
+
+## 10. Legal pages and the cookie notice
 
 `/policies`, `/terms` and `/privacy` are live, linked from a new **Legal**
 column in the footer alongside **Cookie preferences**, and in the sitemap. Your
@@ -412,7 +449,7 @@ which is only possible because the real list is this short.
 - **"Clear what is stored on this device" really clears it** — both cookies and
   the localStorage fallback — rather than only saying so.
 
-## 10. Pricing changes — two offers in, two out
+## 11. Pricing changes — two offers in, two out
 
 ### 🔴 The two new memberships do not exist in Arketa yet
 
@@ -482,7 +519,7 @@ offering list — not as a pack, subscription, bundle or challenge — yet its
 checkout URL still loads and charges. Worth confirming it is configured the
 way you think it is.
 
-## 11. Checkout pages — and a pricing error they caught
+## 12. Checkout pages — and a pricing error they caught
 
 18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
 Every Buy-now link across the site now routes through them rather than jumping
