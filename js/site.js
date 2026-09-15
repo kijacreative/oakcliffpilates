@@ -214,15 +214,102 @@
       b.addEventListener("click", function () { show(Number(b.dataset.back)); });
     });
 
-    /* Step 1 — hand-off. Following the link opens the Arketa form in a
-       new tab; we advance to the offers so the popup is somewhere useful
-       when they come back to this one. "Skip" jumps straight there. */
-    $$("[data-lead-form]", pop).forEach(function (a) {
-      a.addEventListener("click", function () { show(2); });
-    });
     $$("[data-step-to]", pop).forEach(function (b) {
       b.addEventListener("click", function () { show(Number(b.dataset.stepTo)); });
     });
+
+    /* Step 1 — the new-client form. Posts to /api/lead, which forwards to
+       Arketa. Three outcomes and each is told the truth:
+
+         saved    → step 2, greeted by name
+         no route → the endpoint is not wired up, or it failed. We open
+                    Arketa's own hosted form rather than claim we stored it.
+         invalid  → the message says which field, nothing is sent
+
+       With JavaScript off none of this runs and the form's own action posts
+       to the Arketa page, which is the same destination by a slower road. */
+    (function () {
+      var form = $("#lead-form", pop);
+      if (!form) return;
+      var msg = $("[data-lead-msg]", form);
+      var button = $("button[type=submit]", form);
+      var sending = false;
+
+      function say(text) {
+        if (!msg) return;
+        msg.textContent = text;
+        msg.hidden = !text;
+      }
+
+      function handOff(url, lead) {
+        say("Opening our new-client form — finish there and you're on the list.");
+        window.open(url || LEAD_FORM_URL, "_blank", "noopener");
+        greet(lead, "handoff");
+      }
+
+      function greet(lead, state) {
+        $$("[data-firstname]", pop).forEach(function (slot) {
+          slot.textContent = lead.firstName ? ", " + lead.firstName : "";
+        });
+        $$("[data-lead-state]", pop).forEach(function (block) {
+          block.hidden = block.dataset.leadState !== (state || "saved");
+        });
+        show(2);
+      }
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (sending) return;
+
+        var data = new FormData(form);
+        var lead = {
+          firstName: String(data.get("firstName") || "").trim(),
+          lastName: String(data.get("lastName") || "").trim(),
+          email: String(data.get("email") || "").trim(),
+          phone: String(data.get("phone") || "").trim(),
+          company: String(data.get("company") || ""),
+          emailOptIn: data.get("emailOptIn") !== null,
+          smsOptIn: data.get("smsOptIn") !== null,
+          reason: reason,
+          source: "popup"
+        };
+
+        var blank = ["firstName", "lastName", "email"].filter(function (k) {
+          return !lead[k];
+        })[0];
+        if (blank) {
+          say("We need your name and email to hold the offer.");
+          var field = $("[name=" + blank + "]", form);
+          if (field) field.focus();
+          return;
+        }
+        if (!/.+@.+\..+/.test(lead.email)) {
+          say("That email doesn't look right — mind checking it?");
+          $("[name=email]", form).focus();
+          return;
+        }
+
+        sending = true;
+        if (button) button.disabled = true;
+        say("Saving\u2026");
+
+        fetch("/api/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(lead)
+        }).then(function (r) {
+          return r.json().catch(function () { return {}; });
+        }).then(function (body) {
+          if (body && body.ok) { form.reset(); return greet(lead, "saved"); }
+          handOff(body && body.fallback, lead);
+        }).catch(function () {
+          handOff(null, lead);
+        }).then(function () {
+          sending = false;
+          if (button) button.disabled = false;
+        });
+      });
+    })();
 
     /* Auto-open once the delay has elapsed. If the page was loaded into a
        background tab, wait for it to actually be looked at first. */
@@ -259,11 +346,11 @@
         input.focus();
         return;
       }
-      /* Same hand-off as the popup: the intake form is a hosted page, so
-         send them there rather than pretending we stored the address. */
-      var link = $("[data-lead-form]");
+      /* Only an email here, and Arketa needs a name to create a client, so
+         this stays a hand-off: send them to the real form rather than
+         pretending we stored the address. */
       say("Opening our new-client form — finish there and you're on the list.");
-      window.open((link && link.href) || LEAD_FORM_URL, "_blank", "noopener");
+      window.open(LEAD_FORM_URL, "_blank", "noopener");
       form.reset();
     });
   })();

@@ -456,6 +456,21 @@ section{position:relative}
 .pop-reasons{display:grid;gap:10px}
 .pop-reasons .btn{white-space:normal;text-align:center;height:auto;min-height:var(--control-height);padding-top:12px;padding-bottom:12px}
 .pop-fields{display:grid;gap:14px}
+.pop-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pop-check{
+  display:grid;grid-template-columns:auto 1fr;align-items:start;gap:10px;
+  font:var(--fw-regular) var(--type-caption)/1.5 var(--font-body);
+  color:var(--text-secondary);cursor:pointer;
+}
+.pop-check input{
+  width:16px;height:16px;margin:2px 0 0;flex:none;accent-color:var(--ocp-gold);cursor:pointer;
+}
+/* Honeypot: off-screen rather than display:none, which some bots skip. */
+.pop-trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.pop-msg{
+  margin:0;font:var(--fw-regular) var(--type-caption)/1.5 var(--font-body);
+  color:var(--ocp-gold);
+}
 .pop-submit{display:grid;gap:12px;margin-top:4px}
 .pop-offers{display:grid;gap:12px}
 .pop-offer{
@@ -531,6 +546,7 @@ body.is-locked{overflow:hidden}
 }
 @media(max-width:820px){
   .pop-shell{grid-template-columns:1fr}
+  .pop-row{grid-template-columns:1fr}
   .pop-photo{display:none}
   .pop-panel{padding:44px 24px 32px}
 }
@@ -1117,8 +1133,11 @@ figure.video-figure figcaption{
 }
 .band-light .rv-card__text{color:var(--text-on-light-secondary)}
 .rv-card__who{
-  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-  padding-top:16px;border-top:1px solid var(--border-subtle);
+  /* Google names run from "Caitlin P" to "Monette DeBaun Stransom", so the
+     name gets the room it needs and the date drops beneath it rather than
+     squeezing a long one into three stacked words. */
+  display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+  gap:4px 12px;padding-top:16px;border-top:1px solid var(--border-subtle);
 }
 .band-light .rv-card__who{border-top-color:var(--border-on-light)}
 .rv-card__name{font-family:var(--font-display);font-size:var(--type-display-5);
@@ -1131,10 +1150,39 @@ figure.video-figure figcaption{
 }
 .band-light .rv-card__where{color:var(--ocp-gold-deep)}
 
+/* The page shows twelve of the hundreds on file, so it says where the rest
+   are and sends people straight to each studio's Google listing. */
+.rv-more{
+  display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;
+  margin-top:28px;padding-top:24px;border-top:1px solid var(--border-subtle);
+}
+.band-light .rv-more{border-top-color:var(--border-on-light)}
+.rv-more__label{
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);
+}
+.rv-more__links{display:flex;flex-wrap:wrap;gap:8px 24px}
+/* Deliberately text links, not buttons: the "Leave a review" buttons sit
+   directly beneath with the same three studio names, and two rows of identical
+   pills would read as one control repeated twice. */
+.rv-more__link{
+  display:inline-flex;align-items:baseline;gap:8px;
+  font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-secondary);text-decoration:none;
+  border-bottom:1px solid var(--border-subtle);padding-bottom:3px;
+  transition:color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out);
+}
+.band-light .rv-more__link{color:var(--text-on-light-secondary);border-bottom-color:var(--border-on-light)}
+.rv-more__link span{color:var(--ocp-gold);white-space:nowrap}
+.band-light .rv-more__link span{color:var(--ocp-gold-deep)}
+.rv-more__link:hover{color:var(--text-primary);border-bottom-color:var(--ocp-gold)}
+.band-light .rv-more__link:hover{color:var(--text-on-light)}
+
 @media (max-width:1000px){ .rv-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:700px){
   .rv-grid{grid-template-columns:1fr}
   .rv-head{grid-template-columns:1fr;gap:20px}
+  .rv-more{flex-direction:column;align-items:flex-start;gap:14px}
 }
 
 /* ══════════════════════════════════════════════════════════════════════════

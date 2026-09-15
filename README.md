@@ -47,7 +47,7 @@ tools/build-media.sh  turns the Drive originals into img/ and video/
 tools/build-team.py   turns the Arketa staff export into the team roster
 css/tokens.css     design-system tokens, copied verbatim from the design project
 css/site.css       DS components → CSS, page styles, popup, inner-page components
-js/site.js         marquee, drawer, FAQ, carousels, popup, signup, reviews widget
+js/site.js         marquee, drawer, FAQ, carousels, popup, signup, video facade
 img/ video/        optimised media — see MEDIA.md
 _design-src/       pristine import of the design project (reference)
 ```
@@ -126,29 +126,70 @@ A row that drifts advertises one price and charges another.
 The homepage review feed is ours, not a widget. Two steps, both build-time:
 
 ```bash
-export GOOGLE_MAPS_API_KEY=...          # never committed, never sent to a browser
 python3 tools/fetch-reviews.py          # → src/data/reviews.json
 python3 tools/build-reviews.py && python3 tools/build.py
 ```
 
-`fetch-reviews.py` calls the Google Places API for the three studios, keeps
-reviews at 4★ and above, sorts newest first, and computes the weighted mean
-across all three so the headline number is a real aggregate rather than an
-average of averages. `build-reviews.py` renders that into
-`src/partials/reviews.html`, which the homepage includes.
+The source is the RevuBlast / onlinereviews.tech account that already collects
+the studios' Google reviews — one "seat" per studio, tokens in `SEATS` at the
+top of `fetch-reviews.py`. The endpoint its own widget calls is public and
+needs no key, so there is no secret to manage:
 
-Doing it at build time rather than in the page means the API key stays on the
-build machine, the reviews are real HTML that crawlers can read, and no
-third-party JavaScript runs on the homepage.
+```
+https://server.onlinereviews.tech/api/v0.0.9/seats/<token>/reviews/widgets?limit=50
+```
 
-**Before it can run you need two things:** a Places API key, and the three
-place IDs filled into `PLACES` at the top of `fetch-reviews.py`. Until then
-`build-reviews.py` writes the original EmbedSocial widget instead, so the
-homepage keeps working — **no review is ever invented to fill the gap.**
+`fetch-reviews.py` pulls all three studios, keeps reviews at 4★ and above,
+sorts newest first, and computes the weighted mean across all three so the
+headline number is a real aggregate rather than an average of averages.
 
-Two limits, both Google's: the Places API returns **at most five reviews per
-place** (so fifteen across three studios), and its terms forbid caching that
-content beyond 30 days — re-run the fetcher monthly.
+`build-reviews.py` renders that into `src/partials/reviews.html`: twelve cards
+dealt round-robin across the studios so the newest Bishop Arts reviews don't
+crowd out Lower Greenville, a per-studio "read them all on Google" row, and a
+JSON-LD block that attaches each studio's real `aggregateRating` to the
+`@id` it already has in `schema-org.html`.
+
+Cards show reviews between 80 and 420 characters. A two-word review looks like
+an empty card and a 900-word one runs off the screen — but **nothing is ever
+truncated**: a review is shown whole or not at all.
+
+Doing this at build time rather than in the page means the reviews are real
+HTML that crawlers can read, three vendor carousels collapse into one feed in
+the site's own styling, and **no third-party JavaScript runs on the homepage.**
+
+If `src/data/reviews.json` is missing or empty, `build-reviews.py` writes the
+original EmbedSocial widget instead, so the homepage keeps working —
+**no review is ever invented to fill the gap.**
+
+Re-run the fetcher monthly. When you do, check that the copy still matches:
+`index.html` and `intro-offers.html` both quote a round review count ("500+")
+and `intro-offers` quotes the average rating.
+
+## New-client leads
+
+The intro popup collects name, email and phone in our own fields and posts
+them to `api/lead.js`, which forwards to a **Zapier catch hook** wired to
+Arketa's **Add New Client** action. Set `LEAD_WEBHOOK_URL` in Vercel; see
+`.env.example` for how to build the Zap.
+
+Why the relay instead of posting straight at Arketa:
+
+* The intake form at `app.arketa.co` is a hosted HTML page, **not an API**.
+  A cross-origin POST at it fails CORS and the lead vanishes silently — worse
+  than no form, because the visitor is told it worked.
+* A catch-hook URL sitting in client JavaScript is a public write endpoint
+  into the client list. Behind `/api/lead` it stays server-side, and the
+  obvious bots (honeypot, oversized payloads) are dropped before the CRM.
+
+**Three outcomes, each told the truth.** Saved → "You're in, <name>". Endpoint
+missing or failing → the hosted Arketa form opens and the screen says "Nearly
+there — finish the form in the tab we just opened". Invalid → the message
+names the field and nothing is sent. It never reports a lead it did not
+deliver. With JavaScript off the form's own `action` posts to the Arketa page,
+which loads the real form.
+
+Arketa's API key belongs in the **Zapier connection**, not in this repo. The
+site never holds it.
 
 ## Team roster
 
@@ -161,6 +202,140 @@ python3 tools/build-team.py ~/Downloads/Team_List.csv && python3 tools/build.py
 It writes `src/partials/team-roster.html`. **Names, roles and start year only** — the
 export's emails, phone numbers and birthdays are never written to the site. Booking and
 system accounts are filtered out via `NOT_PEOPLE` in the script.
+
+## Trainer HQ
+
+`/trainer-hq` is the internal trainer page: class standard, live events, live
+announcements, offers, the membership goal, studio upkeep and staff resources.
+It is **not** a static file. Everything else on this site is public, and this
+page carries pay rates, promo codes and the bonus scheme, so it is served by a
+function that checks a session first.
+
+```bash
+node tools/hq-dev.js --as "Your Name"   # → http://localhost:4333/trainer-hq
+```
+
+`--as` skips Slack so the page can be worked on with no app configured. Without
+it you get the real sign-in screen.
+
+### How the gate works
+
+`vercel.json` rewrites `/trainer-hq` to `api/hq/page.js`. That function requires
+`api/_hq-page.js` — compiled from `src/hq/` by `tools/build-hq.py` — and hands
+the HTML out only to a request carrying a valid session cookie; everyone else
+gets the sign-in screen. The compiled page lives inside `api/` with a leading
+underscore, which Vercel treats as a shared module rather than an endpoint, so
+there is no URL that serves it unauthenticated. `.vercelignore` keeps `src/`,
+`tools/` and the `.md` files out of the deployment entirely.
+
+Sign-in is **Sign in with Slack** (OpenID Connect). The callback refuses any
+identity whose `team_id` is not `SLACK_TEAM_ID`, so only the Oak Cliff Pilates
+workspace gets in, and someone removed from Slack loses access on their next
+visit with no password to rotate. The session cookie is HMAC-signed, HttpOnly,
+Secure, SameSite=Lax, 30 days.
+
+```bash
+python3 tools/build-hq.py     # after editing src/hq/, css/trainer-hq.css or js/trainer-hq.js
+```
+
+**Run it after every change to those three**, including CSS and JS — the build
+stamps a content hash into their `?v=` query strings, which is what gets a
+change past the year-long immutable cache on `/css` and `/js`.
+
+### The three live feeds
+
+| Panel | Source | Endpoint |
+| --- | --- | --- |
+| Announcements | Slack `#general` | `api/hq/slack.js` |
+| Events, and the membership count | the events workbook, via Apps Script | `api/hq/events.js` |
+| Report a studio issue | posts to Slack `#studio-issues` | `api/hq/issue.js` |
+
+Every credential stays server-side; the browser only ever sees normalised JSON,
+and each endpoint returns 401 without a session. Text from Slack and from the
+sheet is escaped before it reaches the page, and only `http(s)` links are ever
+turned into anchors — a ticket URL with a `javascript:` scheme is dropped.
+
+**Each panel says when it is not connected rather than showing anything
+invented.** A trainer reading a made-up call time is worse than one reading
+"not connected yet".
+
+### Wiring it up
+
+Copy `.env.example` into Vercel's environment variables. Three jobs:
+
+1. **Slack app** — api.slack.com/apps → create an app in the OCP workspace.
+   - *Sign in with Slack*: add redirect URL
+     `https://oakcliffpilates.com/api/auth/slack/callback`. Copy the client ID
+     and secret.
+   - *Bot token*: scopes `channels:history`, `channels:read`, `users:read`,
+     `chat:write`. Install, copy the `xoxb-` token, then invite the bot in
+     Slack: `/invite @<the app>` in **both** `#general` and `#studio-issues`.
+     Without the invite the feed returns "not_in_channel".
+2. **Events feed** — `tools/apps-script/ocp-events-feed.gs`, with its own setup
+   instructions at the top. See below.
+3. **Session secret** — `openssl rand -hex 32` into `HQ_SESSION_SECRET`.
+
+### The events workbook
+
+`tools/apps-script/ocp-events-feed.gs` is bound to the event workbook. Running
+`setup` once adds a `SITE CONFIG` tab (the membership count lives there), adds
+three rows to each event tab, builds a `WEBSITE FEED` tab, and schedules an
+hourly refresh. The sheet then gets a **Trainer HQ** menu.
+
+`WEBSITE FEED` is a flat table — one row per event, one column per field — and
+it is what the website reads. It exists so the feed is something a person can
+look at: you can see exactly what trainers will see, and fix it in the sheet.
+
+**Three of its columns are yours**, shown on cream:
+
+| Column | Why it is manual |
+| --- | --- |
+| Ticket Link | The Arketa checkout URL. Nothing in the event tabs holds it. |
+| Call Time | "15 min early". Not a field the tracker has. |
+| Show On Site | `No` hides an event from trainers without deleting anything. Blank means yes. |
+
+Every other column is regenerated from the `EVENT NN` tabs on each refresh, so
+edit those in the event tab. **A refresh never overwrites the three manual
+columns** — they are read first and written back, matched on the tab name in
+column A. That is the behaviour most worth protecting, and the test covers it
+directly.
+
+The event tabs are read by scanning column A for labels rather than by fixed
+cell references, so inserting a row does not break the mapping. Instructors are
+serialised one per line as `Name | Role | Pay | Scope` and parsed back when the
+feed is served, which keeps the whole event on one row while preserving the
+structure the event cards need.
+
+If `WEBSITE FEED` has not been built yet, the feed falls back to reading the
+event tabs directly, so the website keeps working either way.
+
+```bash
+node tools/apps-script/test/feed.test.js
+```
+
+25 assertions. Apps Script cannot run locally, so `test/harness.js` stands in
+for `SpreadsheetApp` with plain 2-D arrays and the fixture is shaped like the
+real workbook — labels in column A, values merged across B:G, an INSTRUCTORS
+block underneath. Run it after editing the `.gs`, then re-deploy
+(Manage deployments → edit → Version: New).
+
+### Content still needed
+
+Marked on the page with a red **Needs content** chip; grep `hq-tk` in
+`src/hq/page.html` to find them all.
+
+- Welcome to OCP, and the full onboarding step list
+- Parking registration links for all three studios, and the payroll portal link
+- Lower Greenville client parking — the arrangement was never stated
+- The unfinished retail rule ("clients should not leave studio")
+- Staff benefits
+- The eleven Arketa how-to screen shares
+- Front desk to-do list
+- Promo codes beyond the intro offers and the trainer code
+
+The previous paste-in block for GoHighLevel is kept at
+`src/hq/legacy-ghl-block.html`. It used to sit at the repo root, where Vercel
+served it publicly at `/trainer-hq-ghl` — pay rates and all.
 
 ## Media
 
@@ -228,7 +403,9 @@ carrying `rel="noopener"`, and valid JSON-LD throughout.
 3. **A working mobile drawer.** The prototype renders a burger with no handler.
 4. **Popup snooze.** Still opens 5s after load, but a dismissal is remembered for
    7 days, and a page loaded in a background tab waits until it is looked at.
-5. **The reviews widget loads lazily**, 600px before it enters the viewport.
+5. **The reviews are static HTML** — no third-party script on the homepage.
+   (`site.js` still carries a lazy loader for the EmbedSocial fallback; it is
+   inert unless `build-reviews.py` has fallen back to the widget.)
    Final rendered height matches the prototype (1942px vs 1941px).
 6. **Added for production:** skip link, focus-visible rings,
    `prefers-reduced-motion`, SEO metadata, Open Graph, `LocalBusiness` +

@@ -188,46 +188,122 @@ Three things to confirm on it:
   `park-first-class`, which is what this page uses. `events.html` still uses
   `park-group` — harmless there, but the slug should be renamed. Noted in MEDIA.md.
 
-## 7. The Google reviews feed
+## 7. The Google reviews feed — ✅ live
 
-Built as a build-time pipeline rather than a widget: `tools/fetch-reviews.py`
-pulls from the Places API into `src/data/reviews.json`, `tools/build-reviews.py`
-renders `src/partials/reviews.html`, and the homepage includes it. Branded with
-the site's own tokens — gold stars, display-type score, studio label per card.
+You sent three RevuBlast widget snippets to stack on the homepage. I didn't
+stack them. Those widgets talk to an API that turned out to be readable with
+the tokens already in the embed codes, so instead of three vendor carousels
+the homepage now has **one feed, all three studios, in our own styling**.
 
-### ⚠️ It is not live yet, and it needs two things from you
+`tools/fetch-reviews.py` pulls every studio from
+`server.onlinereviews.tech/api/v0.0.9`, `tools/build-reviews.py` renders
+`src/partials/reviews.html`, the homepage includes it. **No third-party
+JavaScript runs on the homepage at all now** — the old EmbedSocial loader is
+gone from the page and the reviews are plain HTML a crawler can read.
 
-1. **A Google Places API key.** Create one in Google Cloud with the Places API
-   enabled. The script reads it from `GOOGLE_MAPS_API_KEY` so it never reaches
-   the repo or the browser — do not paste it into a file.
-2. **The three place IDs**, filled into `PLACES` at the top of
-   `tools/fetch-reviews.py`. Open each studio on Google Maps and take the
-   `place_id` from the share URL.
+Live numbers as of this build: **4.8 out of 5 across 566 Google reviews** —
+Bishop Arts 4.8 (427), Uptown 4.9 (112), Lower Greenville 5.0 (27).
 
-Until both exist, the homepage renders the **original EmbedSocial widget**, exactly
-as before. Nothing regressed, and **no placeholder review was written** — I built and
-tested the layout with obviously-synthetic strings and deleted them before committing.
-Every review that ever appears will be one a real person left on Google.
+### 🔴 Two numbers on the site were overstated — corrected
 
-### Things to know before you switch it on
+- The homepage heading read **"600+ verified 5 star reviews."** The real total
+  is 566, and the average is 4.8, so "5 star" was wrong twice over. Changed to
+  "500+ verified reviews across three studios" — true now and still true as
+  the count grows.
+- `/intro-offers` claimed **"4.9 · Excellent · 600+ verified reviews."**
+  Changed to 4.8 and 500+.
 
-- **Google returns at most five reviews per place.** Three studios means a ceiling
-  of fifteen. The component shows up to twelve. It is a curated wall, not a
-  complete archive, and the copy does not claim otherwise.
-- **Places content may not be cached beyond 30 days** under Google's terms, so the
-  fetcher needs re-running monthly. A cron on the build box or a line in your
-  deploy script covers it.
-- **The section heading is hardcoded** to "600+ verified 5 star reviews" while the
-  feed prints the live count beneath it. If the real total ever drops below 600
-  those two disagree. Worth making the heading vaguer, or generating it too.
-- **I did not add `aggregateRating` structured data.** Google's own guidelines say
-  not to mark up ratings collected from a third-party site as your own. Adding it
-  risks a manual action, and the visible number does the persuasive work anyway.
-- **Reviews under 4★ are filtered out** (`MIN_RATING` in the fetcher). That is a
-  normal marketing choice, not a neutral feed — flagging it so it is your decision
-  and not a silent default. Set it to 0 to publish everything.
+Re-run the fetcher monthly, and re-check those two lines when you do.
 
-## 8. Checkout pages — and a pricing error they caught
+### Calls I made, so you can overrule them
+
+- **Cards show reviews between 80 and 420 characters.** A two-word review
+  looks like an empty card and a 900-word one runs off the screen. **Nothing
+  is ever truncated** — a review is shown whole or not at all.
+- **Twelve cards, dealt round-robin across the studios.** Strict newest-first
+  buried Lower Greenville entirely; it is the youngest studio with the fewest
+  reviews, so Bishop Arts and Uptown took every slot.
+- **Reviews under 4★ are filtered out** (`MIN_RATING`). A marketing choice,
+  not a neutral feed. Set it to 0 to publish everything. As it happens none
+  were dropped this run — of the 116 fetched, 115 are 5★ and one is 4★.
+- **Names are published exactly as Google has them**, from "Caitlin P" to
+  "Monette DeBaun Stransom" to "LuxeGiving LLC". Shortening them would be
+  editing someone's attribution.
+- **No `aggregateRating` structured data**, and I want to flag that I briefly
+  added it and then took it back out. Google's structured-data policy for
+  local businesses says not to mark up ratings collected from a third-party
+  site as your own — these are Google's reviews read back through RevuBlast.
+  It risks a manual action, and the visible 4.8 persuades just as well.
+- **The Places API route is abandoned.** It needed a billing key and capped at
+  five reviews per studio; this needs no key and returns fifty. If you already
+  made a key for it, you can delete it.
+
+### One thing to check
+
+The RevuBlast endpoint is public — it needs no key, which is what makes this
+work — but it is **their** endpoint, not a documented public API. If they ever
+change it, `fetch-reviews.py` fails loudly and the committed
+`src/data/reviews.json` keeps the site working until it is fixed. Nothing
+breaks silently, and nothing is ever invented to fill a gap.
+
+## 8. The intro popup and where leads go
+
+You asked for the popup to show only the $59 week, then the lead form, and
+asked whether a native form could pass to Arketa. It can, with one relay in
+between. What is built:
+
+**Step 1 — one offer.** The three-offer list is gone; the popup now leads with
+"A week of unlimited Pilates for $59" and the reason buttons.
+
+**Step 2 — our own form**, in our own styling: first name, last name, email,
+phone, and the two opt-ins. It posts to `/api/lead`, a small endpoint in this
+repo, which forwards to a **Zapier catch hook** wired to Arketa's
+**Add New Client** action.
+
+### 🟡 It needs one thing from you before it saves anything
+
+A Zapier Zap — trigger **Webhooks by Zapier · Catch Hook**, action
+**Arketa · Add New Client** — and its hook URL set as `LEAD_WEBHOOK_URL` in
+Vercel. Arketa's API key goes into the *Zapier connection*, never into this
+repo. `.env.example` has the field mapping.
+
+Note that **Webhooks by Zapier is a paid Zapier feature**, so this has a
+monthly cost. If you would rather not, say so and I will embed Arketa's hosted
+form in the popup instead — I tested it and it does frame cleanly, and it is
+already dark with a gold button and your logo. Two downsides: it took about
+**ten seconds** to render in my test, which is a long time to stare at a blank
+panel in a popup, and its input fields are grey against your black.
+
+### Why not post the form straight at Arketa
+
+The intake form at `app.arketa.co` is a hosted HTML page, not an API. A
+cross-origin POST at it fails CORS and the lead disappears with no error. That
+is worse than having no form, because the visitor is told it worked.
+
+The hook also stays server-side deliberately: a catch-hook URL in page
+JavaScript is a public write endpoint into your client list, and anyone
+viewing source could fill it with junk. Behind `/api/lead` it is hidden, and
+a honeypot field and a size cap drop the obvious bots first.
+
+### Three outcomes, each told the truth
+
+| What happened | What the visitor sees |
+|---|---|
+| Saved to Arketa | "You're in, *name*." |
+| Hook missing or failing | Arketa's hosted form opens; "Nearly there — finish the form in the tab we just opened." |
+| Invalid input | The message names the field. Nothing is sent. |
+
+It never reports a lead it did not deliver. With JavaScript off, the form's
+own `action` posts to the Arketa page, which loads the real form — verified,
+it answers 200.
+
+### Still a hand-off
+
+The **footer newsletter signup** only collects an email, and Arketa needs a
+name to create a client, so that one still sends people to the hosted form.
+Tell me if you would rather it asked for a name too and used the same route.
+
+## 9. Checkout pages — and a pricing error they caught
 
 18 pages at `/pricing/<slug>`, one per option, each embedding Arketa's checkout.
 Every Buy-now link across the site now routes through them rather than jumping

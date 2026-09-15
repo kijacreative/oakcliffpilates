@@ -406,15 +406,10 @@
         <span class="pop-dot on"></span><span class="pop-dot"></span><span class="pop-dot"></span>
       </div>
 
-      <!-- step 0 -->
+      <!-- step 0 · one offer, one decision -->
       <div class="pop-step" data-step="0">
-        <h2 class="pop-head" id="pop-head">Start at <span class="foil">$25</span></h2>
-        <p class="pop-fine" style="margin-top:24px">3 Classes for $25, 1 Week Unlimited for $59 and 10 Classes for $145.</p>
-        <div style="margin-top:24px">
-          <div class="pop-offer-row"><span>3 classes</span><span>$25</span></div>
-          <div class="pop-offer-row"><span>1 week unlimited</span><span>$59</span></div>
-          <div class="pop-offer-row"><span>10 classes</span><span>$145</span></div>
-        </div>
+        <h2 class="pop-head" id="pop-head">A week of unlimited Pilates for <span class="foil">$59</span></h2>
+        <p class="pop-fine" style="margin-top:24px">Seven days, every class, all three studios. One charge of $59 — it does not roll into a subscription.</p>
         <p class="pop-ask" style="margin-top:24px">First, what brings you in?</p>
         <div class="pop-reasons" style="margin-top:24px">
           <button class="btn btn--secondary btn--full" data-reason><span>I'm new to reformer</span></button>
@@ -425,44 +420,87 @@
         <div style="display:grid"><button class="pop-ghost" data-close-popup>No, thanks</button></div>
       </div>
 
-      <!-- step 1 · hand-off to the Arketa new-client form.
-           The form is a hosted page on app.arketa.co, not an API, so the only
-           way a lead actually reaches Arketa is for the visitor to fill it in
-           there. Collecting the same fields here first would mean typing them
-           twice — or losing them. -->
+      <!-- step 1 · the new-client form.
+           These are our fields, in our styling, posted to /api/lead — which
+           forwards them to Arketa. The action attribute points at Arketa's own
+           hosted form so the step still works with JavaScript off, and so the
+           script has somewhere real to fall back to if the endpoint is down or
+           not yet wired up. -->
       <div class="pop-step" data-step="1" hidden>
         <button class="pop-back" data-back="0">&larr; Back</button>
         <h2 class="pop-head" style="margin-top:24px">Let&rsquo;s get you set up.</h2>
-        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> &middot; we&rsquo;ve got you. Fill in the new-client form and we&rsquo;ll hold your intro offer.</p>
-        <div class="pop-submit" style="margin-top:24px">
-          <a class="btn btn--lg btn--primary btn--full" data-lead-form href="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE" target="_blank" rel="noopener"><span>Start my new-client form</span></a>
-          <p class="pop-fine">First-timers only, one per person. We&rsquo;ll text you class reminders, never spam.</p>
-        </div>
-        <div style="display:grid"><button class="pop-ghost" data-step-to="2">Skip &mdash; just show me the offers</button></div>
+        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> &middot; we&rsquo;ve got you. Tell us where to send it and we&rsquo;ll hold your $59 week.</p>
+
+        <form class="pop-form" id="lead-form" method="post" novalidate
+              action="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE">
+          <div class="pop-fields" style="margin-top:24px">
+            <div class="pop-row">
+              <label class="field">
+                <span class="field__label">First name</span>
+                <span class="field__box"><input type="text" name="firstName" autocomplete="given-name" required></span>
+              </label>
+              <label class="field">
+                <span class="field__label">Last name</span>
+                <span class="field__box"><input type="text" name="lastName" autocomplete="family-name" required></span>
+              </label>
+            </div>
+            <label class="field">
+              <span class="field__label">Email</span>
+              <span class="field__box"><input type="email" name="email" autocomplete="email" inputmode="email" required></span>
+            </label>
+            <label class="field">
+              <span class="field__label">Phone</span>
+              <span class="field__box"><input type="tel" name="phone" autocomplete="tel" inputmode="tel"></span>
+            </label>
+
+            <!-- Not visible, not tabbable, not autofilled. Anything in it is a bot. -->
+            <div class="pop-trap" aria-hidden="true">
+              <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+            </div>
+
+            <label class="pop-check">
+              <input type="checkbox" name="emailOptIn" checked>
+              <span>Email me about classes, offers and OCP stuff.</span>
+            </label>
+            <label class="pop-check">
+              <input type="checkbox" name="smsOptIn">
+              <span>You can text me too. Msg &amp; data rates may apply, reply STOP any time.</span>
+            </label>
+          </div>
+
+          <div class="pop-submit" style="margin-top:24px">
+            <button class="btn btn--lg btn--primary btn--full" type="submit"><span>Claim my $59 week</span></button>
+            <p class="pop-msg" data-lead-msg hidden role="status"></p>
+            <p class="pop-fine">First-timers only, one per person. We&rsquo;ll text you class reminders, never spam.</p>
+          </div>
+        </form>
+
+        <div style="display:grid"><button class="pop-ghost" data-step-to="2">Skip &mdash; just take me to checkout</button></div>
       </div>
 
       <!-- step 2 -->
       <div class="pop-step" data-step="2" hidden>
         <button class="pop-back" data-back="1">← Back</button>
-        <h2 class="pop-head" style="margin-top:24px">You're in<span data-firstname></span>.</h2>
-        <p class="pop-ask" style="margin-top:24px">Pick your intro offer and we'll take you straight to checkout.</p>
+        <!-- Two headings, because two things can have happened. Saying
+             "you're in" to someone whose details were handed off to Arketa's
+             form — and who has not filled it in yet — would be a lie. -->
+        <div data-lead-state="saved">
+          <h2 class="pop-head" style="margin-top:24px">You're in<span data-firstname></span>.</h2>
+          <p class="pop-ask" style="margin-top:24px">Grab your week and we'll see you in the room.</p>
+        </div>
+        <div data-lead-state="handoff" hidden>
+          <h2 class="pop-head" style="margin-top:24px">Nearly there<span data-firstname></span>.</h2>
+          <p class="pop-ask" style="margin-top:24px">Finish the new-client form in the tab we just opened, then grab your week.</p>
+        </div>
         <div class="pop-offers" style="margin-top:24px">
-          <a class="pop-offer" href="/pricing/3-classes-for-25">
-            <div class="pop-offer__top"><span>3 classes</span><span>$25</span></div>
-            <p>Try all three studios before you commit.</p>
-          </a>
           <a class="pop-offer pop-offer--best" href="/pricing/intro-1-week">
             <div class="pop-offer__top"><span>1 week unlimited</span><span>$59</span></div>
-            <p>Seven days, every class, every studio.</p>
-            <div style="margin-top:12px"><span class="badge badge--gold">Most popular</span></div>
-          </a>
-          <a class="pop-offer" href="/pricing/intro-10-classes">
-            <div class="pop-offer__top"><span>10 classes</span><span>$145</span></div>
-            <p>For the ones who already know. Expires in 30 days.</p>
+            <p>Seven days, every class, every studio. One charge — it does not renew.</p>
+            <div style="margin-top:12px"><span class="badge badge--gold">New clients only</span></div>
           </a>
         </div>
         <p class="pop-fine" style="margin-top:24px">Grip socks required. Roll in ten minutes early. Cancel free up to 4 hours out.</p>
-        <div style="display:grid"><button class="pop-ghost" data-close-popup>Never mind</button></div>
+        <div style="display:grid"><a class="pop-ghost" href="/pricing" style="text-align:center">See every option</a></div>
       </div>
     </div>
 

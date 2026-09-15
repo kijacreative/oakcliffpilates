@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-"""Pull Google reviews for the three studios into src/data/reviews.json.
+"""Pull the Google reviews for all three studios into src/data/reviews.json.
 
-    export GOOGLE_MAPS_API_KEY=...
     python3 tools/fetch-reviews.py
     python3 tools/build-reviews.py && python3 tools/build.py
 
-Why a build step and not a script in the page: the Places API needs a key, and
-anything the browser can read is public. Fetching here keeps the key on the
-machine running the build and ships the reviews as plain HTML — no third-party
-JavaScript, no layout shift, and crawlers see the text.
+Source is the RevuBlast / onlinereviews.tech account that already powers the
+review widgets — one "seat" per studio. The endpoint the widget's own bundle
+calls is public and needs no key:
 
-Two limits worth knowing, both Google's, not ours:
+    {API}/seats/{token}/reviews/widgets?limit=N[&cursor=...]
 
-  * The Places API returns at most **five** reviews per place. Three studios is
-    therefore a ceiling of fifteen, which is why the page shows a selection
-    rather than claiming to list everything.
-  * Places content may not be cached for more than 30 days, so re-run this
-    monthly. `make reviews` or a cron on the build box is enough.
+Reading it here rather than dropping three widget scripts on the homepage buys
+three things. The reviews from all three studios end up in **one** feed sorted
+by date, instead of three separate carousels a visitor has to work through.
+They ship as real HTML, so they render instantly and a crawler can read them.
+And they inherit the site's own styling instead of the vendor's white cards and
+yellow stars.
 
-The place IDs live in PLACES below. Find one by searching the studio on Google
-Maps and taking the `place_id` from the URL, or via the Place Search endpoint.
+Re-run it whenever you want the feed refreshed; monthly is plenty.
 """
 from __future__ import annotations
 
 import json
-import os
 import sys
 import urllib.parse
 import urllib.request
@@ -33,101 +30,92 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "src" / "data" / "reviews.json"
 
-ENDPOINT = "https://maps.googleapis.com/maps/api/place/details/json"
+API = "https://server.onlinereviews.tech/api/v0.0.9"
 
-# label -> Google place ID. Fill these in; see the module docstring.
-PLACES = {
-    "Bishop Arts": "",
-    "Uptown": "",
-    "Lower Greenville": "",
+# studio -> seat token, from the widget embed codes.
+SEATS = {
+    "Bishop Arts":      "69be051dc3d3eceaf39c816e",
+    "Uptown":           "6730f860255d27b71a0d0aa9",
+    "Lower Greenville": "69be0561c3d3eceaf39c8183",
 }
 
-# Only publish reviews at or above this rating. Google returns all of them;
-# a five-star wall of text is not the point, but nor is a one-star on the
-# homepage. Set to 0 to publish everything the API returns.
+# How many to pull per studio before filtering. The page shows far fewer; the
+# surplus is so the newest-first merge has something to choose from.
+PER_SEAT = 50
+
+# Publish reviews at or above this rating. A marketing choice rather than a
+# neutral feed — set it to 0 to publish everything the account holds.
 MIN_RATING = 4
 
 
-def fetch(place_id: str, key: str) -> dict:
-    url = ENDPOINT + "?" + urllib.parse.urlencode({
-        "place_id": place_id,
-        "fields": "name,rating,user_ratings_total,reviews,url",
-        "reviews_sort": "newest",
-        "key": key,
-    })
-    with urllib.request.urlopen(url, timeout=20) as r:
-        payload = json.load(r)
-    if payload.get("status") != "OK":
-        raise SystemExit(
-            f"Places API said {payload.get('status')}: "
-            f"{payload.get('error_message', 'no detail')}"
-        )
-    return payload["result"]
+def get(token: str, limit: int, cursor: str | None = None) -> dict:
+    q = {"limit": limit}
+    if cursor:
+        q["cursor"] = cursor
+    url = f"{API}/seats/{token}/reviews/widgets?" + urllib.parse.urlencode(q)
+    req = urllib.request.Request(url, headers={"User-Agent": "oakcliffpilates-build/1.0"})
+    with urllib.request.urlopen(req, timeout=25) as r:
+        return json.load(r)
 
 
 def main() -> int:
-    key = os.environ.get("GOOGLE_MAPS_API_KEY", "").strip()
-    if not key:
-        raise SystemExit(
-            "GOOGLE_MAPS_API_KEY is not set.\n"
-            "Create a key in Google Cloud with the Places API enabled, then:\n"
-            "  export GOOGLE_MAPS_API_KEY=...\n"
-            "Do not commit it — this script reads it from the environment so it\n"
-            "never reaches the browser or the repository."
-        )
+    reviews, studios, skipped = [], [], 0
 
-    missing = [n for n, pid in PLACES.items() if not pid]
-    if missing:
-        raise SystemExit(
-            "No place ID for: " + ", ".join(missing) + "\n"
-            "Fill in PLACES at the top of this file. Find each ID by opening the\n"
-            "studio on Google Maps — the place_id is in the share URL."
-        )
+    for studio, token in SEATS.items():
+        try:
+            payload = get(token, PER_SEAT)
+        except Exception as e:                                  # noqa: BLE001
+            raise SystemExit(f"{studio}: could not reach the reviews API — {e}")
 
-    reviews, totals = [], []
-    for label, pid in PLACES.items():
-        result = fetch(pid, key)
-        totals.append({
-            "studio": label,
-            "rating": result.get("rating"),
-            "count": result.get("user_ratings_total"),
-            "url": result.get("url", ""),
-        })
-        for rv in result.get("reviews", []):
-            if (rv.get("rating") or 0) < MIN_RATING:
-                continue
-            text = (rv.get("text") or "").strip()
-            if not text:
+        # avg comes back per source, e.g. [{"_id": "google", "avg": 4.9}]
+        avgs = payload.get("avg") or []
+        rating = round(sum(a["avg"] for a in avgs) / len(avgs), 1) if avgs else None
+        count = payload.get("count") or 0
+        entry = {"studio": studio, "rating": rating, "count": count, "url": ""}
+        studios.append(entry)
+
+        for rv in payload.get("reviews", []):
+            # Every review from a place carries the same maps.google.com CID
+            # link, so the first one gives us the studio's own Google listing.
+            if not entry["url"] and rv.get("url"):
+                entry["url"] = rv["url"]
+
+            text = (rv.get("review_text") or "").strip()
+            value = rv.get("rating_value") or 0
+            if not text or value < MIN_RATING:
+                skipped += 1
                 continue
             reviews.append({
-                "studio": label,
-                "author": rv.get("author_name", "").strip(),
-                "rating": rv.get("rating"),
+                "studio": studio,
+                "author": (rv.get("name") or "").strip() or "A member",
+                "rating": value,
                 "text": text,
-                "when": rv.get("relative_time_description", ""),
-                "time": rv.get("time", 0),
+                "date": (rv.get("date") or "")[:10],
+                "source": rv.get("source", "google"),
+                "url": rv.get("url", ""),
             })
+        print(f"  {studio:<17} {rating} from {count:,} reviews")
 
-    reviews.sort(key=lambda r: r["time"], reverse=True)
+    reviews.sort(key=lambda r: r["date"], reverse=True)
 
-    # Weighted mean across the studios, so the headline number is the real
-    # aggregate rather than an average of averages.
-    rated = [t for t in totals if t["rating"] and t["count"]]
-    overall = (
-        round(sum(t["rating"] * t["count"] for t in rated) / sum(t["count"] for t in rated), 1)
-        if rated else None
-    )
+    # Weighted mean across the studios — the real aggregate, not an average of
+    # three averages, which would let the smallest studio count as much as the
+    # largest.
+    rated = [s for s in studios if s["rating"] and s["count"]]
+    overall = (round(sum(s["rating"] * s["count"] for s in rated) / sum(s["count"] for s in rated), 1)
+               if rated else None)
+    total = sum(s["count"] or 0 for s in studios)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({
         "overall": overall,
-        "total": sum(t["count"] or 0 for t in totals),
-        "studios": totals,
+        "total": total,
+        "studios": studios,
         "reviews": reviews,
     }, indent=2, ensure_ascii=False) + "\n")
 
-    print(f"  {len(reviews)} review(s) from {len(totals)} studio(s)")
-    print(f"  overall {overall} across {sum(t['count'] or 0 for t in totals)} ratings")
+    print(f"\n  {len(reviews)} publishable, {skipped} skipped (under {MIN_RATING}★ or no text)")
+    print(f"  overall {overall} across {total:,} reviews, all three studios")
     print(f"  wrote {OUT.relative_to(ROOT)}")
     print("  next: python3 tools/build-reviews.py && python3 tools/build.py")
     return 0
