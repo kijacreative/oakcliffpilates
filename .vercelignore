@@ -1,0 +1,11 @@
+# Source, tooling and internal notes must never be served.
+# Vercel deploys every file in the project directory unless it is listed here —
+# without this, /src/pages/index.html, /tools/build.py and /REVIEW.md are all
+# fetchable by anyone.
+src/
+tools/
+_design-src/
+output/
+work/
+*.md
+.claude/

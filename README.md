@@ -308,137 +308,19 @@ system accounts are filtered out via `NOT_PEOPLE` in the script.
 
 ## Trainer HQ
 
-`/trainer-hq` is the internal trainer page: class standard, live events, live
-announcements, offers, the membership goal, studio upkeep and staff resources.
-It is **not** a static file. Everything else on this site is public, and this
-page carries pay rates, promo codes and the bonus scheme, so it is served by a
-function that checks a session first.
+The internal trainer portal lives in its own repo and its own Vercel project:
+[kijacreative/ocp-portal](https://github.com/kijacreative/ocp-portal). It is
+deployed separately so an internal, signed-in-only tool does not ride along
+with marketing deploys, and so its Slack and Google credentials sit in a
+different project to this one.
 
-```bash
-node tools/hq-dev.js --as "Your Name"   # → http://localhost:4333/trainer-hq
-```
+Two things there are copied from here and can drift:
+`css/tokens.css` and the handful of component rules in its `css/base.css`.
+If a button or badge looks wrong next to this site, diff those first.
 
-`--as` skips Slack so the page can be worked on with no app configured. Without
-it you get the real sign-in screen.
-
-### How the gate works
-
-`vercel.json` rewrites `/trainer-hq` to `api/hq/page.js`. That function requires
-`api/_hq-page.js` — compiled from `src/hq/` by `tools/build-hq.py` — and hands
-the HTML out only to a request carrying a valid session cookie; everyone else
-gets the sign-in screen. The compiled page lives inside `api/` with a leading
-underscore, which Vercel treats as a shared module rather than an endpoint, so
-there is no URL that serves it unauthenticated. `.vercelignore` keeps `src/`,
-`tools/` and the `.md` files out of the deployment entirely.
-
-Sign-in is **Sign in with Slack** (OpenID Connect). The callback refuses any
-identity whose `team_id` is not `SLACK_TEAM_ID`, so only the Oak Cliff Pilates
-workspace gets in, and someone removed from Slack loses access on their next
-visit with no password to rotate. The session cookie is HMAC-signed, HttpOnly,
-Secure, SameSite=Lax, 30 days.
-
-```bash
-python3 tools/build-hq.py     # after editing src/hq/, css/trainer-hq.css or js/trainer-hq.js
-```
-
-**Run it after every change to those three**, including CSS and JS — the build
-stamps a content hash into their `?v=` query strings, which is what gets a
-change past the year-long immutable cache on `/css` and `/js`.
-
-### The three live feeds
-
-| Panel | Source | Endpoint |
-| --- | --- | --- |
-| Announcements | Slack `#general` | `api/hq/slack.js` |
-| Events, and the membership count | the events workbook, via Apps Script | `api/hq/events.js` |
-| Report a studio issue | posts to Slack `#studio-issues` | `api/hq/issue.js` |
-
-Every credential stays server-side; the browser only ever sees normalised JSON,
-and each endpoint returns 401 without a session. Text from Slack and from the
-sheet is escaped before it reaches the page, and only `http(s)` links are ever
-turned into anchors — a ticket URL with a `javascript:` scheme is dropped.
-
-**Each panel says when it is not connected rather than showing anything
-invented.** A trainer reading a made-up call time is worse than one reading
-"not connected yet".
-
-### Wiring it up
-
-Copy `.env.example` into Vercel's environment variables. Three jobs:
-
-1. **Slack app** — api.slack.com/apps → create an app in the OCP workspace.
-   - *Sign in with Slack*: add redirect URL
-     `https://oakcliffpilates.com/api/auth/slack/callback`. Copy the client ID
-     and secret.
-   - *Bot token*: scopes `channels:history`, `channels:read`, `users:read`,
-     `chat:write`. Install, copy the `xoxb-` token, then invite the bot in
-     Slack: `/invite @<the app>` in **both** `#general` and `#studio-issues`.
-     Without the invite the feed returns "not_in_channel".
-2. **Events feed** — `tools/apps-script/ocp-events-feed.gs`, with its own setup
-   instructions at the top. See below.
-3. **Session secret** — `openssl rand -hex 32` into `HQ_SESSION_SECRET`.
-
-### The events workbook
-
-`tools/apps-script/ocp-events-feed.gs` is bound to the event workbook. Running
-`setup` once adds a `SITE CONFIG` tab (the membership count lives there), adds
-three rows to each event tab, builds a `WEBSITE FEED` tab, and schedules an
-hourly refresh. The sheet then gets a **Trainer HQ** menu.
-
-`WEBSITE FEED` is a flat table — one row per event, one column per field — and
-it is what the website reads. It exists so the feed is something a person can
-look at: you can see exactly what trainers will see, and fix it in the sheet.
-
-**Three of its columns are yours**, shown on cream:
-
-| Column | Why it is manual |
-| --- | --- |
-| Ticket Link | The Arketa checkout URL. Nothing in the event tabs holds it. |
-| Call Time | "15 min early". Not a field the tracker has. |
-| Show On Site | `No` hides an event from trainers without deleting anything. Blank means yes. |
-
-Every other column is regenerated from the `EVENT NN` tabs on each refresh, so
-edit those in the event tab. **A refresh never overwrites the three manual
-columns** — they are read first and written back, matched on the tab name in
-column A. That is the behaviour most worth protecting, and the test covers it
-directly.
-
-The event tabs are read by scanning column A for labels rather than by fixed
-cell references, so inserting a row does not break the mapping. Instructors are
-serialised one per line as `Name | Role | Pay | Scope` and parsed back when the
-feed is served, which keeps the whole event on one row while preserving the
-structure the event cards need.
-
-If `WEBSITE FEED` has not been built yet, the feed falls back to reading the
-event tabs directly, so the website keeps working either way.
-
-```bash
-node tools/apps-script/test/feed.test.js
-```
-
-25 assertions. Apps Script cannot run locally, so `test/harness.js` stands in
-for `SpreadsheetApp` with plain 2-D arrays and the fixture is shaped like the
-real workbook — labels in column A, values merged across B:G, an INSTRUCTORS
-block underneath. Run it after editing the `.gs`, then re-deploy
-(Manage deployments → edit → Version: New).
-
-### Content still needed
-
-Marked on the page with a red **Needs content** chip; grep `hq-tk` in
-`src/hq/page.html` to find them all.
-
-- Welcome to OCP, and the full onboarding step list
-- Parking registration links for all three studios, and the payroll portal link
-- Lower Greenville client parking — the arrangement was never stated
-- The unfinished retail rule ("clients should not leave studio")
-- Staff benefits
-- The eleven Arketa how-to screen shares
-- Front desk to-do list
-- Promo codes beyond the intro offers and the trainer code
-
-The previous paste-in block for GoHighLevel is kept at
-`src/hq/legacy-ghl-block.html`. It used to sit at the repo root, where Vercel
-served it publicly at `/trainer-hq-ghl` — pay rates and all.
+**The offers on that page must match the `OPTIONS` table in
+`tools/build-checkout.py`.** When a price changes here, change it there too —
+that page is what trainers quote from the floor.
 
 ## Media
 
