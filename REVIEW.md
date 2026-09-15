@@ -267,24 +267,38 @@ the answer rides along with the lead and tells you what is bringing people in,
 but it is one extra tap before the form. Say the word and I will add a direct
 route through.
 
-**Step 2 — our own form**, in our own styling: first name, last name, email,
-phone, and the two opt-ins. It posts to `/api/lead`, a small endpoint in this
-repo, which forwards to a **Zapier catch hook** wired to Arketa's
-**Add New Client** action.
+**Step 2 — Arketa's own form, embedded.** You asked for the embed for now, so
+that is what is live. It frames cleanly and is already dark with a gold button
+and your logo. Their page centres its card on a light background; the wrapper
+crops those pale bands so the card meets our black with no seam.
 
-### 🟡 It needs one thing from you before it saves anything
+The iframe starts loading the moment the popup **opens**, a step before it is
+needed, so the seconds spent choosing a reason are seconds it spends loading.
+Nothing is requested from Arketa on a page view that never opens the popup.
 
-A Zapier Zap — trigger **Webhooks by Zapier · Catch Hook**, action
-**Arketa · Add New Client** — and its hook URL set as `LEAD_WEBHOOK_URL` in
-Vercel. Arketa's API key goes into the *Zapier connection*, never into this
-repo. `.env.example` has the field mapping.
+### 🟡 Two things the embed cannot do
 
-Note that **Webhooks by Zapier is a paid Zapier feature**, so this has a
-monthly cost. If you would rather not, say so and I will embed Arketa's hosted
-form in the popup instead — I tested it and it does frame cleanly, and it is
-already dark with a gold button and your logo. Two downsides: it took about
-**ten seconds** to render in my test, which is a long time to stare at a blank
-panel in a popup, and its input fields are grey against your black.
+1. **We cannot style its insides.** The grey input fields are theirs, on their
+   origin. Nothing on our side can reach them.
+2. **We cannot tell when it has been submitted.** So the visitor moves on with
+   a "Done — show me the offer" button rather than automatically, and step 3
+   reads "Your $59 week is waiting" — true whether or not they finished. I
+   will not print "You're in" for something we cannot see.
+
+Arketa's Submit button is gold; I made our "Done" button an outline so two
+gold buttons in a row do not invite hitting the wrong one.
+
+### The native form is still here if you want it back
+
+`api/lead.js` and the `#lead-form` handler in `js/site.js` both still work —
+they are dormant only because the markup that used them is gone (commit
+`02c13a2`). That version was your own branded fields posting to `/api/lead`,
+forwarded to a Zapier catch hook on Arketa's **Add New Client** action. It is
+instant, fully styled, and it can actually confirm the lead saved.
+
+It needs `LEAD_WEBHOOK_URL` set and **Webhooks by Zapier is a paid feature** —
+which is the only reason we are on the embed. Say the word and it is a
+markup swap.
 
 ### Why not post the form straight at Arketa
 

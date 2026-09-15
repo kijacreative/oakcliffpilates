@@ -457,6 +457,38 @@ section{position:relative}
 .pop-reasons .btn{white-space:normal;text-align:center;height:auto;min-height:var(--control-height);padding-top:12px;padding-bottom:12px}
 .pop-fields{display:grid;gap:14px}
 .pop-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Arketa's hosted intake form, embedded. Their page centres its card on a
+   light background, leaving a pale band above and below; the wrapper is
+   shorter than the frame and the frame is nudged up, which crops both away so
+   the card meets our black cleanly. If they ever change that padding the worst
+   case is a thin light edge, not a broken layout. */
+.pop-embed{
+  position:relative;height:500px;overflow:hidden;
+  border:1px solid var(--border-hairline);border-radius:8px;background:var(--ocp-black);
+}
+.pop-embed__frame{
+  display:block;width:100%;height:560px;margin-top:-30px;border:0;
+  background:var(--ocp-black);
+}
+.pop-embed__wait{
+  position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;
+  background:var(--ocp-black);
+}
+/* Needed because the display above outranks the browser's own [hidden] rule,
+   so without this the overlay never goes away. */
+.pop-embed__wait[hidden]{display:none}
+.pop-embed__wait p{
+  margin:0;font:var(--text-style-eyebrow);letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase;color:var(--text-muted);
+}
+.pop-embed__spin{
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid var(--border-hairline);border-top-color:var(--ocp-gold);
+  animation:pop-spin .8s linear infinite;
+}
+@keyframes pop-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){ .pop-embed__spin{animation-duration:2.4s} }
 .pop-check{
   display:grid;grid-template-columns:auto 1fr;align-items:start;gap:10px;
   font:var(--fw-regular) var(--type-caption)/1.5 var(--font-body);
@@ -547,6 +579,10 @@ body.is-locked{overflow:hidden}
 @media(max-width:820px){
   .pop-shell{grid-template-columns:1fr}
   .pop-row{grid-template-columns:1fr}
+  /* Their card sits closer to the top at narrow widths, so the crop above
+     has to ease off or it takes a bite out of the logo. */
+  .pop-embed{height:530px}
+  .pop-embed__frame{height:560px;margin-top:-14px}
   .pop-photo{display:none}
   .pop-panel{padding:44px 24px 32px}
 }

@@ -384,62 +384,45 @@
         <div style="display:grid"><button class="pop-ghost" data-close-popup>No, thanks</button></div>
       </div>
 
-      <!-- step 1 · the new-client form.
-           These are our fields, in our styling, posted to /api/lead — which
-           forwards them to Arketa. The action attribute points at Arketa's own
-           hosted form so the step still works with JavaScript off, and so the
-           script has somewhere real to fall back to if the endpoint is down or
-           not yet wired up. -->
+      <!-- step 1 · Arketa's own intake form, embedded.
+           We had a native form here posting to /api/lead → Zapier → Arketa
+           (commit 02c13a2, still in the repo: api/lead.js and the #lead-form
+           handler in site.js, both dormant while this markup is in place).
+           Swapped to the embed to avoid the paid Zapier webhook for now.
+
+           The trade is that the form lives on their origin, so we cannot
+           style its insides and cannot know when it has been submitted —
+           hence the button below it rather than an automatic advance. -->
       <div class="pop-step" data-step="1" hidden>
         <button class="pop-back" data-back="0">&larr; Back</button>
         <h2 class="pop-head" style="margin-top:24px">Let&rsquo;s get you set up.</h2>
-        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> &middot; we&rsquo;ve got you. Tell us where to send it and we&rsquo;ll hold your $59 week.</p>
+        <p class="pop-ask" style="margin-top:24px"><span data-picked></span> &middot; we&rsquo;ve got you. Fill this in and we&rsquo;ll hold your $59 week.</p>
 
-        <form class="pop-form" id="lead-form" method="post" novalidate
-              action="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE">
-          <div class="pop-fields" style="margin-top:24px">
-            <div class="pop-row">
-              <label class="field">
-                <span class="field__label">First name</span>
-                <span class="field__box"><input type="text" name="firstName" autocomplete="given-name" required></span>
-              </label>
-              <label class="field">
-                <span class="field__label">Last name</span>
-                <span class="field__box"><input type="text" name="lastName" autocomplete="family-name" required></span>
-              </label>
-            </div>
-            <label class="field">
-              <span class="field__label">Email</span>
-              <span class="field__box"><input type="email" name="email" autocomplete="email" inputmode="email" required></span>
-            </label>
-            <label class="field">
-              <span class="field__label">Phone</span>
-              <span class="field__box"><input type="tel" name="phone" autocomplete="tel" inputmode="tel"></span>
-            </label>
-
-            <!-- Not visible, not tabbable, not autofilled. Anything in it is a bot. -->
-            <div class="pop-trap" aria-hidden="true">
-              <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
-            </div>
-
-            <label class="pop-check">
-              <input type="checkbox" name="emailOptIn" checked>
-              <span>Email me about classes, offers and OCP stuff.</span>
-            </label>
-            <label class="pop-check">
-              <input type="checkbox" name="smsOptIn">
-              <span>You can text me too. Msg &amp; data rates may apply, reply STOP any time.</span>
-            </label>
+        <div class="pop-embed" style="margin-top:24px">
+          <!-- src is set by site.js the moment the popup opens, a step early,
+               because this takes several seconds to render and the time spent
+               choosing a reason is time it can spend loading. No loading="lazy"
+               on purpose: this step is display:none when the popup opens, so a
+               lazy frame would sit and wait for it to be shown — exactly the
+               delay the warm-up exists to avoid. Nothing is requested before
+               the popup opens, which is the deferral that matters. -->
+          <iframe class="pop-embed__frame" title="Oak Cliff Pilates new-client form"
+                  data-src="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE"></iframe>
+          <div class="pop-embed__wait" data-embed-wait>
+            <span class="pop-embed__spin" aria-hidden="true"></span>
+            <p>Loading your form&hellip;</p>
           </div>
+        </div>
 
-          <div class="pop-submit" style="margin-top:24px">
-            <button class="btn btn--lg btn--primary btn--full" type="submit"><span>Claim my $59 week</span></button>
-            <p class="pop-msg" data-lead-msg hidden role="status"></p>
-            <p class="pop-fine">First-timers only, one per person. We&rsquo;ll text you class reminders, never spam.</p>
-          </div>
-        </form>
-
-        <div style="display:grid"><button class="pop-ghost" data-step-to="2">Skip &mdash; just take me to checkout</button></div>
+        <div class="pop-submit" style="margin-top:20px">
+          <!-- Secondary on purpose: Arketa's own Submit sits directly above
+               this, and two gold buttons in a row invites hitting the wrong
+               one. Submit is the action that matters. -->
+          <button class="btn btn--lg btn--secondary btn--full" data-step-to="2"><span>Done &mdash; show me the offer</span></button>
+          <p class="pop-fine">Trouble with the form?
+            <a href="https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE" target="_blank" rel="noopener">Open it in a new tab</a>.
+            First-timers only, one per person.</p>
+        </div>
       </div>
 
       <!-- step 2 -->
@@ -448,14 +431,11 @@
         <!-- Two headings, because two things can have happened. Saying
              "you're in" to someone whose details were handed off to Arketa's
              form — and who has not filled it in yet — would be a lie. -->
-        <div data-lead-state="saved">
-          <h2 class="pop-head" style="margin-top:24px">You're in<span data-firstname></span>.</h2>
-          <p class="pop-ask" style="margin-top:24px">Grab your week and we'll see you in the room.</p>
-        </div>
-        <div data-lead-state="handoff" hidden>
-          <h2 class="pop-head" style="margin-top:24px">Nearly there<span data-firstname></span>.</h2>
-          <p class="pop-ask" style="margin-top:24px">Finish the new-client form in the tab we just opened, then grab your week.</p>
-        </div>
+        <!-- The form is on Arketa's origin, so we cannot see whether it was
+             actually submitted. This copy is therefore true either way — it
+             does not tell anyone they are signed up when they might not be. -->
+        <h2 class="pop-head" style="margin-top:24px">Your $59 week is waiting.</h2>
+        <p class="pop-ask" style="margin-top:24px">Grab it below and we'll see you in the room.</p>
         <div class="pop-offers" style="margin-top:24px">
           <a class="pop-offer pop-offer--best" href="/pricing/intro-1-week">
             <div class="pop-offer__top"><span>1 week unlimited</span><span>$59</span></div>

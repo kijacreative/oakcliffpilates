@@ -182,29 +182,39 @@ Three steps: the $59 week → the new-client form → the link to checkout.
 
 ## New-client leads
 
-The intro popup collects name, email and phone in our own fields and posts
-them to `api/lead.js`, which forwards to a **Zapier catch hook** wired to
-Arketa's **Add New Client** action. Set `LEAD_WEBHOOK_URL` in Vercel; see
-`.env.example` for how to build the Zap.
+**Currently: Arketa's own intake form, embedded in step 2 of the popup.** It
+frames cleanly (no `X-Frame-Options`, no `frame-ancestors`) and is already
+dark with a gold button and the OCP logo. `js/site.js` sets the iframe `src`
+the moment the popup **opens** — a step before it is needed — so the time
+spent choosing a reason is time the form spends loading. Nothing is requested
+from Arketa until the popup opens.
 
-Why the relay instead of posting straight at Arketa:
+Their page centres its card on a light background. `.pop-embed` is shorter
+than the frame and the frame is nudged up, cropping the pale bands away so the
+card meets our black cleanly. If Arketa ever changes that padding the worst
+case is a thin light edge, not a broken layout.
 
-* The intake form at `app.arketa.co` is a hosted HTML page, **not an API**.
-  A cross-origin POST at it fails CORS and the lead vanishes silently — worse
-  than no form, because the visitor is told it worked.
-* A catch-hook URL sitting in client JavaScript is a public write endpoint
-  into the client list. Behind `/api/lead` it stays server-side, and the
-  obvious bots (honeypot, oversized payloads) are dropped before the CRM.
+Two things the embed cannot do, both handled in the markup:
 
-**Three outcomes, each told the truth.** Saved → "You're in, <name>". Endpoint
-missing or failing → the hosted Arketa form opens and the screen says "Nearly
-there — finish the form in the tab we just opened". Invalid → the message
-names the field and nothing is sent. It never reports a lead it did not
-deliver. With JavaScript off the form's own `action` posts to the Arketa page,
-which loads the real form.
+* **We cannot style its insides** — it is their origin. The grey input fields
+  are theirs.
+* **We cannot tell when it has been submitted**, so the visitor advances with
+  a "Done — show me the offer" button rather than automatically, and step 3
+  says "Your $59 week is waiting" — true whether or not they finished.
 
-Arketa's API key belongs in the **Zapier connection**, not in this repo. The
-site never holds it.
+### The native form, if you want it back
+
+`api/lead.js` and the `#lead-form` handler in `js/site.js` are still here and
+still work; they are dormant only because the markup that used them is gone
+(see commit `02c13a2`). That route was a branded form posting to `/api/lead`,
+which forwards to a **Zapier catch hook** wired to Arketa's **Add New Client**
+action — instant, fully styled, and able to confirm the lead was actually
+saved. It needs `LEAD_WEBHOOK_URL` set, and **Webhooks by Zapier is a paid
+feature**, which is why the embed is in place for now.
+
+Either way, the form cannot post straight at Arketa: the intake form is a
+hosted HTML page, not an API, so a cross-origin POST fails CORS and the lead
+vanishes while the visitor is told it worked.
 
 ## Team roster
 

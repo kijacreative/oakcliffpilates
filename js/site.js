@@ -157,12 +157,26 @@
       if (focusable) focusable.focus();
     }
 
+    /* Arketa's intake form takes several seconds to render, so start it
+       loading the moment the popup opens — a step before it is needed. By the
+       time someone has picked a reason it is usually ready. Nothing is
+       requested until the popup opens, so a page view that never sees it
+       never touches their origin. */
+    function warmEmbed() {
+      var frame = $(".pop-embed__frame", pop);
+      if (!frame || frame.src) return;
+      var wait = $("[data-embed-wait]", pop);
+      frame.addEventListener("load", function () { if (wait) wait.hidden = true; });
+      frame.src = frame.dataset.src;
+    }
+
     function open() {
       if (!pop.hidden) return;
       lastFocus = document.activeElement;
       pop.hidden = false;
       document.body.classList.add("is-locked");
       snooze();
+      warmEmbed();
       show(0);
     }
 
