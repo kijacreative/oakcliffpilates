@@ -1,6 +1,6 @@
 /* Oak Cliff Pilates — site behaviour
-   Marquee · mobile drawer · FAQ accordion · intro-offer popup · signup ·
-   deferred third-party review widget. No dependencies, no build step. */
+   Marquee · mobile drawer · FAQ accordion · intro-offer popup · new-client
+   form · signup · video facade. No dependencies, no build step. */
 (function () {
   "use strict";
 
@@ -13,10 +13,10 @@
      works with JavaScript off; this constant is the fallback.        */
   var LEAD_FORM_URL = "https://app.arketa.co/oakcliffpilates/intake-form/84hxQjyQ8Va2RFHvUgxE";
 
-  /* Delay before the intro-offer popup opens, and how long a dismissal
-     is remembered so returning visitors are not nagged every visit. */
-  var POPUP_DELAY_MS = 5000;
-  var POPUP_SNOOZE_DAYS = 7;
+  /* Delay before the intro-offer popup opens, and how long a first visit is
+     remembered so returning visitors are not nagged every time. */
+  var POPUP_DELAY_MS = 3000;
+  var POPUP_SNOOZE_DAYS = 30;
 
   var MARQUEE = [
     "Energy Elevated™",
@@ -162,6 +162,7 @@
       lastFocus = document.activeElement;
       pop.hidden = false;
       document.body.classList.add("is-locked");
+      snooze();
       show(0);
     }
 
@@ -169,19 +170,34 @@
       if (pop.hidden) return;
       pop.hidden = true;
       document.body.classList.remove("is-locked");
-      snooze();
       if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
 
-    /* Remember a dismissal so the popup does not reopen every visit. */
+    /* Remember the visit so the popup shows once and then stays quiet for a
+       month. Written as a cookie, with localStorage alongside it: a cookie is
+       what the 30 days is actually keyed to, and localStorage covers the case
+       where cookies are blocked but storage is not. Either one counts as seen,
+       so a visitor is never shown it twice because one of the two was cleared.
+
+       Recorded on open, not on close — someone who opens the popup and walks
+       away has still been shown the offer. */
+    var SEEN = "ocp_popup_seen";
+
     function snooze() {
+      var expires = new Date(Date.now() + POPUP_SNOOZE_DAYS * 864e5).toUTCString();
       try {
-        localStorage.setItem("ocp:popup-seen", String(Date.now()));
-      } catch (e) { /* private mode — fall back to per-session only */ }
+        document.cookie = SEEN + "=1; expires=" + expires +
+          "; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
+      } catch (e) { /* cookies blocked — localStorage below may still work */ }
+      try {
+        localStorage.setItem(SEEN, String(Date.now()));
+      } catch (e) { /* private mode — this visit only */ }
     }
+
     function snoozed() {
+      if (document.cookie.indexOf(SEEN + "=1") !== -1) return true;
       try {
-        var t = Number(localStorage.getItem("ocp:popup-seen"));
+        var t = Number(localStorage.getItem(SEEN));
         return !!t && Date.now() - t < POPUP_SNOOZE_DAYS * 864e5;
       } catch (e) { return false; }
     }

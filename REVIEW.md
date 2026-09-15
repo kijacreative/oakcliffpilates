@@ -252,8 +252,20 @@ You asked for the popup to show only the $59 week, then the lead form, and
 asked whether a native form could pass to Arketa. It can, with one relay in
 between. What is built:
 
+**Timing.** Opens 3 seconds into a first visit, on every page (all 51 carry
+it), then stays quiet for 30 days. Recorded in a cookie *and* localStorage —
+either counts as seen, so clearing one does not show it to someone twice — and
+recorded when it **opens**, not when it closes, since someone who opens it and
+walks away has still seen the offer.
+
 **Step 1 — one offer.** The three-offer list is gone; the popup now leads with
 "A week of unlimited Pilates for $59" and the reason buttons.
+
+One thing to note about that step: the four reason buttons are the only way
+forward — there is no separate "claim it" button. That is deliberate, since
+the answer rides along with the lead and tells you what is bringing people in,
+but it is one extra tap before the form. Say the word and I will add a direct
+route through.
 
 **Step 2 — our own form**, in our own styling: first name, last name, email,
 phone, and the two opt-ins. It posts to `/api/lead`, a small endpoint in this

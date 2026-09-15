@@ -165,6 +165,21 @@ Re-run the fetcher monthly. When you do, check that the copy still matches:
 `index.html` and `intro-offers.html` both quote a round review count ("500+")
 and `intro-offers` quotes the average rating.
 
+## The intro popup
+
+Opens **3 seconds** after a first visit, on **every page**, and then stays
+quiet for **30 days**. Both numbers are `POPUP_DELAY_MS` and
+`POPUP_SNOOZE_DAYS` at the top of `js/site.js`.
+
+The visit is recorded in a `ocp_popup_seen` cookie *and* in localStorage, and
+either one counts as seen — so a visitor is not shown it twice because one of
+the two was cleared. It is recorded when the popup **opens**, not when it
+closes: someone who opens it and walks away has still been shown the offer.
+If the page loads into a background tab the timer waits until the tab is
+actually looked at.
+
+Three steps: the $59 week → the new-client form → the link to checkout.
+
 ## New-client leads
 
 The intro popup collects name, email and phone in our own fields and posts
