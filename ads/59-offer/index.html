@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--
+  $59 One Week Unlimited — paid-social ad set (feed, feed portrait, story).
+  Built from the Claude Design project "OCP 59 Offer Ad.dc.html"
+  (https://claude.ai/design/p/575a0341-da36-46d9-abfc-cbe8398babf9).
+
+  Open this page to review all three frames live. ?render=1080x1080 (or
+  1080x1350, 1080x1920) shows one frame alone on a transparent background with
+  the video hidden: tools/render-ads.sh screenshots that as the overlay and
+  composites it onto the Drive originals to make the MP4s in out/.
+  Not deployed — ads/ is in .vercelignore.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>$59 Offer Ad — Oak Cliff Pilates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Khand:wght@700&family=Montserrat:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../../css/tokens.css">
+<style>
+/* Campaign layer (tokens/campaign.css in the design system): red accent, off-white type, crushed black. */
+:root{--camp-black:#0A0A0A;--camp-offwhite:#F2EDE4;--camp-red:#E8452C;--camp-text-dim:#8A837A;--camp-support-dim:#CFC8BD;
+  --camp-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E")}
+body{margin:0;background:#1a1a1a}
+
+.sheet{display:flex;flex-wrap:wrap;align-items:flex-start;gap:80px;padding:80px;font-family:var(--font-body)}
+.slot{display:flex;flex-direction:column;gap:20px}
+.slot-label{font:500 22px/1 var(--font-body);letter-spacing:.3em;text-transform:uppercase;color:var(--camp-text-dim)}
+
+.ad{position:relative;width:1080px;overflow:hidden;background:var(--camp-black);color:var(--camp-offwhite);isolation:isolate}
+.ad::after{content:"";position:absolute;inset:0;z-index:99;pointer-events:none;background-image:var(--camp-grain);background-size:160px 160px;opacity:.085;mix-blend-mode:overlay}
+@media (min-resolution:1.5dppx){.ad::after{opacity:.06}}
+.ad video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ad .shade{position:absolute;inset:0}
+
+.ad .tag{position:absolute;left:28px;writing-mode:vertical-rl;transform:rotate(180deg);transform-origin:center;font:700 var(--tag)/1 var(--font-display);letter-spacing:.28em;text-transform:uppercase;color:var(--camp-red);z-index:3}
+.ad .price{position:absolute;z-index:2;font:700 var(--price)/.72 var(--font-display);letter-spacing:-.02em;white-space:nowrap}
+.ad .price span{position:absolute;font-size:.2em;left:-.11em;top:.36em;color:var(--camp-red);line-height:1}
+.ad .copy{position:absolute;right:72px;display:flex;flex-direction:column;gap:16px;z-index:3}
+.ad .eyebrow{font:700 22px/1 var(--font-body);letter-spacing:.34em;text-transform:uppercase;color:var(--camp-red)}
+.ad .head{font:700 var(--head)/.86 var(--font-display);letter-spacing:-.015em;text-transform:uppercase;margin:0}
+.ad .rule{height:1px;background:rgba(242,237,228,.26);margin-top:10px}
+.ad .foot{display:flex;justify-content:space-between;align-items:baseline;gap:24px;white-space:nowrap;text-transform:uppercase}
+.ad .studios{font:600 18px/1 var(--font-body);letter-spacing:.28em}
+.ad .hoods{font:500 15px/1 var(--font-body);letter-spacing:.26em;color:var(--camp-support-dim)}
+
+/* 1080 × 1080 — feed. Price top, copy pinned to the bottom. */
+.ad-sq{height:1080px;--tag:74px;--price:800px;--head:152px}
+.ad-sq video{object-position:50% 42%;filter:contrast(1.1) saturate(.95) brightness(1.02)}
+.ad-sq .shade{background:linear-gradient(to top,rgba(10,10,10,.92) 0%,rgba(10,10,10,.86) 28%,rgba(10,10,10,.6) 48%,rgba(10,10,10,.26) 72%,rgba(10,10,10,.06) 100%)}
+.ad-sq .tag{top:24px}
+.ad-sq .price{left:152px;top:56px}
+.ad-sq .copy{left:152px;bottom:72px}
+
+/* 1080 × 1350 — feed portrait. */
+.ad-pt{height:1350px;--tag:53px;--price:560px;--head:118px}
+.ad-pt video{object-position:50% 38%;filter:contrast(1.08) saturate(.95) brightness(.98)}
+.ad-pt .shade{background:linear-gradient(to bottom,rgba(10,10,10,.14) 0%,rgba(10,10,10,.6) 17%,rgba(10,10,10,.74) 46%,rgba(10,10,10,.7) 72%,rgba(10,10,10,.14) 100%)}
+.ad-pt .tag{top:262px}
+.ad-pt .price{left:112px;top:262px}
+.ad-pt .copy{left:112px;top:700px;gap:14px}
+.ad-pt .eyebrow{font-size:20px}
+.ad-pt .rule{margin-top:8px}
+.ad-pt .studios{font-size:17px}
+.ad-pt .hoods{font-size:14px}
+
+/* 1080 × 1920 — story / reel. Type sits inside the 250px top and bottom safe zones. */
+.ad-st{height:1920px;--tag:93px;--price:880px;--head:142px}
+.ad-st video{object-position:50% 44%;filter:contrast(1.08) saturate(.95) brightness(.98)}
+.ad-st .shade{background:linear-gradient(to bottom,rgba(10,10,10,.12) 0%,rgba(10,10,10,.55) 14%,rgba(10,10,10,.76) 34%,rgba(10,10,10,.74) 70%,rgba(10,10,10,.18) 100%)}
+.ad-st .tag{top:270px}
+.ad-st .price{left:172px;top:392px}
+.ad-st .copy{left:172px;top:1090px}
+.ad-st .eyebrow{font-size:21px}
+
+/* Render mode: one frame, no video, no grain, transparent — the overlay for tools/render-ads.sh. */
+html.render,html.render body{background:transparent}
+html.render .sheet{padding:0;gap:0}
+html.render .slot-label,html.render .ad video{display:none}
+html.render .ad{background:transparent}
+html.render .ad::after{display:none}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="slot" data-size="1080x1080">
+    <div class="slot-label">1080 × 1080 — Feed</div>
+    <div class="ad ad-sq">
+      <video src="../../video/lib/bishop-2.mp4" poster="../../video/lib/bishop-2-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+      <div class="shade"></div>
+      <div class="tag">Anti-Pilates Pilates</div>
+      <div class="price">59<span>$</span></div>
+      <div class="copy">
+        <div class="eyebrow">One Week</div>
+        <h1 class="head">Unlimited<br>Pilates</h1>
+        <div class="rule"></div>
+        <div class="foot"><div class="studios">Three Dallas Studios</div><div class="hoods">Bishop Arts · Uptown · Lower Greenville</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slot" data-size="1080x1350">
+    <div class="slot-label">1080 × 1350 — Feed portrait</div>
+    <div class="ad ad-pt">
+      <video src="../../video/lib/uptown-2.mp4" poster="../../video/lib/uptown-2-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+      <div class="shade"></div>
+      <div class="tag">Anti-Pilates Pilates</div>
+      <div class="price">59<span>$</span></div>
+      <div class="copy">
+        <div class="eyebrow">One Week</div>
+        <h1 class="head">Unlimited<br>Pilates</h1>
+        <div class="rule"></div>
+        <div class="foot"><div class="studios">Three Dallas Studios</div><div class="hoods">Bishop Arts · Uptown · Lower Greenville</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slot" data-size="1080x1920">
+    <div class="slot-label">1080 × 1920 — Story / Reel</div>
+    <div class="ad ad-st">
+      <video src="../../video/lib/lg-2.mp4" poster="../../video/lib/lg-2-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
+      <div class="shade"></div>
+      <div class="tag">Anti-Pilates Pilates</div>
+      <div class="price">59<span>$</span></div>
+      <div class="copy">
+        <div class="eyebrow">One Week</div>
+        <h1 class="head">Unlimited<br>Pilates</h1>
+        <div class="rule"></div>
+        <div class="foot"><div class="studios">Three Dallas Studios</div><div class="hoods">Bishop Arts · Uptown · Lower Greenville</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+  var only = new URLSearchParams(location.search).get('render');
+  if (only) {
+    document.documentElement.classList.add('render');
+    document.querySelectorAll('.slot').forEach(function (s) { if (s.dataset.size !== only) s.remove(); });
+  }
+</script>
+</body>
+</html>

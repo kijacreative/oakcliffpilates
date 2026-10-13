@@ -2,6 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     { "name": "ocp", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4321"], "port": 4321 },
-    { "name": "ocp-design-src", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4322", "--directory", "_design-src"], "port": 4322 }
+    { "name": "ocp-design-src", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4322", "--directory", "_design-src"], "port": 4322 },
+    { "name": "lp", "runtimeExecutable": "python3", "runtimeArgs": ["-m", "http.server", "4173", "--directory", "/Users/kieljared/ocp-lp"], "port": 4173 }
   ]
 }

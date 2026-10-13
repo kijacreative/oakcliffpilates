@@ -7,3 +7,6 @@ output/
 *.log
 .vercel/
 node_modules/
+
+# Rendered ad videos — regenerate with tools/render-ads.sh.
+ads/*/out/
